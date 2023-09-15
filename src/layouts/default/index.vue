@@ -1,5 +1,5 @@
 <script setup>
-import DefaultBar from "../components/Navbar.vue";
+import DefaultBar from "@/components/Navbar/index.vue";
 </script>
 
 <template>

@@ -94,7 +94,7 @@ import {
   hamburger,
   logo,
   close,
-} from "../assets/navbar";
+} from "@/assets/navbar";
 
 export default {
   setup() {

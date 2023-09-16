@@ -1,3 +1,5 @@
+<script setup></script>
+
 <template>
   <nav class="px-8 py-4 fixed w-full top-0 bg-white">
     <div class="flex justify-between items-center">
@@ -44,7 +46,7 @@
     ></div>
     <div
       class="bg-white h-screen top-0 w-9/12 fixed transition-all ease-in duration-300 z-20 md:hidden"
-      :class="isNavToggle ? 'left-0' : 'left-[-400px]'"
+      :class="isNavToggle ? 'left-0' : 'left-[-600px]'"
     >
       <div class="pl-9 pt-5">
         <ul>

@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <nav class="px-8 py-4 fixed w-full top-0 bg-white">
+  <nav class="px-8 py-4 fixed w-full top-0 bg-white z-50">
     <div class="flex justify-between items-center">
       <div class="flex items-center">
         <div class="md:hidden cursor-pointer">
@@ -40,13 +40,13 @@
     </div>
 
     <div
-      class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-10 md:hidden"
+      class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-50 z-10 md:hidden"
       :class="isNavToggle ? 'block' : 'hidden'"
       @click="toggleNav"
     ></div>
     <div
       class="bg-white h-screen top-0 w-9/12 fixed transition-all ease-in duration-300 z-20 md:hidden"
-      :class="isNavToggle ? 'left-0' : 'left-[-600px]'"
+      :class="isNavToggle ? 'left-0' : 'left-[-400px]'"
     >
       <div class="pl-9 pt-5">
         <ul>

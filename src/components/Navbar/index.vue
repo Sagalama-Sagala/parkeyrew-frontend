@@ -40,7 +40,7 @@
     </div>
 
     <div
-      class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-50 z-10 md:hidden"
+      class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-10 md:hidden"
       :class="isNavToggle ? 'block' : 'hidden'"
       @click="toggleNav"
     ></div>

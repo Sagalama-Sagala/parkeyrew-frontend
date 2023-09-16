@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
   <nav class="px-8 py-4 fixed w-full top-0 bg-white">
     <div class="flex justify-between items-center">

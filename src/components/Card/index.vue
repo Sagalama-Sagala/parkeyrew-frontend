@@ -1,10 +1,4 @@
-<script setup>
-import {Recommend,Star,Starfilled,Starhalffilled,Heart,Heartfilled} from '@/assets/Card'
-function greet()
-{
-    alert("คลิกทำไม ยังไม่เสร็จครับ")
-}
-</script>
+<script setup></script>
 
 <template>
     <div class="  bg-white p-2 rounded-xl w-[13.5rem] h-[18rem] flex flex-col" @click="cardClick">
@@ -13,14 +7,14 @@ function greet()
         <img v-if="isRecommended" :src=Recommend class="w-10 z-0"> 
         </div>
 
-        <div class="flex absolute  h-[8.7rem] w-[12.5rem] items-end justify-end">
-            <img v-if="!liked" :src=Heart  class="w-10">
-            <img v-if="liked" :src=Heartfilled  class="w-10">
+        <div  v-if="likeshow" class="flex absolute  h-[8.7rem] w-[12.5rem] items-end justify-end rounded-sm" >
+            <img v-if="!liked" :src=Heart  class="w-10 [clip-path:polygon(49%_100%,100%_50%,100%_0,0%_0%,0%_49%)] hover:pb-[0.1rem]" @click="heartClick">
+            <img v-if="liked" :src=Heartfilled  class="w-10 [clip-path:polygon(49%_100%,100%_50%,100%_0,0%_0%,0%_49%)] hover:pb-[0.1rem]" @click="heartClick">
         </div>
-        <img  :src="itemImage" class="rounded-xl h-[8.7rem] ">
+        <img  :src="itemImage" class="rounded-xl h-[8.7rem] object-cover">
 
         <h1>{{itemName}}</h1>
-        <div class="flex flex-wrap h-[3rem] overflow-hidden mx-auto">
+        <div class="flex flex-wrap h-[3rem] overflow-hidden mx-auto ">
             <div v-for="item in Tag" :key="item.id">
                 <div class="border-[1px] border-grey rounded-[3px] px-1 text-center text-[10px] m-1 hover:bg-slate-400 hover:cursor-pointer" @click="(e)=>{e.stopPropagation();tagClick}" >
                 {{ item.label }}
@@ -58,6 +52,9 @@ function greet()
 
 
 <script>
+import {ref} from 'vue';
+import {Recommend,Star,Starfilled,Starhalffilled,Heart,Heartfilled} from '@/assets/Card'
+
 export default {
   name: "Cardproduct",
   props: {
@@ -65,6 +62,11 @@ export default {
     {
         type:Boolean,
         default:false,
+    },
+    likeshow:
+    {
+      type:Boolean,
+      default:true
     },
     itemName: 
     {
@@ -118,6 +120,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    heartClick:
+    {
+      type: Function,
+      default:null
+    }
   },
   computed: {
     getStarImage() {
@@ -134,12 +141,18 @@ export default {
       };
     },
   },
-  methods: {
-    empty() {},
+  setup()
+  {
+    
   },
   data() {
     return {
-      Recommend: Recommend,
+      Recommend:Recommend,
+      Star:Star,
+      Starfilled:Starfilled,
+      Starhalffilled:Starhalffilled,
+      Heart:Heart,
+      Heartfilled:Heartfilled
     };
   },
 };

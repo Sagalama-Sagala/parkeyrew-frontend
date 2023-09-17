@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <nav class="fixed w-full top-0 bg-white">
+  <nav class="fixed w-full top-0 bg-white z-20">
     <div class="flex justify-between items-center px-8 py-3 h-16">
       <div class="flex items-center">
         <div class="md:hidden cursor-pointer">
@@ -83,7 +83,6 @@
       </div>
     </div>
   </nav>
-  <div class="block h-16"></div>
 </template>
 
 <script>

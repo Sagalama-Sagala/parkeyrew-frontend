@@ -1,114 +1,131 @@
-<script setup>
-import {Recommend,Star,Starfilled,Starhalffilled,Heart,Heartfilled} from '@/assets/Card'
-function greet()
-{
-    alert("คลิกทำไม ยังไม่เสร็จครับ")
-}
-</script>
-
 <template>
-    <div class="  bg-white p-2 rounded-xl w-[13.5rem] h-[18rem] flex flex-col" @click="cardClick">
-
-        <div class="flex items-end  h-[9rem] w-[12.5rem] absolute flex-col mt-[-0.5rem] justify-stretch" >
-        <img v-if="isRecommended" :src=Recommend class="w-10 z-0"> 
-        </div>
-
-        <div class="flex absolute  h-[8.7rem] w-[12.5rem] items-end justify-end">
-            <img v-if="!liked" :src=Heart  class="w-10">
-            <img v-if="liked" :src=Heartfilled  class="w-10">
-        </div>
-        <img  :src="itemImage" class="rounded-xl h-[8.7rem] ">
-
-        <h1>{{itemName}}</h1>
-        <div class="flex flex-wrap h-[3rem] overflow-hidden mx-auto">
-            <div v-for="item in Tag" :key="item.id">
-                <div class="border-[1px] border-grey rounded-[3px] px-1 text-center text-[10px] m-1 hover:bg-slate-400 hover:cursor-pointer" @click="(e)=>{e.stopPropagation();tagClick}" >
-                {{ item.label }}
-                </div>
-            </div>
-        </div>
-        <div class="flex justify-between mt-3">
-
-        <div>
-            <div class="flex items-center  gap-2">
-                <img :src=sellerImage class="rounded-full w-6 h-6 border-2">
-                <p class="text-[0.8rem] hover:underline hover:cursor-pointer" @click="(e)=>{e.stopPropagation();nameClick}">{{sellerName}}</p>
-            </div>
-            <div class="flex mt-1">
-                <img
-                v-for="index in 5"
-                :key="index"
-                :src="getStarImage(index)"
-                class="w-4"
-                />
-            </div>
-        </div>
-            <div class="flex items-end justify-end  flex-col">
-                <h1 class="text-[1.4rem] leading-4 font-bold"> 
-                    {{itemPrice}}
-                </h1>
-                <h1 class=" text-[0.7rem]"> 
-                    บาท
-                </h1>
-            </div>
-        </div>
-
+  <div
+    class="bg-white p-2 rounded-xl w-[320px] h-[400px] flex flex-col relative cursor-pointer"
+    @click="this.$router.push(`/product/${this.id}`)"
+  >
+    <div
+      class="flex items-end h-[9rem] w-[12.5rem] absolute flex-col mt-[-0.5rem] right-5 justify-stretch"
+    >
+      <img v-if="isRecommended" :src="Recommend" class="w-10 z-10" />
     </div>
+
+    <div class="px-2">
+      <img :src="itemImage" class="rounded-xl h-[215px] w-[297px] bg-cover" />
+      <div class="absolute top-[11.8rem] right-[1.4rem]">
+        <img v-if="liked" :src="Heartfilled" class="w-10" />
+      </div>
+    </div>
+    <div class="px-4 pt-2">
+      <h1 class="text-xl font-semibold pb-2">{{ itemName }}</h1>
+      <div class="flex overflow-x-auto mx-auto gap-x-1">
+        <div v-for="item in tags" :key="item.id">
+          <div
+            class="border-[1px] border-black rounded-md px-1 text-center text-sm w-full m-1 hover:bg-secondary hover:cursor-pointer whitespace-nowrap"
+            @click="
+              (e) => {
+                e.stopPropagation();
+                tagClick;
+              }
+            "
+          >
+            {{ item.label }}
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between absolute bottom-4 w-full left-0 px-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <img
+              :src="sellerImage"
+              class="rounded-full w-[20px] h-[20px] border-2"
+            />
+            <p
+              class="text-[0.8rem] hover:underline hover:cursor-pointer"
+              @click="
+                (e) => {
+                  e.stopPropagation();
+                  nameClick;
+                }
+              "
+            >
+              {{ sellerName }}
+            </p>
+          </div>
+          <div class="flex mt-1">
+            <img
+              v-for="index in 5"
+              :key="index"
+              :src="getStarImage(index)"
+              class="w-[24px]"
+            />
+          </div>
+        </div>
+        <div class="flex items-end justify-end flex-col">
+          <h1 class="text-4xl leading-4 font-bold">
+            {{ itemPrice }}
+          </h1>
+          <h1 class="text-[0.7rem]">บาท</h1>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-
 <script>
+import {
+  Recommend,
+  Star,
+  Starfilled,
+  Starhalffilled,
+  Heart,
+  Heartfilled,
+} from "@/assets/Card";
+
 export default {
-  name: "Cardproduct",
   props: {
-    isRecommended: 
-    {
-        type:Boolean,
-        default:false,
+    id: {
+      type: String,
+      default: null,
     },
-    itemName: 
-    {
-        type:String,
-        default:"placeholderText",    
+    isRecommended: {
+      type: Boolean,
+      default: false,
     },
-    Tag: 
-    {
-        type:String
+    itemName: {
+      type: String,
+      default: "placeholderText",
     },
-    itemImage: 
-    {
-        type:String,
-        default:"https://placehold.co/600x400"
+    tags: {
+      type: Array,
+      default: () => [],
     },
-    sellerImage: 
-    {
-        type:String,
-        default:"https://placehold.co/600x400"
+    itemImage: {
+      type: String,
+      default: "https://placehold.co/600x400",
     },
-    itemPrice: 
-    {
-        type:Float32Array,
-        default:0
+    sellerImage: {
+      type: String,
+      default: "https://placehold.co/600x400",
     },
-    sellerName: 
-    {
-        type:String,
-        default:"Seller Name"
+    itemPrice: {
+      type: Number,
+      default: 0,
     },
-    nameClick:
-    {
-        type:Function,
-        default:null
+    sellerName: {
+      type: String,
+      default: "Seller Name",
     },
-    cardClick:
-    {
-        type:Function,
-        default:null
+    nameClick: {
+      type: Function,
+      default: null,
     },
-    tagClick:
-    {
-        type:Function,
-        default:null
+    cardClick: {
+      type: Function,
+      default: null,
+    },
+    tagClick: {
+      type: Function,
+      default: null,
     },
     rating: {
       type: Number,
@@ -127,19 +144,22 @@ export default {
         if (index <= fullStars) {
           return Starfilled;
         } else if (halfStar && index === fullStars + 1) {
-          return Starhalffilled; 
+          return Starhalffilled;
         } else {
-          return Star; 
+          return Star;
         }
       };
     },
   },
-  methods: {
-    empty() {},
-  },
+  methods: {},
   data() {
     return {
-      Recommend: Recommend,
+      Recommend,
+      Star,
+      Starfilled,
+      Starhalffilled,
+      Heart,
+      Heartfilled,
     };
   },
 };

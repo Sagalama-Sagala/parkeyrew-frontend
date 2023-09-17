@@ -57,7 +57,6 @@
           :seller-image="item.sellerImage"
           :liked="item.liked"
         />
-        <!-- test web hook -->
       </div>
     </div>
   </div>

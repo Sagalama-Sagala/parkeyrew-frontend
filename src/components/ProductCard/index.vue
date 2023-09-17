@@ -6,7 +6,7 @@
     <div
       class="flex items-end h-[9rem] w-[12.5rem] absolute flex-col mt-[-0.5rem] right-5 justify-stretch"
     >
-      <img v-if="isRecommended" :src="Recommend" class="w-10 z-10" />
+      <img v-if="isRecommended" :src="Recommend" class="w-14 z-10" />
     </div>
 
     <div class="px-2">
@@ -52,12 +52,7 @@
             </p>
           </div>
           <div class="flex mt-1">
-            <img
-              v-for="index in 5"
-              :key="index"
-              :src="getStarImage(index)"
-              class="w-[24px]"
-            />
+            <Rating :rating="rating"/>
           </div>
         </div>
         <div class="flex items-end justify-end flex-col">
@@ -81,7 +76,12 @@ import {
   Heartfilled,
 } from "@/assets/product-card";
 
+import Rating from "../../components/Rating/index.vue"
+
 export default {
+  components:{
+    Rating
+  },
   props: {
     id: {
       type: String,
@@ -146,21 +146,6 @@ export default {
     heartClick: {
       type: Function,
       default: null,
-    },
-  },
-  computed: {
-    getStarImage() {
-      return (index) => {
-        const fullStars = Math.floor(this.rating);
-        const halfStar = this.rating % 1 >= 0.5;
-        if (index <= fullStars) {
-          return Starfilled;
-        } else if (halfStar && index === fullStars + 1) {
-          return Starhalffilled;
-        } else {
-          return Star;
-        }
-      };
     },
   },
   methods: {},

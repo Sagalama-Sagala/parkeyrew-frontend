@@ -35,7 +35,7 @@ export default {
           price: 300,
           productImage:
             "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
+          rating: 4.45,
           sellerImage:
             "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
           liked: true,

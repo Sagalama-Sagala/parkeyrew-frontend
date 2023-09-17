@@ -1,21 +1,22 @@
 <script setup>
-
-import Recommend from "../../assets/Card/Recommend.png"
-
+import {Recommend,Star,Starfilled,Starhalffilled,Heart,Heartfilled} from '@/assets/Card'
 function greet()
 {
     alert("คลิกทำไม ยังไม่เสร็จครับ")
 }
-
 </script>
 
 <template>
     <div class="  bg-white p-2 rounded-xl w-[13.5rem] h-[18rem] flex flex-col" @click="cardClick">
 
-        <div class="flex justify-end">
-        <img v-if="isRecommended" :src=Recommend class="w-10 absolute mt-[-0.5rem] z-0"> 
+        <div class="flex items-end  h-[9rem] w-[12.5rem] absolute flex-col mt-[-0.5rem] justify-stretch" >
+        <img v-if="isRecommended" :src=Recommend class="w-10 z-0"> 
         </div>
 
+        <div class="flex absolute  h-[8.7rem] w-[12.5rem] items-end justify-end">
+            <img v-if="!liked" :src=Heart  class="w-10">
+            <img v-if="liked" :src=Heartfilled  class="w-10">
+        </div>
         <img  :src="itemImage" class="rounded-xl h-[8.7rem] ">
 
         <h1>{{itemName}}</h1>
@@ -33,8 +34,13 @@ function greet()
                 <img :src=sellerImage class="rounded-full w-6 h-6 border-2">
                 <p class="text-[0.8rem] hover:underline hover:cursor-pointer" @click="(e)=>{e.stopPropagation();nameClick}">{{sellerName}}</p>
             </div>
-            <div class=" text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] hover:text-yellow-300 hover:cursor-pointer " @click='greet'> 
-                ★★★★★
+            <div class="flex mt-1">
+                <img
+                v-for="index in 5"
+                :key="index"
+                :src="getStarImage(index)"
+                class="w-4"
+                />
             </div>
         </div>
             <div class="flex items-end justify-end  flex-col">
@@ -52,12 +58,6 @@ function greet()
 
 
 <script>
-
-function empty()
-{
-    
-}
-
 export default {
   name: "Cardproduct",
   props: {
@@ -109,9 +109,33 @@ export default {
     {
         type:Function,
         default:null
-    }
-
-    
+    },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    liked: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    getStarImage() {
+      return (index) => {
+        const fullStars = Math.floor(this.rating);
+        const halfStar = this.rating % 1 >= 0.5;
+        if (index <= fullStars) {
+          return Starfilled;
+        } else if (halfStar && index === fullStars + 1) {
+          return Starhalffilled; 
+        } else {
+          return Star; 
+        }
+      };
+    },
+  },
+  methods: {
+    empty() {},
   },
   data() {
     return {
@@ -119,5 +143,4 @@ export default {
     };
   },
 };
-
 </script>

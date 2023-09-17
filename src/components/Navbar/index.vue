@@ -1,13 +1,8 @@
 <script setup></script>
 
 <template>
-<<<<<<< HEAD
   <nav class="fixed w-full top-0 bg-white">
     <div class="flex justify-between items-center px-8 py-3 h-16">
-=======
-  <nav class="px-8 py-4 fixed w-full top-0 bg-white z-50">
-    <div class="flex justify-between items-center">
->>>>>>> 9dc051effef03b13228657ae38d49dafe00b0823
       <div class="flex items-center">
         <div class="md:hidden cursor-pointer">
           <img :src="hamburger" class="w-6 text-black" @click="toggleNav" />
@@ -45,13 +40,13 @@
     </div>
 
     <div
-      class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-50 z-10 md:hidden"
+      class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-10 md:hidden"
       :class="isNavToggle ? 'block' : 'hidden'"
       @click="toggleNav"
     ></div>
     <div
       class="bg-white h-screen top-0 w-9/12 fixed transition-all ease-in duration-300 z-20 md:hidden"
-      :class="isNavToggle ? 'left-0' : 'left-[-400px]'"
+      :class="isNavToggle ? 'left-0' : 'left-[-600px]'"
     >
       <div class="pl-9 pt-5">
         <ul>

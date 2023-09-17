@@ -1,7 +1,8 @@
 <template>
-  <div class="">
-    <img :src="cover" />
-  </div>
+  <div
+    class="bg-cover"
+    style="background-image: url(&quot;../../assets/home/cover.png&quot;)"
+  ></div>
 </template>
 
 <script>

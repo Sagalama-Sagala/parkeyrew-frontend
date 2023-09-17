@@ -1,5 +1,17 @@
 <template>
-  <div class="bg-primary pt-20 text-white">Home</div>
+  <div class="">
+    <img :src="cover" />
+  </div>
 </template>
 
-<script></script>
+<script>
+import { cover } from "@/assets/home";
+export default {
+  setup() {},
+  data() {
+    return {
+      cover: cover,
+    };
+  },
+};
+</script>

@@ -1,8 +1,8 @@
 <script setup></script>
 
 <template>
-  <nav class="px-8 py-4 fixed w-full top-0 bg-white">
-    <div class="flex justify-between items-center">
+  <nav class="fixed w-full top-0 bg-white">
+    <div class="flex justify-between items-center px-8 py-3 h-16">
       <div class="flex items-center">
         <div class="md:hidden cursor-pointer">
           <img :src="hamburger" class="w-6 text-black" @click="toggleNav" />
@@ -83,6 +83,7 @@
       </div>
     </div>
   </nav>
+  <div class="block h-16"></div>
 </template>
 
 <script>

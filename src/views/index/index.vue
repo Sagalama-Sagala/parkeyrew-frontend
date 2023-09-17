@@ -77,7 +77,7 @@ import {
   sweater,
   trousers,
 } from "@/assets/home";
-import ProductCard from "@/components/Card/index.vue";
+import ProductCard from "@/components/ProductCard/index.vue";
 
 export default {
   setup() {},

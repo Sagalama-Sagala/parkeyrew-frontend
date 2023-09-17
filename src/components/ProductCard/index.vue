@@ -79,7 +79,7 @@ import {
   Starhalffilled,
   Heart,
   Heartfilled,
-} from "@/assets/Card";
+} from "@/assets/product-card";
 
 export default {
   props: {
@@ -164,16 +164,6 @@ export default {
     },
   },
   methods: {},
-  data() {
-    return {
-      Recommend,
-      Star,
-      Starfilled,
-      Starhalffilled,
-      Heart,
-      Heartfilled,
-    };
-  },
   setup() {},
   data() {
     return {

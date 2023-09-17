@@ -91,6 +91,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    likeshow: {
+      type: Boolean,
+      default: true,
+    },
+    itemName: {
+      type: String,
+      default: "placeholderText",
+    },
     itemName: {
       type: String,
       default: "placeholderText",
@@ -135,6 +143,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    heartClick: {
+      type: Function,
+      default: null,
+    },
   },
   computed: {
     getStarImage() {
@@ -152,6 +164,17 @@ export default {
     },
   },
   methods: {},
+  data() {
+    return {
+      Recommend,
+      Star,
+      Starfilled,
+      Starhalffilled,
+      Heart,
+      Heartfilled,
+    };
+  },
+  setup() {},
   data() {
     return {
       Recommend,

@@ -20,7 +20,6 @@
 
 <script>
 import ProductCard from "../../components/Card/index.vue";
-import Recommend from "../../assets/Card/Recommend.png";
 
 export default {
   components: {

@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+  my-vue-app:
+    build:
+      context: ./   # Set the build context to the project root directory
+    container_name: my-vue-app
+    restart: unless-stopped
+    ports:
+      - 3000:3000

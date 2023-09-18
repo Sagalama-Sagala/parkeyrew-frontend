@@ -33,13 +33,9 @@
                             <h1>+</h1>
                         </div>
                         <div class="flex flex-col justify-around ml-5"> 
-                            <div class="flex gap-3"> 
-                                <input type="radio" v-model="color" value="0" class="w-[1.2rem]">
-                                <label>ไม่มี</label>
-                            </div>
-                            <div class="flex gap-3">
-                                <input type="radio" v-model="color" value="0" class="w-[1.2rem]">
-                                <label>มีแบรนด์</label>
+                            <div v-for="Option in brandOptions" :key="Option.id" class="flex gap-3">
+                                <input type="checkbox" v-model="selected" :value="Option.id" class="w-[1.2rem]">
+                                <label>{{ Option.label }}</label>
                             </div>
                         </div>
                     </div>
@@ -49,63 +45,22 @@
                             <h1>+</h1>
                         </div>
                         <div class="flex flex-col ml-5 flex-wrap h-[6rem]"> 
-                            <div class="flex gap-3"> 
-                                <input type="radio" v-model="color" class="w-[1.2rem]">
-                                <label>S</label>
-                            </div>
-                            <div class="flex gap-3">
-                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
-                                <label>M</label>
-                            </div>
-                            <div class="flex gap-3">
-                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
-                                <label>L</label>
-                            </div>
-                            <div class="flex gap-3">
-                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
-                                <label>XL</label>
-                            </div>
-                            <div class="flex gap-3">
-                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
-                                <label>XXL</label>
-                            </div>
-                            <div class="flex gap-3">
-                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
-                                <label>Oversize</label>
+                            <div v-for="size in sizes" :key="size.id" class="flex gap-3">
+                                <input type="checkbox" v-model="selectedSize" :value="size.id" class="w-[1.2rem]">
+                                <label>{{ size.label }}</label>
                             </div>
                         </div>
                     </div>
                     <div class="w-[16rem] flex flex-col gap-3"> 
                         <div class="flex w-full justify-between"> 
-                            <h1>ไซต์</h1>
+                            <h1>สี</h1>
                             <h1>+</h1>
                         </div>
                         <div class="flex  ml-5 flex-wrap w-[12rem] gap-4"> 
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
-                            </div>
-                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+
+                            <div v-for="color in colorOptions" :key="color.id" class="flex gap-3">
+                                <div class="w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5] hover:border-[2px] border-black" :style="{ backgroundColor: color.label }"> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -175,11 +130,27 @@
         ProductImage: [T1, T2, T3, T4, Call, Chat, Heart],
         isOpen: false,
         selectedOption: null,
-        options: [
-            { value: 'option1', label: 'Option 1' },
-            { value: 'option2', label: 'Option 2' },
-            // Add more options as needed
+        sizes: [
+            { id: "S", label: "S" },
+            { id: "M", label: "M" },
+            { id: "L", label: "L" },
+            { id: "XL", label: "XL" },
+            { id: "XXL", label: "XXL" },
+            { id: "Oversize", label: "Oversize" },
         ],
+        brandOptions: [
+            { id: 0, label: "ไม่มี" },
+            { id: 1, label: "มีแบรนด์" },
+        ],
+        colorOptions: [
+            { id: 0, label: "#000000" },
+            { id: 1, label: "#1FFC11" },
+            { id: 2, label: "#6F3222" },
+            { id: 3, label: "#F14131" },
+            { id: 4, label: "#123456" },
+            { id: 5, label: "#555555" },
+        ],
+
         products: [
           {
             id: "a0000001",

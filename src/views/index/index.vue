@@ -95,7 +95,7 @@ export default {
       console.log("Search... ", this.searchInput);
     },
     handleFilterType(type) {
-      console.log("Filter... ", type);
+      this.$router.push(`/filter/${type}`)
     },
   },
   data() {

@@ -90,7 +90,7 @@
               <img  :src="productData.sellerImage" class=" hover:bg-secondary hover:cursor-pointer w-[4rem] h-[4rem] rounded-full object-cover border-4">
               <div>
                 <h1 class=" hover:underline hover:cursor-pointer">{{productData.sellerName}}</h1>
-                <Rating :rating="productData.rating"/>
+                <Rating :rating="productData.rating" @childButtonClick="greet" :clickable="true"/>
               </div>
             </div>
 
@@ -134,6 +134,7 @@
             :rating="item.rating"
             :seller-image="item.sellerImage"
             :liked="item.liked"
+            @sellerClick="greet(item.title)"
           />
         </div>
       </div>
@@ -167,7 +168,10 @@ export default {
   methods:{
       updateSelectedImage(index) {
       this.selectedImageIndex = index;
-    }
+    },
+      greet(sellerNAme){
+        console.log(`you click ${sellerNAme}`);
+      }
   },
   data()
   {
@@ -204,7 +208,7 @@ export default {
         {
           id: "a0000001",
           recommended: true,
-          title: "ขยะ",
+          title: "ขdsยะ",
           price: 300,
           productImage:
             "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",

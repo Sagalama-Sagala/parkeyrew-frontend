@@ -21,12 +21,7 @@
         <div v-for="item in tags" :key="item.id">
           <div
             class="border-[1px] border-black rounded-md px-1 text-center text-sm w-full m-1 hover:bg-secondary hover:cursor-pointer whitespace-nowrap"
-            @click="
-              (e) => {
-                e.stopPropagation();
-                tagClick;
-              }
-            "
+            @click.stop="handleTagClick(item.id)"
           >
             {{ item.label }}
           </div>
@@ -41,12 +36,7 @@
             />
             <p
               class="text-[0.8rem] hover:underline hover:cursor-pointer"
-              @click="
-                (e) => {
-                  e.stopPropagation();
-                  nameClick;
-                }
-              "
+              @click.stop="handleSellerClick()"
             >
               {{ sellerName }}
             </p>
@@ -123,18 +113,6 @@ export default {
       type: String,
       default: "Seller Name",
     },
-    nameClick: {
-      type: Function,
-      default: null,
-    },
-    cardClick: {
-      type: Function,
-      default: null,
-    },
-    tagClick: {
-      type: Function,
-      default: null,
-    },
     rating: {
       type: Number,
       default: 0,
@@ -143,12 +121,19 @@ export default {
       type: Boolean,
       default: false,
     },
-    heartClick: {
-      type: Function,
-      default: null,
-    },
   },
-  methods: {},
+  methods: {
+    handleTagClick(index){
+      this.$emit("tagClick" ,index);
+    },
+    handleHeartClick()
+    {
+      this.$emit("heartClick")
+    },
+    handleSellerClick(){
+      this.$emit("sellerClick")
+    }
+  },
   setup() {},
   data() {
     return {

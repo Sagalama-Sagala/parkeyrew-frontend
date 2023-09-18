@@ -5,6 +5,8 @@
         :key="index"
         :src="getStarImage(index)"
         class="w-5"
+        :class="{ ' hover:translate-y-[-0.15rem] duration-75': clickable }"
+        @click="handleStarCick(index)"
       />
     </div>
   </template>
@@ -18,6 +20,11 @@
         type: Number,
         default: 0,
       },
+      clickable:
+      {
+        type: Boolean,
+        default: false
+      }
     },
     computed: {
       getStarImage() {
@@ -34,6 +41,12 @@
         };
       },
     },
+    methods:{
+      handleStarCick(index)
+      {
+        this.$emit('childButtonClick',index)
+      }
+    }
   };
   </script>
   

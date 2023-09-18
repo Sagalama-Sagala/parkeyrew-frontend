@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen bg-secondary pt-16">
     <div class="relative">
-      <img :src="cover" alt="cover" class="h-[166px]" />
+      <img :src="cover" alt="cover" class="h-[166px] w-full" />
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="text-center space-y-2">
           <h1 class="text-white text-2xl">ผ้าขี้ริ้วห่อทอง ผ้ามือสองห่อใจ</h1>

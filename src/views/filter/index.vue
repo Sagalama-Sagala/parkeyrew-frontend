@@ -3,7 +3,7 @@
         <div class="bg-white h-[8rem] w-full flex text-black items-end iten text-xl font-bold"> 
             <div class="mx-20 my-3 justify-between w-full hidden md:flex">
                 <div class="flex">
-                    <h1 class=" text-[#949494]"> 
+                    <h1 class=" text-[#949494] hover:cursor-pointer hover:text-[#838383]" @click="handleMainClick"> 
                         เลือกซื้อตามหมวดหมู่&nbsp;
                     </h1> 
                     <h1 class="text-primary"> 
@@ -25,8 +25,8 @@
 
         <div class="flex flex-1 gap-10">
 
-            <div class="w-[25%] bg-white hidden md:block mt-[1px] text-xl font-[500]"> 
-                <div class="flex flex-col gap-5 justify-center items-center h-full">
+            <div class="w-[25%] bg-white hidden md:block mt-[1px] text-2xl font-[500]"> 
+                <div class="flex flex-col gap-5 justify-evenly items-center h-full">
                     <div class="w-[16rem] flex flex-col gap-3"> 
                         <div class="flex w-full justify-between"> 
                             <h1>แบรนด์</h1>
@@ -124,6 +124,9 @@
       Rating,
     },
     methods: {
+        handleMainClick(){
+            this.$router.push(`/`)
+        }
     },
     data() {
       return {

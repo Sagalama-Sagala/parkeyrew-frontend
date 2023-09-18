@@ -26,7 +26,7 @@
               v-for="(imageUrl, index) in ProductImage"
               :key="index"
               :src="imageUrl"
-              class="h-[8rem] w-[11rem] border-grey pt-1 rounded-xl border-[1px]"
+              class="h-[8rem] w-[11rem] border-grey rounded-xl border-[1px] aspect-[10.5/9] object-contain bg-slate-400"
               :class="{
                 ' blur-sm border-2 border-black': selectedImageIndex === index,
               }"

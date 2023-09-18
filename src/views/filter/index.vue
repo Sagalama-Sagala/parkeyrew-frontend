@@ -1,0 +1,287 @@
+<template>
+    <div class="bg-secondary min-h-screen flex flex-col  overflow-hidden relative">
+        <div class="bg-white h-[8rem] w-full flex text-black items-end iten text-xl font-bold"> 
+            <div class="mx-20 my-3 justify-between w-full hidden md:flex">
+                <div class="flex">
+                    <h1 class=" text-[#949494]"> 
+                        เลือกซื้อตามหมวดหมู่&nbsp;
+                    </h1> 
+                    <h1 class="text-primary"> 
+                        /&nbsp;{{$route.params.id}}
+                    </h1>
+                </div>
+                
+                <div class="flex gap-2 justify-center items-center"> 
+                    <h1>เรียงตาม</h1>
+                    <select name="cars" id="cars" class="border-[1px] border-black text-[1.2rem] font-normal">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                        <option value="mercedes">Mercedes</option>
+                        <option value="audi">Audi</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-1 gap-10">
+
+            <div class="w-[25%] bg-white hidden md:block mt-[1px] text-xl font-[500]"> 
+                <div class="flex flex-col gap-5 justify-center items-center h-full">
+                    <div class="w-[16rem] flex flex-col gap-3"> 
+                        <div class="flex w-full justify-between"> 
+                            <h1>แบรนด์</h1>
+                            <h1>+</h1>
+                        </div>
+                        <div class="flex flex-col justify-around ml-5"> 
+                            <div class="flex gap-3"> 
+                                <input type="radio" v-model="color" value="0" class="w-[1.2rem]">
+                                <label>ไม่มี</label>
+                            </div>
+                            <div class="flex gap-3">
+                                <input type="radio" v-model="color" value="0" class="w-[1.2rem]">
+                                <label>มีแบรนด์</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-[16rem] flex flex-col gap-3"> 
+                        <div class="flex w-full justify-between"> 
+                            <h1>ไซต์</h1>
+                            <h1>+</h1>
+                        </div>
+                        <div class="flex flex-col ml-5 flex-wrap h-[6rem]"> 
+                            <div class="flex gap-3"> 
+                                <input type="radio" v-model="color" class="w-[1.2rem]">
+                                <label>S</label>
+                            </div>
+                            <div class="flex gap-3">
+                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
+                                <label>M</label>
+                            </div>
+                            <div class="flex gap-3">
+                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
+                                <label>L</label>
+                            </div>
+                            <div class="flex gap-3">
+                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
+                                <label>XL</label>
+                            </div>
+                            <div class="flex gap-3">
+                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
+                                <label>XXL</label>
+                            </div>
+                            <div class="flex gap-3">
+                                <input type="radio" v-model="color" value="asdasd" pointer-events-none class="w-[1.2rem]">
+                                <label>Oversize</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-[16rem] flex flex-col gap-3"> 
+                        <div class="flex w-full justify-between"> 
+                            <h1>ไซต์</h1>
+                            <h1>+</h1>
+                        </div>
+                        <div class="flex  ml-5 flex-wrap w-[12rem] gap-4"> 
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                            <div class="bg-black w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5]"> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-[16rem] flex flex-col gap-3"> 
+                        <div class="flex w-full justify-between"> 
+                            <h1>สภาพ</h1>
+                            <h1>+</h1>
+                        </div>
+                        <div class="flex flex-col ml-5 flex-wrap h-[2rem]"> 
+                            <input type="range" id="volume-slider">
+                        </div>
+                    </div>
+                    <div class="w-[16rem] flex flex-col gap-3"> 
+                        <div class="flex w-full justify-between"> 
+                            <h1>ราคา</h1>
+                            <h1>+</h1>
+                        </div>
+                        <div class="flex flex-col ml-5 flex-wrap h-[2rem]"> 
+                            <input type="range" id="volume-slider">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" flex-1 flex flex-wrap mx-auto overflow-y-auto  "> 
+                <div class="flex flex-wrap mt-10 gap-5 h-[0px] justify-center md:justify-start">
+                <ProductCard class="w-[18rem]"
+                    v-for="(item, index) in products"
+                    :id="item.id"
+                    :key="item.title"
+                    :is-recommended="item.recommended"
+                    :item-name="item.title"
+                    :tags="item.tags"
+                    :item-price="item.price"
+                    :item-image="item.productImage"
+                    :rating="item.rating"
+                    :seller-image="item.sellerImage"
+                    :liked="item.liked"
+                    />
+                </div>
+            </div>
+        </div>
+
+    </div>
+  </template>
+  
+  <script>
+  import { Sharearrow } from "@/assets/Product";
+  import { Heart } from "@/assets/Product";
+  import ProductCard from "@/components/ProductCard/index.vue";
+  import { Recommend } from "@/assets/product-card";
+  import Rating from "@/components/Rating/index.vue";
+  
+  import { Chat, Call } from "@/assets/Product";
+  
+  import { T1, T2, T3, T4 } from "@/assets/TestImage";
+  
+  export default {
+    components: {
+      ProductCard,
+      Rating,
+    },
+    methods: {
+    },
+    data() {
+      return {
+        ProductImage: [T1, T2, T3, T4, Call, Chat, Heart],
+        isOpen: false,
+        selectedOption: null,
+        options: [
+            { value: 'option1', label: 'Option 1' },
+            { value: 'option2', label: 'Option 2' },
+            // Add more options as needed
+        ],
+        products: [
+          {
+            id: "a0000001",
+            recommended: true,
+            title: "ขdsยะ",
+            price: 300,
+            productImage:
+              "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
+            rating: 4.45,
+            sellerImage:
+              "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
+            liked: true,
+            tags: [
+              { id: 0, label: "สีขาว" },
+              { id: 1, label: "เล็ก" },
+              { id: 2, label: "50%" },
+              { id: 0, label: "no-brand" },
+            ],
+          },
+          {
+            id: "a0000002",
+            recommended: true,
+            title: "ขยะ",
+            price: 300,
+            productImage:
+              "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
+            rating: 4.55,
+            sellerImage:
+              "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
+            liked: true,
+            tags: [
+              { id: 0, label: "สีขาว" },
+              { id: 1, label: "เล็ก" },
+              { id: 2, label: "50%" },
+              { id: 2, label: "เล็กมาก" },
+              { id: 2, label: "ถูกเกิน" },
+              { id: 2, label: "ลดได้อีกๆ" },
+            ],
+          },
+          {
+            id: "a0000003",
+            recommended: true,
+            title: "ขยะ",
+            price: 300,
+            productImage:
+              "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
+            rating: 4.55,
+            sellerImage:
+              "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
+            liked: true,
+            tags: [
+              { id: 0, label: "สีขาว" },
+              { id: 1, label: "เล็ก" },
+              { id: 2, label: "50%" },
+              { id: 2, label: "เล็กมาก" },
+              { id: 2, label: "ถูกเกิน" },
+              { id: 2, label: "ลดได้อีกๆ" },
+            ],
+          },
+          {
+            id: "a0000004",
+            recommended: true,
+            title: "ขยะ",
+            price: 300,
+            productImage:
+              "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
+            rating: 4.55,
+            sellerImage:
+              "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
+            liked: true,
+            tags: [
+              { id: 0, label: "สีขาว" },
+              { id: 1, label: "เล็ก" },
+              { id: 2, label: "50%" },
+              { id: 2, label: "เล็กมาก" },
+              { id: 2, label: "ถูกเกิน" },
+              { id: 2, label: "ลดได้อีกๆ" },
+            ],
+          },
+          {
+            id: "a0000004",
+            recommended: true,
+            title: "ขยะ",
+            price: 300,
+            productImage:
+              "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
+            rating: 4.55,
+            sellerImage:
+              "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
+            liked: true,
+            tags: [
+              { id: 0, label: "สีขาว" },
+              { id: 1, label: "เล็ก" },
+              { id: 2, label: "50%" },
+              { id: 2, label: "เล็กมาก" },
+              { id: 2, label: "ถูกเกิน" },
+              { id: 2, label: "ลดได้อีกๆ" },
+            ],
+          },
+        ],
+      };
+    },
+  };
+  </script>
+  

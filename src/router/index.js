@@ -40,6 +40,11 @@ const routes = [
         name: "Product",
         component: () => import("@/views/product/index.vue"),
       },
+      {
+        path: "filter/:id",
+        name: "Filter",
+        component: () => import("@/views/filter/index.vue"),
+      },
     ],
   },
 ];

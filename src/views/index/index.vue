@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen bg-secondary pt-16">
     <div class="relative">
-      <img :src="cover" alt="cover" class="w-full h-auto" />
+      <img :src="cover" alt="cover" class="h-[166px] w-full" />
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="text-center space-y-2">
           <h1 class="text-white text-2xl">ผ้าขี้ริ้วห่อทอง ผ้ามือสองห่อใจ</h1>
@@ -21,13 +21,19 @@
         </div>
       </div>
     </div>
-    <div class="px-8 py-5 bg-white">
-      <h2 class="font-semibold text-xl">เลือกซื้อตามหมวดหมู่</h2>
-      <ul class="flex flex-wrap gap-x-4 gap-y-3 pt-6">
+    <div class="md:px-8 px-0 py-5 bg-white w-full">
+      <h2 class="md:px-0 px-8 font-semibold text-xl">เลือกซื้อตามหมวดหมู่</h2>
+      <ul
+        class="flex md:flex-wrap md:gap-x-4 gap-x-3 gap-y-3 pt-6 md:overflow-hidden overflow-x-auto"
+      >
         <li
           v-for="(item, index) in types"
           :key="item.title"
-          class="border-[2px] border-primary rounded-lg flex justify-center items-center px-5 py-4 text-xl font-semibold gap-x-3 cursor-pointer hover:text-white hover:bg-primary duration-500 h-[80px]"
+          class="border-[2px] border-primary rounded-lg flex justify-center items-center px-5 md:py-4 text-xl font-semibold md:gap-x-3 cursor-pointer hover:text-white hover:bg-primary duration-500 md:h-[80px] h-[60px] whitespace-nowrap"
+          :class="{
+            'ml-5 md:ml-0': index === 0,
+            'mr-5 md:mr-0': index === types.length - 1,
+          }"
           @click="handleFilterType(item.title)"
         >
           <span>

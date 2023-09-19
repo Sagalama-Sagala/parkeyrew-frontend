@@ -1,17 +1,19 @@
 <template>
-    <div class="bg-secondary min-h-screen flex flex-col  overflow-hidden relative">
-        <div class="bg-white h-[8rem] w-full flex text-black items-end iten text-xl font-bold"> 
-            <div class="mx-20 my-3 justify-between w-full hidden md:flex">
-                <div class="flex">
-                    <h1 class=" text-[#949494] hover:cursor-pointer hover:text-[#838383]" @click="handleMainClick"> 
+    <div class="bg-secondary min-h-screen flex flex-col  overflow-hidden relative ">
+        <div class="bg-white md:h-[8rem] h-[8rem] w-full flex text-black items-end iten  font-bold"> 
+            <div class="md:mx-20 mx-10 my-1 md:my-3 justify-between w-full flex md:item-end items-center">
+                <div class="flex md:text-xl text-[1rem] justify-center ">
+                    <h1 class=" text-[#949494] hover:cursor-pointer hover:text-[#838383]  " @click="handleMainClick"> 
                         เลือกซื้อตามหมวดหมู่&nbsp;
                     </h1> 
                     <h1 class="text-primary"> 
                         /&nbsp;{{$route.params.id}}
                     </h1>
                 </div>
+
+                <img :src="filter" class="w-[3rem] border-2 rounded-lg md:hidden ">
                 
-                <div class="flex gap-2 justify-center items-center"> 
+                <div class="md:flex gap-2 justify-center items-center hidden"> 
                     <h1>เรียงตาม</h1>
                     <select name="cars" id="cars" class="border-[1px] border-black text-[1.2rem] font-normal">
                         <option value="volvo">Volvo</option>
@@ -34,7 +36,7 @@
                         </div>
                         <div class="flex flex-col justify-around ml-5"> 
                             <div v-for="Option in brandOptions" :key="Option.id" class="flex gap-3">
-                                <input type="checkbox" v-model="selected" :value="Option.id" class="w-[1.2rem]">
+                                <input type="checkbox" v-model="Option.isCheck" :value="Option.id" class="w-[1.2rem]"  @click="handleBrandCheck(Option)">
                                 <label>{{ Option.label }}</label>
                             </div>
                         </div>
@@ -45,9 +47,9 @@
                             <h1>+</h1>
                         </div>
                         <div class="flex flex-col ml-5 flex-wrap h-[6rem]"> 
-                            <div v-for="size in sizes" :key="size.id" class="flex gap-3">
-                                <input type="checkbox" v-model="selectedSize" :value="size.id" class="w-[1.2rem]">
-                                <label>{{ size.label }}</label>
+                            <div v-for="Option in sizeOptions" :key="Option.id" class="flex gap-3">
+                                <input type="checkbox" v-model="Option.isCheck" :value="Option.id" class="w-[1.2rem]" @click="handleSizeCheck(Option)">
+                                <label>{{ Option.label }}</label>
                             </div>
                         </div>
                     </div>
@@ -87,7 +89,7 @@
 
             <div class=" flex-1 flex flex-wrap mx-auto overflow-y-auto  "> 
                 <div class="flex flex-wrap mt-10 gap-5 h-[0px] justify-center md:justify-start">
-                <ProductCard class="w-[18rem]"
+                <ProductCard class="w-[16rem]"
                     v-for="(item, index) in products"
                     :id="item.id"
                     :key="item.title"
@@ -103,7 +105,7 @@
                 </div>
             </div>
         </div>
-
+        <button @click="console.log(brand)"> test</button>
     </div>
   </template>
   
@@ -115,6 +117,7 @@
   import Rating from "@/components/Rating/index.vue";
   
   import { Chat, Call } from "@/assets/Product";
+  import { filter } from "@/assets/filter";
   
   import { T1, T2, T3, T4 } from "@/assets/TestImage";
   
@@ -126,14 +129,43 @@
     methods: {
         handleMainClick(){
             this.$router.push(`/`)
+        },
+        storeVariableToUrl(object)
+        {
+           this.$router.push({ path: `/filter/${this.$route.params.id}`, query: object });
+        },
+
+        handleBrandCheck(value)
+        {
+           if(value.isCheck){
+            this.urlVariable.brand = this.urlVariable.brand.filter(item=> item !== value.label)
+           }   
+           else{
+            this.urlVariable.brand.push(value.label)
+           }
+           this.storeVariableToUrl(this.urlVariable);
+        },
+        handleSizeCheck(value)
+        {
+          if(Array.isArray(this.urlVariable.size))
+          {
+          if(value.isCheck){
+              this.urlVariable.size = this.urlVariable.size.filter(item=> item !== value.label)
+           }   
+           else{
+            this.urlVariable.size.push(value.label)
+           }
+           this.storeVariableToUrl(this.urlVariable);
+          }
         }
     },
     data() {
       return {
+        filter:filter,
         ProductImage: [T1, T2, T3, T4, Call, Chat, Heart],
         isOpen: false,
         selectedOption: null,
-        sizes: [
+        sizeOptions: [
             { id: "S", label: "S" },
             { id: "M", label: "M" },
             { id: "L", label: "L" },
@@ -142,18 +174,18 @@
             { id: "Oversize", label: "Oversize" },
         ],
         brandOptions: [
-            { id: 0, label: "ไม่มี" },
-            { id: 1, label: "มีแบรนด์" },
+            { id: 0, label: "ไม่มี", isCheck:false},
+            { id: 1, label: "มีแบรนด์", isCheck:false},
         ],
         colorOptions: [
-            { id: 0, label: "#000000" },
-            { id: 1, label: "#1FFC11" },
-            { id: 2, label: "#6F3222" },
-            { id: 3, label: "#F14131" },
-            { id: 4, label: "#123456" },
-            { id: 5, label: "#555555" },
+            { id: 0, label: "#000000", isCheck:false},
+            { id: 1, label: "#1FFC11", isCheck:false},
+            { id: 2, label: "#6F3222", isCheck:false},
+            { id: 3, label: "#F14131", isCheck:false},
+            { id: 4, label: "#123456", isCheck:false},
+            { id: 5, label: "#555555", isCheck:false},
         ],
-
+        urlVariable:{brand:this.$route.query.brand || [],size:this.$route.query.size || [],color:this.$route.query.color || []},
         products: [
           {
             id: "a0000001",
@@ -172,6 +204,7 @@
               { id: 2, label: "50%" },
               { id: 0, label: "no-brand" },
             ],
+            category:"0"
           },
           {
             id: "a0000002",
@@ -256,6 +289,20 @@
         ],
       };
     },
+    created() {
+      const updateOptions = (urlVariable, options) => {
+        if (Array.isArray(urlVariable)) {
+          options.forEach((option) => {
+            option.isCheck = urlVariable.includes(option.label);
+          });
+        }
+      };
+      updateOptions(this.urlVariable.brand, this.brandOptions);
+      updateOptions(this.urlVariable.size, this.sizeOptions);
+      updateOptions(this.urlVariable.color, this.colorOptions);
+    },
+
+    
   };
   </script>
   

@@ -29,11 +29,7 @@
         <li
           v-for="(item, index) in types"
           :key="item.title"
-          class="border-[2px] border-primary rounded-lg flex justify-center items-center px-5 md:py-4 text-xl font-semibold md:gap-x-3 cursor-pointer hover:text-white hover:bg-primary duration-500 md:h-[80px] h-[60px] whitespace-nowrap"
-          :class="{
-            'ml-5 md:ml-0': index === 0,
-            'mr-5 md:mr-0': index === types.length - 1,
-          }"
+          class="border-[2px] border-primary rounded-lg flex justify-center items-center px-5 md:py-4 text-xl font-semibold md:gap-x-3 cursor-pointer hover:text-white hover:bg-primary duration-500 md:h-[80px] h-[60px] whitespace-nowrap first:ml-5 first:md:ml-0 last:mr-5 last:md:mr-0"
           @click="handleFilterType(item.title)"
         >
           <span>
@@ -95,7 +91,7 @@ export default {
       console.log("Search... ", this.searchInput);
     },
     handleFilterType(type) {
-      this.$router.push(`/filter/${type}`)
+      this.$router.push(`/filter/${type}`);
     },
   },
   data() {

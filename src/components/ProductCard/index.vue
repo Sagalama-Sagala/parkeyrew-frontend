@@ -6,13 +6,13 @@
     <div
       class="flex items-end h-[9rem] w-[12.5rem] absolute flex-col mt-[-0.5rem] right-5 justify-stretch"
     >
-      <img v-if="isRecommended" :src="Recommend" class="w-14 z-10" />
+      <img v-if="isRecommended" :src="recommend" class="w-14 z-10" />
     </div>
 
     <div class="px-2">
       <img :src="itemImage" class="rounded-xl h-[215px] w-[297px] bg-cover" />
       <div class="absolute top-[11.8rem] right-[1.4rem]">
-        <img v-if="liked" :src="Heartfilled" class="w-10" />
+        <img v-if="liked" :src="heartfilled" class="w-10" />
       </div>
     </div>
     <div class="px-4 pt-2">
@@ -42,7 +42,7 @@
             </p>
           </div>
           <div class="flex mt-1">
-            <Rating :rating="rating"/>
+            <Rating :rating="rating" />
           </div>
         </div>
         <div class="flex items-end justify-end flex-col">
@@ -58,19 +58,19 @@
 
 <script>
 import {
-  Recommend,
-  Star,
-  Starfilled,
-  Starhalffilled,
-  Heart,
-  Heartfilled,
-} from "@/assets/product-card";
+  recommend,
+  star,
+  starfilled,
+  starhalffilled,
+  heart,
+  heartfilled,
+} from "@/assets/product_card";
 
-import Rating from "../../components/Rating/index.vue"
+import Rating from "../../components/Rating/index.vue";
 
 export default {
-  components:{
-    Rating
+  components: {
+    Rating,
   },
   props: {
     id: {
@@ -123,26 +123,25 @@ export default {
     },
   },
   methods: {
-    handleTagClick(index){
-      this.$emit("tagClick" ,index);
+    handleTagClick(index) {
+      this.$emit("tagClick", index);
     },
-    handleHeartClick()
-    {
-      this.$emit("heartClick")
+    handleHeartClick() {
+      this.$emit("heartClick");
     },
-    handleSellerClick(){
-      this.$emit("sellerClick")
-    }
+    handleSellerClick() {
+      this.$emit("sellerClick");
+    },
   },
   setup() {},
   data() {
     return {
-      Recommend,
-      Star,
-      Starfilled,
-      Starhalffilled,
-      Heart,
-      Heartfilled,
+      recommend,
+      star,
+      starfilled,
+      starhalffilled,
+      heart,
+      heartfilled,
     };
   },
 };

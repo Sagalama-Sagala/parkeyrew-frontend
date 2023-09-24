@@ -4,8 +4,8 @@
     <div class="flex max-w-3xl items-center">
       <!--images-->
       <div class="md:block hidden mt-20">
-        <img class="w-64 mx-5" src="@/assets/login/logo1.png " alt="" />
-        <img class="w-72 mr-10" src="@/assets/login/logo2.png" alt="" />
+        <img class="w-64 mx-5" :src="logo1" alt="" />
+        <img class="w-72 mr-10" :src="logo2" alt="" />
       </div>
 
       <!--form 1 begin-->
@@ -44,7 +44,8 @@
           </button>
           <p class="text-center">
             มีบัญชีอยู่แล้วใช่ไหม ?
-            <button onclick="run(1,2);"
+            <button
+              onclick="run(1,2);"
               class="text-primary font-medium text-sm"
               @click.prevent="submitLogin"
             >
@@ -52,25 +53,26 @@
             </button>
           </p>
         </form>
-        
       </div>
     </div>
     <!--form1 end-->
-    
   </section>
 </template>
 
 <script>
+import { logo1, logo2 } from "@/assets/login_register";
 export default {
   methods: {
     submitLogin() {
       console.log("dfsdfjsdjio");
       this.$router.push("Login");
     },
-    
   },
-  
+  data() {
+    return {
+      logo1,
+      logo2,
+    };
+  },
 };
-
-
 </script>

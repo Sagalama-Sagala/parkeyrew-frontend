@@ -4,8 +4,8 @@
     <div class="flex max-w-3xl items-center">
       <!--images-->
       <div class="md:block hidden mt-20">
-        <img class="w-64 mx-5" src="@/assets/login/logo1.png " alt="" />
-        <img class="w-72 mr-10" src="@/assets/login/logo2.png" alt="" />
+        <img class="w-64 mx-5" :src="logo1" alt="" />
+        <img class="w-72 mr-10" :src="logo2" alt="" />
       </div>
 
       <!--form-->
@@ -92,10 +92,13 @@
 </template>
 
 <script>
+import { logo1, logo2 } from "@/assets/login_register";
 export default {
   data() {
     return {
       inputTypeIcon: "password",
+      logo1,
+      logo2,
     };
   },
   methods: {

@@ -110,8 +110,14 @@
                 class="hover:bg-secondary hover:cursor-pointer w-[4rem] h-[4rem] rounded-full object-cover border-4"
               />
               <div>
-                <h1 class=" hover:underline hover:cursor-pointer">{{productData.sellerName}}</h1>
-                <Rating :rating="productData.rating" @childButtonClick="greet" :clickable="true"/>
+                <h1 class="hover:underline hover:cursor-pointer">
+                  {{ productData.sellerName }}
+                </h1>
+                <Rating
+                  :rating="productData.rating"
+                  @childButtonClick="greet"
+                  :clickable="true"
+                />
               </div>
             </div>
 
@@ -142,32 +148,32 @@
     <div class="flex justify-end">
       <h1>ดูร้านอื่นของผู้ขาย></h1>
     </div>
-      <div class="flex  overflow-x-auto pb-10 ">
-        <div class="flex gap-x-5 mx-auto">
-          <ProductCard
-            v-for="(item, index) in products"
-            :id="item.id"
-            :key="item.title"
-            :is-recommended="item.recommended"
-            :item-name="item.title"
-            :tags="item.tags"
-            :item-price="item.price"
-            :item-image="item.productImage"
-            :rating="item.rating"
-            :seller-image="item.sellerImage"
-            :liked="item.liked"
-            @sellerClick="greet(item.title)"
-          />
-        </div>
+    <div class="flex overflow-x-auto pb-10">
+      <div class="flex gap-x-5 mx-auto">
+        <ProductCard
+          v-for="(item, index) in products"
+          :id="item.id"
+          :key="item.title"
+          :is-recommended="item.recommended"
+          :item-name="item.title"
+          :tags="item.tags"
+          :item-price="item.price"
+          :item-image="item.productImage"
+          :rating="item.rating"
+          :seller-image="item.sellerImage"
+          :liked="item.liked"
+          @sellerClick="greet(item.title)"
+        />
       </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { Sharearrow } from "@/assets/Product";
+import { Sharearrow } from "@/assets/product";
 import { Heart } from "@/assets/Product";
 import ProductCard from "@/components/ProductCard/index.vue";
-import { Recommend } from "@/assets/product-card";
+import { Recommend } from "@/assets/product_card";
 import Rating from "@/components/Rating/index.vue";
 
 import { Chat, Call } from "@/assets/Product";
@@ -183,9 +189,9 @@ export default {
     updateSelectedImage(index) {
       this.selectedImageIndex = index;
     },
-      greet(sellerNAme){
-        console.log(`you click ${sellerNAme}`);
-      }
+    greet(sellerNAme) {
+      console.log(`you click ${sellerNAme}`);
+    },
   },
   data() {
     return {

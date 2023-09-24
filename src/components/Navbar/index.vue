@@ -1,15 +1,26 @@
 <script setup></script>
 
 <template>
-  <nav class="fixed w-full top-0 bg-white z-20">
+  <nav
+    class="fixed w-full top-0 z-20 transition-all duration-500 ease-in-out"
+    :class="isNavColorPrimary() ? 'bg-primary' : 'bg-white'"
+  >
     <div class="flex justify-between items-center px-8 py-3 h-16">
       <div class="flex items-center">
         <div class="md:hidden cursor-pointer">
-          <img :src="hamburger" class="w-6 text-black" @click="toggleNav" />
+          <img
+            :src="isNavColorPrimary() ? hamburger_white : hamburger"
+            class="w-6"
+            @click="toggleNav"
+          />
         </div>
         <div class="pr-5 md:pl-0 pl-5">
           <router-link to="/">
-            <img :src="logo" alt="logo" class="w-28" />
+            <img
+              :src="isNavColorPrimary() ? logo_white : logo"
+              alt="logo"
+              class="w-28"
+            />
           </router-link>
         </div>
         <div class="md:block hidden">
@@ -18,6 +29,7 @@
               v-for="(item, index) in NavItems"
               :key="item.title"
               class="font-semibold text-lg"
+              :class="isNavColorPrimary() ? 'text-white' : 'text-black'"
             >
               <router-link :to="item.path">
                 {{ item.title }}
@@ -35,7 +47,10 @@
               :key="item.icon"
             >
               <router-link :to="item.path">
-                <img :src="item.icon" class="w-8 text-black" />
+                <img
+                  :src="isNavColorPrimary() ? item.icon_white : item.icon"
+                  class="w-8"
+                />
               </router-link>
             </li>
             <li
@@ -74,7 +89,7 @@
             <router-link :to="item.path">{{ item.title }}</router-link>
           </li>
         </ul>
-        <ul class="pl-9 pt-4">
+        <ul v-if="!isLogin" class="pl-9 pt-4">
           <li
             v-for="(item, index) in MenuItemsUnauth"
             :key="item.title"
@@ -119,7 +134,12 @@ import {
   profile,
   hamburger,
   logo,
+  logo_white,
   close,
+  hamburger_white,
+  chat_white,
+  favorite_white,
+  profile_white,
 } from "@/assets/navbar";
 
 export default {
@@ -130,6 +150,15 @@ export default {
     };
     return { isNavToggle, toggleNav };
   },
+  methods: {
+    isNavColorPrimary() {
+      let curPath = this.$route.path.slice(0, 5);
+      if (curPath === "/chat") {
+        return true;
+      }
+      return false;
+    },
+  },
   data() {
     return {
       NavItems: [
@@ -138,9 +167,9 @@ export default {
         { title: "ติดต่อเรา", path: "/contact" },
       ],
       MenuItemsAuth: [
-        { icon: chat, path: "/chat" },
-        { icon: favorite, path: "/favorite" },
-        { icon: profile, path: "/profile" },
+        { icon: chat, icon_white: chat_white, path: "/chat" },
+        { icon: favorite, icon_white: favorite_white, path: "/favorite" },
+        { icon: profile, icon_white: profile_white, path: "/profile" },
       ],
       MenuItemsUnauth: [
         { title: "สมัครใหม่", path: "/register", class: "" },
@@ -150,9 +179,11 @@ export default {
           class: "border-[1px] border-black px-2 py-1 rounded",
         },
       ],
-      hamburger: hamburger,
-      logo: logo,
-      close: close,
+      hamburger,
+      hamburger_white,
+      logo,
+      logo_white,
+      close,
       isLogin: true,
     };
   },

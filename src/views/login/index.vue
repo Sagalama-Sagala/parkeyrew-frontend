@@ -87,7 +87,7 @@ export default {
       this.$router.push("/");
     },
     submitRegisterForm() {
-      this.$router.push("Register");
+      this.$router.push("/register");
     },
   },
 };

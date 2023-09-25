@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
   <nav
     class="fixed w-full top-0 z-20 transition-all duration-500 ease-in-out"
@@ -23,7 +21,7 @@
             />
           </router-link>
         </div>
-        <div class="md:block hidden">
+        <div v-if="!isAuthPage()" class="md:block hidden">
           <ul class="flex gap-x-5">
             <li
               v-for="(item, index) in NavItems"
@@ -40,7 +38,10 @@
       </div>
       <div>
         <div class="md:block hidden">
-          <ul class="flex items-center gap-x-5">
+          <div v-if="isAuthPage()" class="font-semibold md:text-lg">
+            {{ MenuItemAuthPage }}
+          </div>
+          <ul v-else class="flex items-center gap-x-5">
             <li
               v-if="isLogin"
               v-for="(item, index) in MenuItemsAuth"
@@ -58,7 +59,7 @@
               v-for="(item, index) in MenuItemsUnauth"
               :key="item.title"
               :class="item.class"
-              class="font-semibold"
+              class="font-semibold md:text-lg"
             >
               <router-link :to="item.path">
                 {{ item.title }}
@@ -78,9 +79,16 @@
       class="bg-white h-screen top-0 w-9/12 fixed transition-all ease-in duration-300 z-20 md:hidden"
       :class="isNavToggle ? 'left-0' : 'left-[-600px]'"
     >
-      <div class="pt-5 divide-secondary divide-y-2">
+      <div
+        class="pt-5 divide-secondary"
+        :class="!isAuthPage() ? 'divide-y-2' : 'divide-y-0'"
+      >
         <ul class="pl-9 pb-4">
+          <li v-if="isAuthPage()" class="py-2 font-semibold">
+            {{ MenuItemAuthPage }}
+          </li>
           <li
+            v-else
             v-for="(item, index) in NavItems"
             :key="item.title"
             class="py-2 font-semibold"
@@ -89,7 +97,7 @@
             <router-link :to="item.path">{{ item.title }}</router-link>
           </li>
         </ul>
-        <ul v-if="!isLogin" class="pl-9 pt-4">
+        <ul v-if="!isLogin && !isAuthPage()" class="pl-9 pt-4">
           <li
             v-for="(item, index) in MenuItemsUnauth"
             :key="item.title"
@@ -152,8 +160,15 @@ export default {
   },
   methods: {
     isNavColorPrimary() {
-      let curPath = this.$route.path.slice(0, 5);
+      let curPath = this.$route.path.slice(0, 5).toLowerCase();
       if (curPath === "/chat") {
+        return true;
+      }
+      return false;
+    },
+    isAuthPage() {
+      let curPath = this.$route.path.toLowerCase();
+      if (curPath === "/login" || curPath === "/register") {
         return true;
       }
       return false;
@@ -179,12 +194,13 @@ export default {
           class: "border-[1px] border-black px-2 py-1 rounded",
         },
       ],
+      MenuItemAuthPage: "ต้องการความช่วยเหลือ ?",
       hamburger,
       hamburgerWhite,
       logo,
       logoWhite,
       close,
-      isLogin: true,
+      isLogin: false,
     };
   },
 };

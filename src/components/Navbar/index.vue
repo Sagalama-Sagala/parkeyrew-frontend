@@ -200,7 +200,7 @@ export default {
       logo,
       logoWhite,
       close,
-      isLogin: false,
+      isLogin: true,
     };
   },
 };

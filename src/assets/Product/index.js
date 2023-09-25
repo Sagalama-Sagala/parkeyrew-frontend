@@ -1,5 +1,5 @@
-import Sharearrow from "./Sharearrow.svg"
-import Heart from "./Heart.svg"
-import Chat from "./Chat.svg"
-import Call from "./Call.svg"
-export {Sharearrow,Heart,Chat,Call};
+import shareArrow from "./share-arrow.svg";
+import heart from "./heart.svg";
+import chat from "./chat.svg";
+import call from "./call.svg";
+export { shareArrow, heart, chat, call };

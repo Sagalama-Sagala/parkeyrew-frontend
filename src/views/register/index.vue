@@ -44,7 +44,7 @@
             @click="pushStep(index)"
           >
             <img
-              :src="currentStep >= index ? circle_black : circle_gray"
+              :src="currentStep >= index ? circleBlack : circleGray"
               class="w-2"
             />
           </button>
@@ -61,12 +61,7 @@
 </template>
 
 <script>
-import {
-  logo1,
-  logo2,
-  circle_black,
-  circle_gray,
-} from "@/assets/login_register";
+import { logo1, logo2, circleBlack, circleGray } from "@/assets/login_register";
 import { ref, shallowRef } from "vue";
 import Info from "@/components/StepsRegister/Info/index.vue";
 import Password from "@/components/StepsRegister/Password/index.vue";
@@ -122,8 +117,8 @@ export default {
     return {
       logo1,
       logo2,
-      circle_black,
-      circle_gray,
+      circleBlack,
+      circleGray,
       currentStep: 0,
       steps: [
         {

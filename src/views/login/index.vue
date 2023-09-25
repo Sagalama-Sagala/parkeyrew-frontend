@@ -35,13 +35,8 @@
             />
             <button class="input-group-text" @click.prevent="ToggleInputIcon">
               <img
-                :src="inputTypeIcon === 'password' ? eye : eye_off"
+                :src="inputTypeIcon === 'password' ? eye : eyeOff"
                 class="absolute top-3 right-3"
-                :class="
-                  inputTypeIcon === 'password'
-                    ? 'bi bi-eye '
-                    : 'bi bi-eye-slash'
-                "
               />
             </button>
 
@@ -68,7 +63,7 @@
 </template>
 
 <script>
-import { logo1, logo2, eye, eye_off } from "@/assets/login_register";
+import { logo1, logo2, eye, eyeOff } from "@/assets/login_register";
 export default {
   data() {
     return {
@@ -76,7 +71,7 @@ export default {
       logo1,
       logo2,
       eye,
-      eye_off,
+      eyeOff,
       usernameInput: null,
       passwordInput: null,
     };

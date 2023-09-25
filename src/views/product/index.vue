@@ -13,7 +13,7 @@
               />
               <img
                 v-if="productData.isRecommend"
-                :src="Recommend"
+                :src="recommend"
                 class="w-[4rem] absolute top-0 right-3"
               />
             </div>
@@ -54,11 +54,11 @@
             >
               <div class="flex gap-2">
                 <img
-                  :src="Heart"
+                  :src="heart"
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center p-1 hover:bg-secondary md:w-14 w-10"
                 />
                 <img
-                  :src="Sharearrow"
+                  :src="shareArrow"
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center hover:bg-secondary md:w-14 w-10 p-2"
                 />
               </div>
@@ -125,14 +125,14 @@
               <div
                 class="flex border-[1px] border-[#393838] md:border-black w-[4rem] md:w-[6rem] h-[4rem] rounded-full md:rounded-xl justify-center items-center gap-2 hover:bg-secondary hover:cursor-pointer"
               >
-                <img :src="Call" class="w-7" />
+                <img :src="call" class="w-7" />
                 <h1 class="hidden md:block">แชท</h1>
               </div>
 
               <div
                 class="flex border-[1px] border-[#393838] md:border-black w-[4rem] md:w-[6rem] h-[4rem] rounded-full md:rounded-xl justify-center items-center gap-2 hover:bg-secondary hover:cursor-pointer"
               >
-                <img :src="Chat" class="w-[1.5rem]" />
+                <img :src="chat" class="w-[1.5rem]" />
                 <h1 class="hidden md:blcok">โทร</h1>
               </div>
             </div>
@@ -170,13 +170,10 @@
 </template>
 
 <script>
-import { Sharearrow } from "@/assets/product";
-import { Heart } from "@/assets/Product";
+import { shareArrow, heart, chat, call } from "@/assets/product";
+import { recommend } from "@/assets/product_card";
 import ProductCard from "@/components/ProductCard/index.vue";
-import { Recommend } from "@/assets/product_card";
 import Rating from "@/components/Rating/index.vue";
-
-import { Chat, Call } from "@/assets/Product";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
 
@@ -195,11 +192,11 @@ export default {
   },
   data() {
     return {
-      Sharearrow,
-      Heart,
-      Recommend,
-      Chat,
-      Call,
+      shareArrow,
+      heart,
+      recommend,
+      chat,
+      call,
       selectedImageIndex: 0,
       baseURL: "http://localhost:5173/product/a0000002",
       productData: {
@@ -221,7 +218,7 @@ export default {
           "https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg",
         rating: 4.6,
       },
-      ProductImage: [T1, T2, T3, T4, Call, Chat, Heart],
+      ProductImage: [T1, T2, T3, T4, call, chat, heart],
       products: [
         {
           id: "a0000001",

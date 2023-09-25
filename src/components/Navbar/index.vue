@@ -9,7 +9,7 @@
       <div class="flex items-center">
         <div class="md:hidden cursor-pointer">
           <img
-            :src="isNavColorPrimary() ? hamburger_white : hamburger"
+            :src="isNavColorPrimary() ? hamburgerWhite : hamburger"
             class="w-6"
             @click="toggleNav"
           />
@@ -17,7 +17,7 @@
         <div class="pr-5 md:pl-0 pl-5">
           <router-link to="/">
             <img
-              :src="isNavColorPrimary() ? logo_white : logo"
+              :src="isNavColorPrimary() ? logoWhite : logo"
               alt="logo"
               class="w-28"
             />
@@ -134,12 +134,12 @@ import {
   profile,
   hamburger,
   logo,
-  logo_white,
+  logoWhite,
   close,
-  hamburger_white,
-  chat_white,
-  favorite_white,
-  profile_white,
+  hamburgerWhite,
+  chatWhite,
+  favoriteWhite,
+  profileWhite,
 } from "@/assets/navbar";
 
 export default {
@@ -167,9 +167,9 @@ export default {
         { title: "ติดต่อเรา", path: "/contact" },
       ],
       MenuItemsAuth: [
-        { icon: chat, icon_white: chat_white, path: "/chat" },
-        { icon: favorite, icon_white: favorite_white, path: "/favorite" },
-        { icon: profile, icon_white: profile_white, path: "/profile" },
+        { icon: chat, icon_white: chatWhite, path: "/chat" },
+        { icon: favorite, icon_white: favoriteWhite, path: "/favorite" },
+        { icon: profile, icon_white: profileWhite, path: "/profile" },
       ],
       MenuItemsUnauth: [
         { title: "สมัครใหม่", path: "/register", class: "" },
@@ -180,9 +180,9 @@ export default {
         },
       ],
       hamburger,
-      hamburger_white,
+      hamburgerWhite,
       logo,
-      logo_white,
+      logoWhite,
       close,
       isLogin: true,
     };

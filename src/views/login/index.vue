@@ -1,7 +1,7 @@
 <template>
   <section class="bg-primary min-h-screen flex items-center justify-center">
     <!--login container-->
-    <div class="flex max-w-3xl items-center">
+    <div class="flex max-w-3xl items-center gap-x-14">
       <!--images-->
       <div class="md:block hidden mt-20">
         <img class="w-64 mx-5" :src="logo1" alt="" />
@@ -24,12 +24,14 @@
             name="username"
             class="focus:outline-none mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
             placeholder="ชื่อผู้ใช้"
+            v-model="usernameInput"
           />
           <div class="relative">
             <input
               :type="inputTypeIcon"
               class="focus:outline-none form-control mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
               placeholder="รหัสผ่าน"
+              v-model="passwordInput"
             />
             <button class="input-group-text" @click.prevent="ToggleInputIcon">
               <img
@@ -75,6 +77,8 @@ export default {
       logo2,
       eye,
       eye_off,
+      usernameInput: null,
+      passwordInput: null,
     };
   },
   methods: {
@@ -83,11 +87,11 @@ export default {
         this.inputTypeIcon === "password" ? "text" : "password";
     },
     submitForm() {
-      console.log("dfsdfjsdjio");
+      console.log("username: ", this.usernameInput);
+      console.log("password: ", this.passwordInput);
       this.$router.push("/");
     },
     submitRegisterForm() {
-      console.log("dfsdfjsdjio");
       this.$router.push("Register");
     },
   },

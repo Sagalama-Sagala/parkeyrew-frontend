@@ -1,7 +1,7 @@
 <template>
   <section class="bg-primary min-h-screen flex items-center justify-center">
     <!--register container-->
-    <div class="flex max-w-3xl items-center">
+    <div class="flex max-w-3xl items-center gap-x-14">
       <!--images-->
       <div class="md:block hidden mt-20">
         <img class="w-64 mx-5" :src="logo1" alt="" />
@@ -13,65 +13,128 @@
         id="teb-1"
         class="md:h-full md:w-80 bg-white px-10 py-8 mt-12 rounded-xl shadow-[30.0px_30.0px_0.0px_rgba(0,0,0,0.18)]"
       >
-        <h2 class="text-center text-lg font-semibold mb-4">สมัครใหม่</h2>
+        <div class="pb-4">
+          <component
+            v-bind:is="steps[currentStep].component"
+            :formValue="formValue"
+            @update-form-value="testForm"
+          />
+        </div>
+        <button
+          v-if="currentStep === steps.length - 1"
+          type="submit"
+          class="mt-1 block w-full px-3 py-1 bg-tertiary font-normal rounded-md hover:scale-105 duration-300"
+          @click="submitRegister"
+        >
+          ยืนยัน
+        </button>
+        <button
+          v-else
+          type="submit"
+          class="mt-1 block w-full px-3 py-1 bg-tertiary font-normal rounded-md hover:scale-105 duration-300"
+          @click="next"
+        >
+          ต่อไป
+        </button>
 
-        <form action="" class="flex flex-col gap-4">
-          <input
-            type="text"
-            name="name"
-            class="focus:outline-none mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
-            placeholder="ชื่อ"
-          />
-          <input
-            type="text"
-            name="sername"
-            class="focus:outline-none mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
-            placeholder="นามสกุล"
-          />
-          <input
-            type="text"
-            name="username"
-            class="focus:outline-none mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
-            placeholder="ชื่อผู้ใช้"
-          />
-
+        <div class="w-full flex justify-center items-center py-4 gap-x-2">
           <button
-            type="submit"
-            class="mt-1 block w-full px-3 py-1 bg-tertiary font-normal rounded-md hover:scale-105 duration-300"
+            v-for="(item, index) in steps"
+            :key="item.label"
+            @click="pushStep(index)"
           >
-            <a href=""></a>
-            ต่อไป
+            <img
+              :src="currentStep >= index ? circle_black : circle_gray"
+              class="w-2"
+            />
           </button>
-          <p class="text-center">
-            มีบัญชีอยู่แล้วใช่ไหม ?
-            <button
-              onclick="run(1,2);"
-              class="text-primary font-medium text-sm"
-              @click.prevent="submitLogin"
-            >
-              เข้าสู่ระบบ
-            </button>
-          </p>
-        </form>
+        </div>
+        <p class="text-center">
+          มีบัญชีอยู่แล้วใช่ไหม ?
+          <router-link class="text-primary font-medium text-sm" to="/login">
+            เข้าสู่ระบบ
+          </router-link>
+        </p>
       </div>
     </div>
-    <!--form1 end-->
   </section>
 </template>
 
 <script>
-import { logo1, logo2 } from "@/assets/login_register";
+import {
+  logo1,
+  logo2,
+  circle_black,
+  circle_gray,
+} from "@/assets/login_register";
+import { ref, shallowRef } from "vue";
+import Info from "@/components/StepsRegister/Info/index.vue";
+import Password from "@/components/StepsRegister/Password/index.vue";
 export default {
+  setup() {
+    const formValue = ref({
+      fname: "",
+      lname: "",
+      username: "",
+      tel: "",
+      password: "",
+      confirm_password: "",
+    });
+
+    const testForm = (payload) => {
+      formValue.value = {
+        ...formValue.value,
+        [payload.label]: payload.data,
+      };
+    };
+
+    return { formValue, testForm };
+  },
+  emits: ["updateFormValue"],
+  components: {
+    Info,
+    Password,
+  },
   methods: {
+    next() {
+      this.currentStep += 1;
+    },
+    prev() {
+      this.currentStep += 1;
+    },
+    pushStep(step) {
+      this.currentStep = step;
+    },
     submitLogin() {
-      console.log("dfsdfjsdjio");
       this.$router.push("Login");
+    },
+    updateFormValue(payload) {
+      this.formValue = {
+        ...this.formValue,
+        [payload.label]: payload.data,
+      };
+    },
+    submitRegister() {
+      console.log(JSON.stringify(this.formValue, null, 2));
     },
   },
   data() {
     return {
       logo1,
       logo2,
+      circle_black,
+      circle_gray,
+      currentStep: 0,
+      steps: [
+        {
+          component: shallowRef(Info),
+          label: "information",
+        },
+        {
+          component: shallowRef(Password),
+          label: "password",
+        },
+      ],
     };
   },
 };

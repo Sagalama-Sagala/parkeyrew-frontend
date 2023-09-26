@@ -4,8 +4,15 @@
       {{ this.$route.params.id }}
       <p>State: {{ connected }}</p>
     </div>
-    <div v-for="(item, index) in messages" :key="item">
+    <!-- <div v-for="(item, index) in messages" :key="item"> -->
+    <!--   {{ item }} -->
+    <!-- </div> -->
+    <div v-for="(item, index) in chats" :key="item">
       {{ item }}
+    </div>
+    <input class="border-black bg-gray-200" v-model="chatInput" />
+    <div>
+      <button @click="handleSubmitNewMessage">send</button>
     </div>
   </Container>
 </template>
@@ -18,13 +25,19 @@ import { ref } from "vue";
 export default {
   setup() {
     const messages = ref([]);
+    const chats = ref([]);
 
     socket.on("message", (message) => {
       messages.value = message;
       console.log(messages);
     });
 
-    return { messages };
+    socket.on("chat", (message) => {
+      chats.value.push(message);
+      console.log(chats);
+    });
+
+    return { messages, chats };
   },
   computed: {
     connected() {
@@ -32,6 +45,10 @@ export default {
     },
   },
   methods: {
+    handleSubmitNewMessage() {
+      console.log(this.chatInput);
+      socket.emit("chat", this.chatInput);
+    },
     connect() {
       socket.connect();
     },
@@ -41,6 +58,11 @@ export default {
   },
   components: {
     Container,
+  },
+  data() {
+    return {
+      chatInput: "",
+    };
   },
 };
 </script>

@@ -1,25 +1,25 @@
 <template>
-  <div
-    class="bg-primary pt-24 w-screen h-screen flex justify-center pb-16 px-6"
-  >
-    <div
-      class="bg-white w-[1114px] h-full rounded-2xl md:px-24 px-4 pt-6 pb-20"
-    >
-      <div>
-        <ul class="flex justify-between items-center pb-4">
-          <li
-            v-for="(item, index) in chatMenu"
-            :key="item.title"
-            class="md:text-lg text-sm font-semibold"
-          >
-            {{ item.title }}
-          </li>
-        </ul>
-      </div>
-      <div class="h-full overflow-y-auto">
+  <Container>
+    <!-- chat menu -->
+    <div>
+      <ul class="flex justify-between items-center pb-4">
+        <li
+          v-for="(item, index) in chatMenu"
+          :key="item.title"
+          class="md:text-lg text-sm font-semibold cursor-pointer transition-all ease-in-out duration-1000"
+          :class="item.isActive ? 'text-black underline' : 'text-[#9c9c9c]'"
+          @click="handleChatMenu(index)"
+        >
+          {{ item.title }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- chat box -->
+    <div class="h-full overflow-y-auto">
+      <div v-for="(item, index) in mockupChat" :key="item.roomId">
         <div
-          v-for="(item, index) in mockupChat"
-          :key="item.roomId"
+          @click="handleChatPrivate(item.roomId)"
           class="flex justify-between items-center border-b-[1px] border-black md:text-lg text-sm py-1"
         >
           <div class="flex justify-center items-center gap-x-2">
@@ -52,21 +52,32 @@
         </div>
       </div>
     </div>
-  </div>
+  </Container>
 </template>
 
 <script>
 import { noti, profile } from "@/assets/chat";
+import Container from "@/components/ChatContainer/index.vue";
 export default {
+  components: {
+    Container,
+  },
   methods: {
-    handleChatMenu() {},
+    handleChatMenu(menuIndex) {
+      this.chatMenu.forEach((item, index) => {
+        item.isActive = index === menuIndex;
+      });
+    },
+    handleChatPrivate(roomId) {
+      this.$router.push(`chat/${roomId}`);
+    },
   },
   data() {
     return {
       chatMenu: [
-        { title: "แชททั้งหมด" },
-        { title: "แชทกับผู้ขาย" },
-        { title: "แชทกับผู็ซื้อ" },
+        { title: "แชททั้งหมด", isActive: true },
+        { title: "แชทกับผู้ขาย", isActive: false },
+        { title: "แชทกับผู้ซื้อ", isActive: false },
       ],
       mockupChat: [
         {

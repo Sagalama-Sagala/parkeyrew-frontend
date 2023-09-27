@@ -1,11 +1,11 @@
 <template>
-    <div class="">
+    <div class="bg-gray-200 pt-[171px]">
         <aside
             id="cta-button-sidebar"
-            class="fixed left-0 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+            class="fixed left-0 h-screen transition-transform -translate-x-full sm:translate-x-0"
             aria-label="Sidebar"
         >
-            <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50">
+            <div class="h-full p-16 overflow-y-auto text-xl">
                 <ul class="space-y-2 font-medium text-gray-400">
                     <li v-for="e in navs">
                         <div
@@ -56,7 +56,7 @@
             </div>
         </aside>
 
-        <div class="p-4 sm:ml-64 h-screen mt-16">
+        <div class="p-4 ml-80 h-screen">
             <!-- focusPage {{ focusPage }} -->
             <div v-if="focusPage === 'record'"><Myrecord /></div>
             <div v-else-if="focusPage === 'address'"><Address /></div>

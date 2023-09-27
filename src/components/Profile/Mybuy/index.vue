@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-red-400">i am my buy page</div>
+    <div class="bg-white h-screen">i am my buy page</div>
 </template>
 
 <script>

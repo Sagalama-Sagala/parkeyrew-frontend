@@ -153,7 +153,7 @@ import ProductCard from "@/components/ProductCard/index.vue";
 import { recommend } from "@/assets/product_card";
 import Rating from "@/components/Rating/index.vue";
 
-import { chat, call } from "@/assets/Product";
+import { chat, call } from "@/assets/product";
 import { filter } from "@/assets/filter";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";

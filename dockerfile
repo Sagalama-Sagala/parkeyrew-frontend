@@ -1,21 +1,13 @@
-FROM node:lts-alpine
-
-# set the working direction
+# build stage
+FROM node:lts-alpine as build-stage
 WORKDIR /app
-
-# install app dependencies
-COPY package.json ./
-
-# Fix permissions for packages
-# RUN npm config set unsafe-perm true
-
+COPY package*.json ./
 RUN yarn install
-RUN yarn add global serve
+COPY . .
+RUN yarn run build
 
-# Bundle app source
-COPY . ./
-
-RUN chown -R node:node /app/node_modules
-
-# start app
-CMD ["yarn", "run", "dev"]
+# production stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

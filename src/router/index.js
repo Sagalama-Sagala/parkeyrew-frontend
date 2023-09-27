@@ -11,6 +11,16 @@ const routes = [
         component: () => import("@/views/index/index.vue"),
       },
       {
+        path: "login",
+        name: "Login",
+        component: () => import("@/views/login/index.vue"),
+      },
+      {
+        path: "register",
+        name: "Register",
+        component: () => import("@/views/register/index.vue"),
+      },
+      {
         path: "mystore",
         name: "MyStore",
         component: () => import("@/views/mystore/index.vue"),
@@ -26,6 +36,12 @@ const routes = [
         component: () => import("@/views/chat/index.vue"),
       },
       {
+        path: "chat/:id",
+        name: "PrivateChat",
+        component: () => import("@/views/chat-private/index.vue"),
+      },
+
+      {
         path: "profile",
         name: "Profile",
         component: () => import("@/views/profile/index.vue"),
@@ -34,6 +50,16 @@ const routes = [
         path: "contact",
         name: "Contact",
         component: () => import("@/views/contact/index.vue"),
+      },
+      {
+        path: "product/:id",
+        name: "Product",
+        component: () => import("@/views/product/index.vue"),
+      },
+      {
+        path: "filter/:id",
+        name: "Filter",
+        component: () => import("@/views/filter/index.vue"),
       },
     ],
   },

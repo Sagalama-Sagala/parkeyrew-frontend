@@ -148,12 +148,12 @@
 </template>
 
 <script>
-import { sharearrow, heart } from "@/assets/product";
+import { shareArrow, heart } from "@/assets/product";
 import ProductCard from "@/components/ProductCard/index.vue";
-import { Recommend } from "@/assets/product_card";
+import { recommend } from "@/assets/product_card";
 import Rating from "@/components/Rating/index.vue";
 
-import { Chat, Call } from "@/assets/Product";
+import { chat, call } from "@/assets/Product";
 import { filter } from "@/assets/filter";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";

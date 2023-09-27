@@ -14,9 +14,6 @@
     <div>
       <button @click="handleSubmitNewMessage">send</button>
     </div>
-    <div>
-      {{ api }}
-    </div>
   </Container>
 </template>
 
@@ -28,14 +25,13 @@ import { ref } from "vue";
 export default {
   setup() {
     const chats = ref([]);
-    const api = import.meta.env.VITE_APP_API;
 
     socket.on("message", (message) => {
       chats.value.push(message);
       console.log(chats);
     });
 
-    return { chats, api };
+    return { chats };
   },
   computed: {
     connected() {

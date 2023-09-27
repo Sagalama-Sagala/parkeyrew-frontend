@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-red-400">i am my record page</div>
+    <div class="bg-white h-screen">i am my record page</div>
 </template>
 
 <script>

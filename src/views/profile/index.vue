@@ -56,24 +56,36 @@
             </div>
         </aside>
 
-        <div class="p-4 sm:ml-64 h-screen bg-gray-400 mt-16">
-            focusPage {{ focusPage }}
-            <div v-if="focusPage === 'prawat'">ประวัติ</div>
-            <div v-else-if="focusPage === 'teeyoo'">ที่อยู่</div>
-            <div v-else-if="focusPage === 'chagepass'">เปลี่ยนรหัสผ่าน</div>
-            <div v-else-if="focusPage === 'mybuy'">การซื้อของฉัน</div>
-            <div v-else-if="focusPage === 'mysell'">การขายของฉัน</div>
+        <div class="p-4 sm:ml-64 h-screen mt-16">
+            <!-- focusPage {{ focusPage }} -->
+            <div v-if="focusPage === 'record'"><Myrecord /></div>
+            <div v-else-if="focusPage === 'address'"><Address /></div>
+            <div v-else-if="focusPage === 'chagepass'"><Changepass /></div>
+            <div v-else-if="focusPage === 'mybuy'"><Mybuy /></div>
+            <div v-else-if="focusPage === 'mysell'"><Mysell /></div>
         </div>
     </div>
 </template>
 
 <script>
+import Address from "@/components/Profile/Address/index.vue";
+import Changepass from "@/components/Profile/Changepass/index.vue";
+import Mybuy from "@/components/Profile/Mybuy/index.vue";
+import Mysell from "@/components/Profile/Mysell/index.vue";
+import Myrecord from "@/components/Profile/Myrecord/index.vue";
 import { account, cart, cart2 } from "@/assets/profile";
 export default {
+    components: {
+        Address,
+        Changepass,
+        Mybuy,
+        Mysell,
+        Myrecord,
+    },
     methods: {},
     data() {
         return {
-            focusPage: "prawat",
+            focusPage: "record", //default
             account,
             cart,
             cart2,
@@ -87,12 +99,12 @@ export default {
                         {
                             title: "ประวัติ",
                             icon: account,
-                            page: "prawat",
+                            page: "record",
                         },
                         {
                             title: "ที่อยู่",
                             icon: account,
-                            page: "teeyoo",
+                            page: "address",
                         },
                         {
                             title: "เปลี่ยนรหัสผ่าน",

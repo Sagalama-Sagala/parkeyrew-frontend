@@ -9,6 +9,7 @@
       placeholder="ชื่อ"
       v-model="formValue.fname"
       @input="updateForm('fname', $event.target.value)"
+      required
     />
     <input
       type="text"
@@ -17,6 +18,7 @@
       placeholder="นามสกุล"
       v-model="formValue.lname"
       @input="updateForm('lname', $event.target.value)"
+      required
     />
     <input
       type="text"
@@ -25,6 +27,7 @@
       placeholder="ชื่อผู้ใช้"
       v-model="formValue.username"
       @input="updateForm('username', $event.target.value)"
+      required
     />
   </div>
 </template>

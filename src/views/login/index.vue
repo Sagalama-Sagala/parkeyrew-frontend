@@ -87,7 +87,7 @@ export default {
     },
     submitForm() {
       axios
-        .post(`${import.meta.env.VITE_APP_API}/auth/login`, {
+        .post("/auth/login", {
           username: this.usernameInput,
           password: this.passwordInput,
         })

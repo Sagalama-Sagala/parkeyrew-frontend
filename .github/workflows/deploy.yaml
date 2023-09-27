@@ -1,0 +1,16 @@
+name: deploy-frontend
+on:
+    push:
+        branches: [main]
+
+jobs:
+    deploy-docker:
+        runs-on: self-hosted
+        steps:
+            # checkout branch
+            - uses: actions/checkout@master
+            - run: |
+                  cd /home/g64010017/actions-runner/_work/parkeyrew-frontend/parkeyrew-frontend
+                  git reset --hard HEAD
+                  git pull origin main
+                  sudo docker-compose up --build -d

@@ -148,12 +148,11 @@
 </template>
 
 <script>
-import { shareArrow, heart } from "@/assets/product";
 import ProductCard from "@/components/ProductCard/index.vue";
-import { recommend } from "@/assets/product_card";
 import Rating from "@/components/Rating/index.vue";
 
 import { chat, call } from "@/assets/product";
+import { heart } from "@/assets/product";
 import { filter } from "@/assets/filter";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
@@ -200,16 +199,16 @@ export default {
   data() {
     return {
       filter: filter,
-      ProductImage: [T1, T2, T3, T4, Call, Chat, Heart],
+      ProductImage: [T1, T2, T3, T4, call, chat, heart],
       isOpen: false,
       selectedOption: null,
       sizeOptions: [
-        { id: "S", label: "S" },
-        { id: "M", label: "M" },
-        { id: "L", label: "L" },
-        { id: "XL", label: "XL" },
-        { id: "XXL", label: "XXL" },
-        { id: "Oversize", label: "Oversize" },
+        { id: "S", label: "S" ,isCheck: false },
+        { id: "M", label: "M" ,isCheck: false},
+        { id: "L", label: "L" ,isCheck: false},
+        { id: "XL", label: "XL" ,isCheck: false},
+        { id: "XXL", label: "XXL" ,isCheck: false},
+        { id: "Oversize", label: "Oversize" ,isCheck: false},
       ],
       brandOptions: [
         { id: 0, label: "ไม่มี", isCheck: false },

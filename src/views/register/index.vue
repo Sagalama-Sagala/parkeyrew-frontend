@@ -65,6 +65,7 @@ import { logo1, logo2, circleBlack, circleGray } from "@/assets/login_register";
 import { ref, shallowRef } from "vue";
 import Info from "@/components/StepsRegister/Info/index.vue";
 import Password from "@/components/StepsRegister/Password/index.vue";
+import axios from "axios";
 export default {
   setup() {
     const formValue = ref({

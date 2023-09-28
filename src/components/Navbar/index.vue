@@ -43,7 +43,7 @@
           </div>
           <ul v-else class="flex items-center gap-x-5">
             <li
-              v-if="isLogin"
+              v-if="isAuth()"
               v-for="(item, index) in MenuItemsAuth"
               :key="item.icon"
             >
@@ -55,7 +55,7 @@
               </router-link>
             </li>
             <li
-              v-if="!isLogin"
+              v-else
               v-for="(item, index) in MenuItemsUnauth"
               :key="item.title"
               :class="item.class"
@@ -97,7 +97,7 @@
             <router-link :to="item.path">{{ item.title }}</router-link>
           </li>
         </ul>
-        <ul v-if="!isLogin && !isAuthPage()" class="pl-9 pt-4">
+        <ul v-if="!isAuth() && !isAuthPage()" class="pl-9 pt-4">
           <li
             v-for="(item, index) in MenuItemsUnauth"
             :key="item.title"
@@ -109,7 +109,7 @@
         </ul>
       </div>
       <div
-        v-if="isLogin"
+        v-if="isAuth()"
         class="absolute bottom-0 w-full py-4 border-t-[2px] border-secondary"
       >
         <ul class="flex justify-evenly px">
@@ -149,6 +149,7 @@ import {
   favoriteWhite,
   profileWhite,
 } from "@/assets/navbar";
+import { getLocal } from "@/common/js/utils.js";
 
 export default {
   setup() {
@@ -169,6 +170,12 @@ export default {
     isAuthPage() {
       let curPath = this.$route.path.toLowerCase();
       if (curPath === "/login" || curPath === "/register") {
+        return true;
+      }
+      return false;
+    },
+    isAuth() {
+      if (getLocal("token")) {
         return true;
       }
       return false;
@@ -200,7 +207,6 @@ export default {
       logo,
       logoWhite,
       close,
-      isLogin: true,
     };
   },
 };

@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-gray-200 pt-[120px]">
-        <div class="m-2 text-xl ml-80 flex">
+    <div class="bg-gray-200 md:pt-[120px] pt-[80px]  ">
+        <div class="m-2 text-sm md:text-xl ml-0 md:ml-80 flex pl-4 md:pl-0">
             <p class="mr-2">บัญชีผู้ใช้</p>
             <div class="text-primary">
                 <div v-if="focusPage === 'record'"><p> / ประวัติ</p></div>
@@ -67,7 +67,7 @@
         </aside>
 
         
-        <div class="p-4 ml-80 h-screen bg-white">
+        <div class="p-4 md:ml-80 h-screen bg-white">
             <!-- focusPage {{ focusPage }} -->
             <div v-if="focusPage === 'record'"><Myrecord /></div>
             <div v-else-if="focusPage === 'address'"><Address /></div>

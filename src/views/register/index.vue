@@ -96,13 +96,13 @@ export default {
       this.currentStep += 1;
     },
     prev() {
-      this.currentStep += 1;
+      this.currentStep -= 1;
     },
     pushStep(step) {
       this.currentStep = step;
     },
     submitLogin() {
-      this.$router.push("Login");
+      this.$router.push("login");
     },
     updateFormValue(payload) {
       this.formValue = {

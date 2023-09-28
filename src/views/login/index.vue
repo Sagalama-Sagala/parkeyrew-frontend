@@ -24,7 +24,7 @@
             name="username"
             class="focus:outline-none mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
             placeholder="ชื่อผู้ใช้"
-            v-model="usernameInput"
+            v-model="formValue.username"
             required
           />
           <div class="relative">
@@ -32,7 +32,7 @@
               :type="inputTypeIcon"
               class="focus:outline-none form-control mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
               placeholder="รหัสผ่าน"
-              v-model="passwordInput"
+              v-model="formValue.password"
               required
             />
             <button class="input-group-text" @click.prevent="toggleInputIcon">
@@ -68,7 +68,28 @@
 import { logo1, logo2, eye, eyeOff } from "@/assets/login_register";
 import axios from "axios";
 import { setLocal } from "@/common/js/utils.js";
+import { useUserStore } from "@/store/user.store.js";
+import { ref } from "vue";
 export default {
+  setup() {
+    const userStore = useUserStore();
+    const formValue = ref({
+      username: "",
+      password: "",
+    });
+    const submitForm = () => {
+      axios
+        .post("/auth/login", formValue.value)
+        .then((response) => {
+          userStore.setUser(response.data.user);
+          setLocal("token", response.data.access_token);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    return { submitForm, formValue, userStore };
+  },
   data() {
     return {
       inputTypeIcon: "password",
@@ -76,29 +97,12 @@ export default {
       logo2,
       eye,
       eyeOff,
-      usernameInput: null,
-      passwordInput: null,
     };
   },
   methods: {
     toggleInputIcon() {
       this.inputTypeIcon =
         this.inputTypeIcon === "password" ? "text" : "password";
-    },
-    submitForm() {
-      axios
-        .post("/auth/login", {
-          username: this.usernameInput,
-          password: this.passwordInput,
-        })
-        .then((response) => {
-          console.log(response);
-          setLocal("token", response.data.access_token);
-          this.$router.push("/");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     submitRegisterForm() {
       this.$router.push("/register");

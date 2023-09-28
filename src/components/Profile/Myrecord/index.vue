@@ -1,4 +1,5 @@
 <template>
+    
     <div class="text-2xl">
         <div class="my-2 font-semibold">ข้อมูลของฉัน</div>
         <div class="my-2">

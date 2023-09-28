@@ -1,5 +1,15 @@
 <template>
-    <div class="bg-gray-200 pt-[171px]">
+    <div class="bg-gray-200 pt-[120px]">
+        <div class="m-2 text-xl ml-80 flex">
+            <p class="mr-2">บัญชีผู้ใช้</p>
+            <div class="text-primary">
+                <div v-if="focusPage === 'record'"><p> / ประวัติ</p></div>
+                <div v-else-if="focusPage === 'address'"><p>/ ที่อยู่</p></div>
+                <div v-else-if="focusPage === 'chagepass'"><p>/ เปลี่ยนรหัสผ่าน</p></div>
+                <div v-else-if="focusPage === 'mybuy'"><p>/ การซื้อของฉัน</p></div>
+                <div v-else-if="focusPage === 'mysell'"><p>/ การขายของฉัน</p></div>
+            </div>
+        </div>
         <aside
             id="cta-button-sidebar"
             class="fixed left-0 h-screen transition-transform -translate-x-full sm:translate-x-0"
@@ -17,18 +27,18 @@
                             :class="`${
                                 e.childs.length !== 0
                                     ? e.childs?.findIndex(
-                                          (child) => child.page === focusPage
-                                      ) !== -1
+                                        (child) => child.page === focusPage
+                                    ) !== -1
                                         ? 'text-gray-800'
                                         : ''
                                     : focusPage === e.page
-                                    ? 'text-gray-800'
+                                    ? 'text-primary'
                                     : ''
                             }`"
                             class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer my-4"
                         >
                             <img class="w-6 h-6" :src="e.icon" />
-                            <span class="flex-1 ml-3 whitespace-nowrap">
+                            <span class="flex-1 ml-3 whitespace-nowrap ">
                                 {{ e.title }}
                             </span>
                         </div>
@@ -39,7 +49,7 @@
                                     @click="focusPage = sub.page"
                                     :class="`${
                                         focusPage === sub.page
-                                            ? 'text-gray-800'
+                                            ? 'text-primary'
                                             : ''
                                     }`"
                                     class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer my-4"
@@ -56,6 +66,7 @@
             </div>
         </aside>
 
+        
         <div class="p-4 ml-80 h-screen bg-white">
             <!-- focusPage {{ focusPage }} -->
             <div v-if="focusPage === 'record'"><Myrecord /></div>

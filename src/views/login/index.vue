@@ -70,8 +70,10 @@ import axios from "axios";
 import { setLocal } from "@/common/js/utils.js";
 import { useUserStore } from "@/store/user.store.js";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 export default {
   setup() {
+    const router = useRouter();
     const userStore = useUserStore();
     const formValue = ref({
       username: "",
@@ -83,6 +85,7 @@ export default {
         .then((response) => {
           userStore.setUser(response.data.user);
           setLocal("token", response.data.access_token);
+          router.push("/");
         })
         .catch((err) => {
           console.log(err);

@@ -66,6 +66,17 @@
               </router-link>
             </li>
           </ul>
+          <div
+            class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-10 md:block hidden"
+          ></div>
+          <div
+            class="z-20 fixed top-[70px] right-[120px] bg-white px-10 py-4 rounded"
+          >
+            <ul>
+              <li>uuu</li>
+              <li>uuu</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -106,6 +117,9 @@
           >
             <router-link :to="item.path">{{ item.title }}</router-link>
           </li>
+        </ul>
+        <ul v-if="isAuth() && !isAuthPage()" class="pl-9 pt-4">
+          <li class="py-2 font-semibold">ออกจากระบบ</li>
         </ul>
       </div>
       <div
@@ -180,6 +194,10 @@ export default {
       }
       return false;
     },
+    pushProfilePage() {
+      this.$router.push("/profile");
+    },
+    handle,
   },
   data() {
     return {
@@ -188,6 +206,7 @@ export default {
         { title: "ร้านของฉัน", path: "/mystore" },
         { title: "ติดต่อเรา", path: "/contact" },
       ],
+      ProfileMenu: [{ title: "บัญชีผู้ใช้" }, { title: "ออกจากระบบ" }],
       MenuItemsAuth: [
         { icon: chat, icon_white: chatWhite, path: "/chat" },
         { icon: favorite, icon_white: favoriteWhite, path: "/favorite" },

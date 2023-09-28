@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white h-screen">i am address page</div>
+    <div class="">i am address page</div>
 </template>
 
 <script>

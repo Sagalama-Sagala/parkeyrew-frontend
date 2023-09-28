@@ -1,11 +1,12 @@
 <template>
-    <div class="bg-gray-200 pt-[171px]">
+    <div class="mt-16">
         <aside
             id="cta-button-sidebar"
-            class="fixed left-0 h-screen transition-transform -translate-x-full sm:translate-x-0"
+            class="fixed left-0 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-gray-200"
             aria-label="Sidebar"
         >
-            <div class="h-full p-16 overflow-y-auto text-xl">
+            <div class="bg-gray-200 h-20 w-screen absolute"></div>
+            <div class="h-full px-12 overflow-y-auto text-xl mt-20 bg-gray-200">
                 <ul class="space-y-2 font-medium text-gray-400">
                     <li v-for="e in navs">
                         <div
@@ -19,15 +20,15 @@
                                     ? e.childs?.findIndex(
                                           (child) => child.page === focusPage
                                       ) !== -1
-                                        ? 'text-gray-800'
+                                        ? 'text-[#204E8F]'
                                         : ''
                                     : focusPage === e.page
-                                    ? 'text-gray-800'
+                                    ? 'text-[#204E8F]'
                                     : ''
                             }`"
-                            class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer"
+                            class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer my-4"
                         >
-                            <img class="w-6 h-6" :src="e.icon" />
+                            <img class="w-8 h-8" :src="e.icon" />
                             <span class="flex-1 ml-3 whitespace-nowrap">
                                 {{ e.title }}
                             </span>
@@ -39,10 +40,10 @@
                                     @click="focusPage = sub.page"
                                     :class="`${
                                         focusPage === sub.page
-                                            ? 'text-gray-800'
+                                            ? 'text-[#204E8F]'
                                             : ''
                                     }`"
-                                    class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer"
+                                    class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer my-4"
                                 >
                                     <span
                                         class="flex-1 ml-12 whitespace-nowrap"
@@ -56,7 +57,7 @@
             </div>
         </aside>
 
-        <div class="p-4 ml-80 h-screen">
+        <div class="bg-white h-screen pl-80 pt-28">
             <!-- focusPage {{ focusPage }} -->
             <div v-if="focusPage === 'record'"><Myrecord /></div>
             <div v-else-if="focusPage === 'address'"><Address /></div>

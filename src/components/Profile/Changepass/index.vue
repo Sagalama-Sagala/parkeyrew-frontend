@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white h-screen">i am change password page</div>
+    <div class="">i am change password page</div>
 </template>
 
 <script>

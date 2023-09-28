@@ -76,7 +76,10 @@
 import { view } from "@/assets/profile";
 export default {
     data() {
-        return { view, pageState: 0 };
+        return {
+            view,
+            pageState: 0,
+        };
     },
     methods: {
         editProfile() {

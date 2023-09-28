@@ -43,19 +43,19 @@
           </div>
           <ul v-else class="flex items-center gap-x-5">
             <li
-              v-if="isLogin"
+              v-if="isAuth()"
               v-for="(item, index) in MenuItemsAuth"
               :key="item.icon"
+              @click="item.next"
+              class="cursor-pointer"
             >
-              <router-link :to="item.path">
-                <img
-                  :src="isNavColorPrimary() ? item.icon_white : item.icon"
-                  class="w-8"
-                />
-              </router-link>
+              <img
+                :src="isNavColorPrimary() ? item.icon_white : item.icon"
+                class="w-8"
+              />
             </li>
             <li
-              v-if="!isLogin"
+              v-else
               v-for="(item, index) in MenuItemsUnauth"
               :key="item.title"
               :class="item.class"
@@ -66,6 +66,26 @@
               </router-link>
             </li>
           </ul>
+          <div
+            class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-10"
+            :class="isProfileToggle ? 'block' : 'hidden'"
+            @click="toggleProfile"
+          ></div>
+          <div
+            class="z-20 fixed top-[64px] right-[30px] px-8 bg-white py-5 rounded w-[200px]"
+            :class="isProfileToggle ? 'block' : 'hidden'"
+          >
+            <ul class="space-y-3">
+              <li
+                v-for="(item, index) in ProfileMenu"
+                :key="item.title"
+                @click="item.next"
+                class="cursor-pointer"
+              >
+                {{ item.title }}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -97,7 +117,7 @@
             <router-link :to="item.path">{{ item.title }}</router-link>
           </li>
         </ul>
-        <ul v-if="!isLogin && !isAuthPage()" class="pl-9 pt-4">
+        <ul v-if="!isAuth() && !isAuthPage()" class="pl-9 pt-4">
           <li
             v-for="(item, index) in MenuItemsUnauth"
             :key="item.title"
@@ -107,9 +127,12 @@
             <router-link :to="item.path">{{ item.title }}</router-link>
           </li>
         </ul>
+        <ul v-if="isAuth() && !isAuthPage()" class="pl-9 pt-4">
+          <li class="py-2 font-semibold">ออกจากระบบ</li>
+        </ul>
       </div>
       <div
-        v-if="isLogin"
+        v-if="isAuth()"
         class="absolute bottom-0 w-full py-4 border-t-[2px] border-secondary"
       >
         <ul class="flex justify-evenly px">
@@ -149,14 +172,21 @@ import {
   favoriteWhite,
   profileWhite,
 } from "@/assets/navbar";
+import { getLocal } from "@/common/js/utils.js";
+import { removeLocal } from "@/common/js/utils.js";
 
 export default {
   setup() {
     const isNavToggle = ref(false);
+    const isProfileToggle = ref(false);
     const toggleNav = () => {
       isNavToggle.value = !isNavToggle.value;
     };
-    return { isNavToggle, toggleNav };
+    const toggleProfile = () => {
+      isProfileToggle.value = !isProfileToggle.value;
+      console.log(isProfileToggle);
+    };
+    return { isNavToggle, toggleNav, isProfileToggle, toggleProfile };
   },
   methods: {
     isNavColorPrimary() {
@@ -173,6 +203,24 @@ export default {
       }
       return false;
     },
+    isAuth() {
+      if (getLocal("token")) {
+        return true;
+      }
+      return false;
+    },
+    pushPage(path) {
+      this.$router.push(path);
+    },
+    handleLogout() {
+      removeLocal("token");
+      this.$router.push("/login");
+      this.toggleProfile();
+    },
+    pushProfilePage() {
+      this.$router.push("/profile");
+      this.toggleProfile();
+    },
   },
   data() {
     return {
@@ -181,10 +229,29 @@ export default {
         { title: "ร้านของฉัน", path: "/mystore" },
         { title: "ติดต่อเรา", path: "/contact" },
       ],
+      ProfileMenu: [
+        { title: "บัญชีผู้ใช้", next: this.pushProfilePage },
+        { title: "ออกจากระบบ", next: this.handleLogout },
+      ],
       MenuItemsAuth: [
-        { icon: chat, icon_white: chatWhite, path: "/chat" },
-        { icon: favorite, icon_white: favoriteWhite, path: "/favorite" },
-        { icon: profile, icon_white: profileWhite, path: "/profile" },
+        {
+          icon: chat,
+          icon_white: chatWhite,
+          path: "/chat",
+          next: () => this.pushPage("/chat"),
+        },
+        {
+          icon: favorite,
+          icon_white: favoriteWhite,
+          path: "/favorite",
+          next: () => this.pushPage("/favorite"),
+        },
+        {
+          icon: profile,
+          icon_white: profileWhite,
+          path: "/profile",
+          next: this.toggleProfile,
+        },
       ],
       MenuItemsUnauth: [
         { title: "สมัครใหม่", path: "/register", class: "" },
@@ -200,7 +267,6 @@ export default {
       logo,
       logoWhite,
       close,
-      isLogin: true,
     };
   },
 };

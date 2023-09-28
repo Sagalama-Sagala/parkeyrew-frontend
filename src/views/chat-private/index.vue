@@ -24,20 +24,14 @@ import { ref } from "vue";
 
 export default {
   setup() {
-    const messages = ref([]);
     const chats = ref([]);
 
     socket.on("message", (message) => {
-      messages.value = message;
-      console.log(messages);
-    });
-
-    socket.on("chat", (message) => {
       chats.value.push(message);
       console.log(chats);
     });
 
-    return { messages, chats };
+    return { chats };
   },
   computed: {
     connected() {
@@ -47,7 +41,7 @@ export default {
   methods: {
     handleSubmitNewMessage() {
       console.log(this.chatInput);
-      socket.emit("chat", this.chatInput);
+      socket.emit("message", this.chatInput);
     },
     connect() {
       socket.connect();

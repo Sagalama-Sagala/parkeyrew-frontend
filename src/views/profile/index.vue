@@ -1,11 +1,21 @@
 <template>
-    <div class="">
+    <div class="bg-gray-200 pt-[120px]">
+        <div class="m-2 text-xl ml-80 flex">
+            <p class="mr-2">บัญชีผู้ใช้</p>
+            <div class="text-primary">
+                <div v-if="focusPage === 'record'"><p> / ประวัติ</p></div>
+                <div v-else-if="focusPage === 'address'"><p>/ ที่อยู่</p></div>
+                <div v-else-if="focusPage === 'chagepass'"><p>/ เปลี่ยนรหัสผ่าน</p></div>
+                <div v-else-if="focusPage === 'mybuy'"><p>/ การซื้อของฉัน</p></div>
+                <div v-else-if="focusPage === 'mysell'"><p>/ การขายของฉัน</p></div>
+            </div>
+        </div>
         <aside
             id="cta-button-sidebar"
-            class="fixed left-0 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+            class="fixed left-0 h-screen transition-transform -translate-x-full sm:translate-x-0"
             aria-label="Sidebar"
         >
-            <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50">
+            <div class="h-full px-16 overflow-y-auto text-2xl">
                 <ul class="space-y-2 font-medium text-gray-400">
                     <li v-for="e in navs">
                         <div
@@ -17,18 +27,18 @@
                             :class="`${
                                 e.childs.length !== 0
                                     ? e.childs?.findIndex(
-                                          (child) => child.page === focusPage
-                                      ) !== -1
+                                        (child) => child.page === focusPage
+                                    ) !== -1
                                         ? 'text-gray-800'
                                         : ''
                                     : focusPage === e.page
-                                    ? 'text-gray-800'
+                                    ? 'text-primary'
                                     : ''
                             }`"
-                            class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer"
+                            class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer my-4"
                         >
                             <img class="w-6 h-6" :src="e.icon" />
-                            <span class="flex-1 ml-3 whitespace-nowrap">
+                            <span class="flex-1 ml-3 whitespace-nowrap ">
                                 {{ e.title }}
                             </span>
                         </div>
@@ -39,10 +49,10 @@
                                     @click="focusPage = sub.page"
                                     :class="`${
                                         focusPage === sub.page
-                                            ? 'text-gray-800'
+                                            ? 'text-primary'
                                             : ''
                                     }`"
-                                    class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer"
+                                    class="flex items-center p-2 rounded-lg hover:bg-gray-100 group cursor-pointer my-4"
                                 >
                                     <span
                                         class="flex-1 ml-12 whitespace-nowrap"
@@ -56,24 +66,37 @@
             </div>
         </aside>
 
-        <div class="p-4 sm:ml-64 h-screen bg-gray-400 mt-16">
-            focusPage {{ focusPage }}
-            <div v-if="focusPage === 'prawat'">ประวัติ</div>
-            <div v-else-if="focusPage === 'teeyoo'">ที่อยู่</div>
-            <div v-else-if="focusPage === 'chagepass'">เปลี่ยนรหัสผ่าน</div>
-            <div v-else-if="focusPage === 'mybuy'">การซื้อของฉัน</div>
-            <div v-else-if="focusPage === 'mysell'">การขายของฉัน</div>
+        
+        <div class="p-4 ml-80 h-screen bg-white">
+            <!-- focusPage {{ focusPage }} -->
+            <div v-if="focusPage === 'record'"><Myrecord /></div>
+            <div v-else-if="focusPage === 'address'"><Address /></div>
+            <div v-else-if="focusPage === 'chagepass'"><Changepass /></div>
+            <div v-else-if="focusPage === 'mybuy'"><Mybuy /></div>
+            <div v-else-if="focusPage === 'mysell'"><Mysell /></div>
         </div>
     </div>
 </template>
 
 <script>
+import Address from "@/components/Profile/Address/index.vue";
+import Changepass from "@/components/Profile/Changepass/index.vue";
+import Mybuy from "@/components/Profile/Mybuy/index.vue";
+import Mysell from "@/components/Profile/Mysell/index.vue";
+import Myrecord from "@/components/Profile/Myrecord/index.vue";
 import { account, cart, cart2 } from "@/assets/profile";
 export default {
+    components: {
+        Address,
+        Changepass,
+        Mybuy,
+        Mysell,
+        Myrecord,
+    },
     methods: {},
     data() {
         return {
-            focusPage: "prawat",
+            focusPage: "record", //default
             account,
             cart,
             cart2,
@@ -87,12 +110,12 @@ export default {
                         {
                             title: "ประวัติ",
                             icon: account,
-                            page: "prawat",
+                            page: "record",
                         },
                         {
                             title: "ที่อยู่",
                             icon: account,
-                            page: "teeyoo",
+                            page: "address",
                         },
                         {
                             title: "เปลี่ยนรหัสผ่าน",

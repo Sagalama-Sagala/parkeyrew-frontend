@@ -46,13 +46,13 @@
               v-if="isAuth()"
               v-for="(item, index) in MenuItemsAuth"
               :key="item.icon"
+              @click="item.next"
+              class="cursor-pointer"
             >
-              <router-link :to="item.path">
-                <img
-                  :src="isNavColorPrimary() ? item.icon_white : item.icon"
-                  class="w-8"
-                />
-              </router-link>
+              <img
+                :src="isNavColorPrimary() ? item.icon_white : item.icon"
+                class="w-8"
+              />
             </li>
             <li
               v-else
@@ -66,17 +66,26 @@
               </router-link>
             </li>
           </ul>
-          <!-- <div
-            class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-10 md:block hidden"
+          <div
+            class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-10"
+            :class="isProfileToggle ? 'block' : 'hidden'"
+            @click="toggleProfile"
           ></div>
           <div
-            class="z-20 fixed top-[70px] right-[120px] bg-white px-10 py-4 rounded"
+            class="z-20 fixed top-[64px] right-[30px] px-8 bg-white py-5 rounded w-[200px]"
+            :class="isProfileToggle ? 'block' : 'hidden'"
           >
-            <ul>
-              <li>uuu</li>
-              <li>uuu</li>
+            <ul class="space-y-3">
+              <li
+                v-for="(item, index) in ProfileMenu"
+                :key="item.title"
+                @click="item.next"
+                class="cursor-pointer"
+              >
+                {{ item.title }}
+              </li>
             </ul>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -164,14 +173,20 @@ import {
   profileWhite,
 } from "@/assets/navbar";
 import { getLocal } from "@/common/js/utils.js";
+import { removeLocal } from "@/common/js/utils.js";
 
 export default {
   setup() {
     const isNavToggle = ref(false);
+    const isProfileToggle = ref(false);
     const toggleNav = () => {
       isNavToggle.value = !isNavToggle.value;
     };
-    return { isNavToggle, toggleNav };
+    const toggleProfile = () => {
+      isProfileToggle.value = !isProfileToggle.value;
+      console.log(isProfileToggle);
+    };
+    return { isNavToggle, toggleNav, isProfileToggle, toggleProfile };
   },
   methods: {
     isNavColorPrimary() {
@@ -194,10 +209,18 @@ export default {
       }
       return false;
     },
+    pushPage(path) {
+      this.$router.push(path);
+    },
+    handleLogout() {
+      removeLocal("token");
+      this.$router.push("/login");
+      this.toggleProfile();
+    },
     pushProfilePage() {
       this.$router.push("/profile");
+      this.toggleProfile();
     },
-  
   },
   data() {
     return {
@@ -206,11 +229,29 @@ export default {
         { title: "ร้านของฉัน", path: "/mystore" },
         { title: "ติดต่อเรา", path: "/contact" },
       ],
-      ProfileMenu: [{ title: "บัญชีผู้ใช้" }, { title: "ออกจากระบบ" }],
+      ProfileMenu: [
+        { title: "บัญชีผู้ใช้", next: this.pushProfilePage },
+        { title: "ออกจากระบบ", next: this.handleLogout },
+      ],
       MenuItemsAuth: [
-        { icon: chat, icon_white: chatWhite, path: "/chat" },
-        { icon: favorite, icon_white: favoriteWhite, path: "/favorite" },
-        { icon: profile, icon_white: profileWhite, path: "/profile" },
+        {
+          icon: chat,
+          icon_white: chatWhite,
+          path: "/chat",
+          next: () => this.pushPage("/chat"),
+        },
+        {
+          icon: favorite,
+          icon_white: favoriteWhite,
+          path: "/favorite",
+          next: () => this.pushPage("/favorite"),
+        },
+        {
+          icon: profile,
+          icon_white: profileWhite,
+          path: "/profile",
+          next: this.toggleProfile,
+        },
       ],
       MenuItemsUnauth: [
         { title: "สมัครใหม่", path: "/register", class: "" },

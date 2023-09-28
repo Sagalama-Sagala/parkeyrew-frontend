@@ -21,33 +21,51 @@
         </div>
         <div v-else-if="pageState === 1" class="w-1/4">
             <div class="m-12">
-                <input class="border-[0.08rem] border-black rounded-md px-2" placeholder="mmayyiisuay"/>
+                <input
+                    class="border-[0.08rem] border-black rounded-md px-2"
+                    placeholder="mmayyiisuay"
+                />
             </div>
             <div class="m-12">
-                <input class="border-[0.08rem] border-black rounded-md px-2" placeholder="ณัชชา" />
+                <input
+                    class="border-[0.08rem] border-black rounded-md px-2"
+                    placeholder="ณัชชา"
+                />
             </div>
             <div class="m-12">
-                <input class="border-[0.08rem] border-black rounded-md px-2" placeholder="สวยสะอาด" />
+                <input
+                    class="border-[0.08rem] border-black rounded-md px-2"
+                    placeholder="สวยสะอาด"
+                />
             </div>
             <div class="m-12">
-                <input class="border-[0.08rem] border-black rounded-md px-2" placeholder="0999999999" />
+                <input
+                    class="border-[0.08rem] border-black rounded-md px-2"
+                    placeholder="0999999999"
+                />
             </div>
         </div>
         <div class="w-2/4 flex flex-col justify-center items-center">
-            <img class="w-36 h-36 my-8" :src="view" />
+            <img class="w-36 h-36 mt-8" :src="view" />
+            <div v-if="pageState === 1" class="flex flex-col">
+                <button
+                    class="border-[0.05rem] border-black px-2 rounded-lg my-4"
+                >
+                    เลือกรูป
+                </button>
+                <button
+                    class="my-8 border-2 border-[#204E8F] font-semibold text-[#204E8F] py-2 px-6 rounded-lg"
+                    @click="saveProfile"
+                >
+                    บันทึก
+                </button>
+            </div>
             <button
                 v-if="pageState === 0"
                 class="my-8 border-2 border-[#204E8F] font-semibold text-[#204E8F] py-2 px-6 rounded-lg"
                 @click="editProfile"
             >
                 แก้ไข
-            </button>
-            <button
-                v-if="pageState === 1"
-                class="my-8 border-2 border-[#204E8F] font-semibold text-[#204E8F] py-2 px-6 rounded-lg"
-                @click="saveProfile"
-            >
-                บันทึก
             </button>
         </div>
     </div>

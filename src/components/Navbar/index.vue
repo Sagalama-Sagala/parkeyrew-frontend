@@ -66,7 +66,7 @@
               </router-link>
             </li>
           </ul>
-          <div
+          <!-- <div
             class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-10 md:block hidden"
           ></div>
           <div
@@ -76,7 +76,7 @@
               <li>uuu</li>
               <li>uuu</li>
             </ul>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -197,7 +197,7 @@ export default {
     pushProfilePage() {
       this.$router.push("/profile");
     },
-    handle,
+  
   },
   data() {
     return {

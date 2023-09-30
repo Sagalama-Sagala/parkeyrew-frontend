@@ -56,17 +56,6 @@ export default {
     data() {
         return {
             view,
-            // steps: [
-            // {
-            //     component: shallowRef(Default),
-            //     label: "defaultrecord",
-            // },
-            // {
-            //     component: shallowRef(Edit),
-            //     label:"editrecord",
-            // }
-            // ],
-        
             pageState: 0,
         };
     },

@@ -1,5 +1,5 @@
-<template>
-    <div class="bg-gray-200 md:pt-[120px] pt-[80px]  ">
+<template  >
+    <div class="bg-gray-200 md:pt-[120px] pt-[80px] ">
         <div class="m-2 text-sm md:text-xl ml-0 md:ml-80 flex pl-4 md:pl-0">
             <p class="mr-2">บัญชีผู้ใช้</p>
             <div class="text-primary">
@@ -10,9 +10,10 @@
                 <div v-else-if="focusPage === 'mysell'"><p>/ การขายของฉัน</p></div>
             </div>
         </div>
+        
         <aside
             id="cta-button-sidebar"
-            class="fixed left-0 h-screen transition-transform -translate-x-full sm:translate-x-0"
+            class="fixed left-0 h-screen md:block hidden"
             aria-label="Sidebar"
         >
             <div class="h-full px-16 overflow-y-auto text-2xl">
@@ -84,6 +85,7 @@ import Changepass from "@/components/Profile/Changepass/index.vue";
 import Mybuy from "@/components/Profile/Mybuy/index.vue";
 import Mysell from "@/components/Profile/Mysell/index.vue";
 import Myrecord from "@/components/Profile/Myrecord/index.vue";
+
 import { account, cart, cart2 } from "@/assets/profile";
 export default {
     components: {
@@ -92,9 +94,25 @@ export default {
         Mybuy,
         Mysell,
         Myrecord,
-        
+        isResponsive() {
+            return window.innerWidth <= 768; 
+        },
+
     },
-    methods: { },
+    mounted() {
+        window.addEventListener("resize", this.handleResize);
+    },
+    beforeDestroy() {
+        window.removeEventListener("resize", this.handleResize);
+    },
+    methods: {
+        handleResize() {
+            if (window.innerWidth <= 768) {
+                this.$router.push("/sidebar-profile");
+            } 
+        },
+    },
+    
     data() {
         return {
             focusPage: "record", //default

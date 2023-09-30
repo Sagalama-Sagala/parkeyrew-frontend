@@ -61,6 +61,11 @@ const routes = [
         name: "Filter",
         component: () => import("@/views/filter/index.vue"),
       },
+      {
+        path: "sidebar-profile",
+        name: "Sidebar",
+        component: () => import("@/views/sidebar-profile/index.vue"),
+      },
     ],
   },
 ];

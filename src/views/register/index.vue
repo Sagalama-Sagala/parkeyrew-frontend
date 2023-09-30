@@ -17,14 +17,14 @@
           <component
             v-bind:is="steps[currentStep].component"
             :formValue="formValue"
-            @update-form-value="testForm"
+            @update-form-value="handleForm"
           />
         </div>
         <button
           v-if="currentStep === steps.length - 1"
           type="submit"
           class="mt-1 block w-full px-3 py-1 bg-tertiary font-normal rounded-md hover:scale-105 duration-300"
-          @click="submitRegister"
+          @click="submitForm"
         >
           ยืนยัน
         </button>
@@ -73,15 +73,15 @@ export default {
     const router = useRouter();
 
     const formValue = ref({
-      fname: "",
-      lname: "",
+      firstname: "",
+      lastname: "",
       username: "",
-      tel: "",
+      phone: "",
       password: "",
       confirm_password: "",
     });
 
-    const testForm = (payload) => {
+    const handleForm = (payload) => {
       formValue.value = {
         ...formValue.value,
         [payload.label]: payload.data,
@@ -90,16 +90,22 @@ export default {
 
     const submitForm = () => {
       axios
-        .post("user/register", {})
+        .post("user/register", {
+          firstname: formValue.value.firstname,
+          lastname: formValue.value.lastname,
+          username: formValue.value.username,
+          password: formValue.value.password,
+          phone: formValue.value.phone,
+        })
         .then((response) => {
-          router.push("/register");
+          router.push("/login");
         })
         .catch((err) => {
           console.log(err);
         });
     };
 
-    return { formValue, testForm };
+    return { formValue, handleForm, submitForm };
   },
   emits: ["updateFormValue"],
   components: {

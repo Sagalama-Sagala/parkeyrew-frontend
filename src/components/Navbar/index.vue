@@ -128,7 +128,12 @@
           </li>
         </ul>
         <ul v-if="isAuth() && !isAuthPage()" class="pl-9 pt-4">
-          <li class="py-2 font-semibold">ออกจากระบบ</li>
+          <li
+            class="py-2 font-semibold cursor-pointer"
+            @click="handleLogoutSidebar()"
+          >
+            ออกจากระบบ
+          </li>
         </ul>
       </div>
       <div
@@ -216,6 +221,11 @@ export default {
       removeLocal("token");
       this.$router.push("/login");
       this.toggleProfile();
+    },
+    handleLogoutSidebar() {
+      removeLocal("token");
+      this.$router.push("/login");
+      this.toggleNav();
     },
     pushProfilePage() {
       this.$router.push("/profile/record");

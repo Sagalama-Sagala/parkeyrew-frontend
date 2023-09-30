@@ -218,7 +218,7 @@ export default {
       this.toggleProfile();
     },
     pushProfilePage() {
-      this.$router.push("/profile");
+      this.$router.push("/profile/record");
       this.toggleProfile();
     },
   },
@@ -249,7 +249,7 @@ export default {
         {
           icon: profile,
           icon_white: profileWhite,
-          path: "/profile",
+          path: "/profile/record",
           next: this.toggleProfile,
         },
       ],

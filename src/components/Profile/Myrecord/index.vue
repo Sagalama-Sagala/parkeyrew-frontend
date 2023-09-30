@@ -7,52 +7,24 @@
         </div>
     </div>
     <div class="border-b-[0.08rem] border-black mr-12 my-8 w-full"></div>
-    <div class="md:text-2xl text-lg flex md:flex-row flex-col-reverse">
-        <div v-if="pageState === 0">
+    <div class="md:text-2xl text-lg flex md:flex-row flex-col-reverse md:items-start items-center">
+        <div v-if="pageState === 0" class="md:w-1/2 w-full md:ml-0 ml-16 md:mt-0 mt-[62px]">
             <Defaultrecord/>
         </div>
-        <div v-if="pageState === 1">
+        <div v-if="pageState === 1" class="md:w-1/2 w-full md:ml-0 ml-16">
             <Edit/>
         </div>
-        <!-- <div  class="md:w-1/4 w-1/2 md:pl-0 pl-4 font-semibold">
-        </div>
-        <div v-else-if="pageState === 1" class="w-1/4">
-            <div class="m-12">
-                <input
-                    class="border-[0.08rem] border-black rounded-md px-2"
-                    placeholder="mmayyiisuay"
-                />
-            </div>
-            <div class="m-12">
-                <input
-                    class="border-[0.08rem] border-black rounded-md px-2"
-                    placeholder="ณัชชา"
-                />
-            </div>
-            <div class="m-12">
-                <input
-                    class="border-[0.08rem] border-black rounded-md px-2"
-                    placeholder="สวยสะอาด"
-                />
-            </div>
-            <div class="m-12">
-                <input
-                    class="border-[0.08rem] border-black rounded-md px-2"
-                    placeholder="0999999999"
-                />
-            </div>
-        </div> -->
-        <div class="w-full flex flex-col  items-center">
+        <div class="w-1/2 flex flex-col items-center">
             <img class="md:w-36 md:h-36 w-28 h-28 md:mt-8" :src="view" />
-        </div>
-    </div>
-    <div class="flex md:mr-[190px] md:justify-end justify-center">
-        <div v-if="pageState === 1" class="flex flex-col">
-            <button
+            <button v-if="pageState === 1"
                 class="border-[0.05rem] border-black px-2 rounded-lg my-4"
             >
                 เลือกรูป
             </button>
+        </div>
+    </div>
+    <div class="flex md:mt-10 justify-center">
+        <div v-if="pageState === 1" class="flex flex-col">
             <button
                 class="my-2  border-2 border-[#204E8F] font-semibold text-[#204E8F] py-2 px-6 rounded-lg"
                 @click="save"

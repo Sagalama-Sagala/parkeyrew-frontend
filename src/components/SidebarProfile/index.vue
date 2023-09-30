@@ -1,9 +1,10 @@
 <template>
   <div class="bg-gray-200 md:pt-[120px] pt-[66px] md:block">
     <div
-      class="m-2 text-sm md:text-xl ml-0 md:ml-80 pl-4 md:pl-0 flex items-center z-0"
+      class="m-2 text-sm md:text-xl ml-0 md:ml-80 pl-4 md:pl-0 md:flex inline-flex items-center z-0 cursor-pointer"
+      @click="toggleSidebar"
     >
-      <div class="md:hidden w-4 h-4 mr-2 cursor-pointer" @click="toggleSidebar">
+      <div class="md:hidden w-4 h-4 mr-2">
         <img :src="chevronLeft" alt="back" />
       </div>
       <p class="mr-2">บัญชีผู้ใช้</p>

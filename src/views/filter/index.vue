@@ -4,7 +4,7 @@
       class="bg-white md:h-[8rem] h-[8rem] w-full flex text-black items-end iten font-bold"
     >
       <div
-        class="md:mx-20 mx-10 my-1 md:my-3 justify-between w-full flex md:item-end items-center"
+        class="md:mx-20 mx-5 my-1 md:my-3 justify-between w-full flex md:item-end items-center"
       >
         <div class="flex md:text-xl text-[1rem] justify-center">
           <h1
@@ -16,7 +16,7 @@
           <h1 class="text-primary">/&nbsp;{{ $route.params.id }}</h1>
         </div>
 
-        <img :src="filter" class="w-[3rem] border-2 rounded-lg md:hidden" />
+        <img :src="filter" class="w-10  rounded-lg md:hidden  " @click="toggleFilterBar" />
 
         <div class="md:flex gap-2 justify-center items-center hidden">
           <h1>เรียงตาม</h1>
@@ -33,10 +33,103 @@
         </div>
       </div>
     </div>
+    <div
+      class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-30 md:hidden"
+      :class="isFilterBarToggle.value ? 'block' : 'hidden'"
+      @click="toggleFilterBar"
+    ></div>
+    <div
+      class="bg-white h-screen top- w-9/12 fixed transition-all ease-in duration-300 z-40 md:hidden"
+      :class="isFilterBarToggle.value ? 'right-[0px]' : 'right-[-600px]'"
+      >
+        <div class="flex flex-col gap-5 justify-evenly items-center h-full">
+          <div class="w-[16rem] flex flex-col gap-3">
+            <div class="flex w-full justify-between">
+              <h1>แบรนด์</h1>
+              <h1>+</h1>
+            </div>
+            <div class="flex flex-col justify-around ml-5">
+              <div
+                v-for="Option in brandOptions"
+                :key="Option.id"
+                class="flex gap-3"
+              >
+                <input
+                  type="checkbox"
+                  v-model="Option.isCheck"
+                  :value="Option.id"
+                  class="w-[1.2rem]"
+                  @click="handleBrandCheck(Option)"
+                />
+                <label>{{ Option.label }}</label>
+              </div>
+            </div>
+          </div>
+          <div class="w-[16rem] flex flex-col gap-3">
+            <div class="flex w-full justify-between">
+              <h1>ไซต์</h1>
+              <h1>+</h1>
+            </div>
+            <div class="flex flex-col ml-5 flex-wrap h-[6rem]">
+              <div
+                v-for="Option in sizeOptions"
+                :key="Option.id"
+                class="flex gap-3"
+              >
+                <input
+                  type="checkbox"
+                  v-model="Option.isCheck"
+                  :value="Option.id"
+                  class="w-[1.2rem]"
+                  @click="handleSizeCheck(Option)"
+                />
+                <label>{{ Option.label }}</label>
+              </div>
+            </div>
+          </div>
+          <div class="w-[16rem] flex flex-col gap-3">
+            <div class="flex w-full justify-between">
+              <h1>สี</h1>
+              <h1>+</h1>
+            </div>
+            <div class="flex ml-5 flex-wrap w-[12rem] gap-4">
+              <div
+                v-for="color in colorOptions"
+                :key="color.id"
+                class="flex gap-3"
+              >
+                <div
+                  class="w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5] hover:border-[2px] border-black"
+                  :style="{ backgroundColor: color.label }"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div class="w-[16rem] flex flex-col gap-3">
+            <div class="flex w-full justify-between">
+              <h1>สภาพ</h1>
+              <h1>+</h1>
+            </div>
+            <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
+              <input type="range" id="volume-slider" />
+            </div>
+          </div>
+          <div class="w-[16rem] flex flex-col gap-3">
+            <div class="flex w-full justify-between">
+              <h1>ราคา</h1>
+              <h1>+</h1>
+            </div>
+            <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
+              <input type="range" id="volume-slider" />
+            </div>
+          </div>
+        </div>
+    </div>
+    
 
     <div class="flex flex-1 gap-10">
       <div
-        class="w-[25%] bg-white hidden md:block mt-[1px] text-2xl font-[500]"
+        class="w-[25%] bg-white  mt-[1px] text-2xl font-[500] hidden md:block"
       >
         <div class="flex flex-col gap-5 justify-evenly items-center h-full">
           <div class="w-[16rem] flex flex-col gap-3">
@@ -143,11 +236,11 @@
         </div>
       </div>
     </div>
-    <button @click="console.log(brand)">test</button>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 
@@ -156,7 +249,6 @@ import { heart } from "@/assets/product";
 import { filter } from "@/assets/filter";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
-
 export default {
   components: {
     ProductCard,
@@ -195,6 +287,11 @@ export default {
         this.storeVariableToUrl(this.urlVariable);
       }
     },
+    toggleFilterBar()
+    {
+      this.isFilterBarToggle.value = !this.isFilterBarToggle.value
+      console.log(this.isFilterBarToggle.value)
+    }
   },
   data() {
     return {
@@ -202,6 +299,7 @@ export default {
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
       isOpen: false,
       selectedOption: null,
+      isFilterBarToggle: ref({ value: false }),
       sizeOptions: [
         { id: "S", label: "S" ,isCheck: false },
         { id: "M", label: "M" ,isCheck: false},

@@ -111,7 +111,7 @@
               <h1>+</h1>
             </div>
             <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <input type="range" id="volume-slider" />
+              <DoubleRangeSlider :min-Range="0" :max-Range="100" :unit="'%'"/>
             </div>
           </div>
           <div class="w-[16rem] flex flex-col gap-3">
@@ -120,7 +120,7 @@
               <h1>+</h1>
             </div>
             <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <input type="range" id="volume-slider" />
+              <DoubleRangeSlider :min-Range="0" :max-Range="5000" :unit="'฿'" />
             </div>
           </div>
         </div>

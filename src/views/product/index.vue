@@ -5,11 +5,11 @@
         class="border-b-[1px] border-b-black text-black flex md:gap-[10rem] gap-4 md:text-[1.3rem] text-[1.2rem] w-full mx-4 justify-center flex-wrap px-5 pb-3"
       >
         <div class="flex flex-col gap-5 w-[40rem]">
-          <div class="flex flex-wrap gap-2 bg-black rounded-xl">
+          <div class="flex flex-wrap gap-2 bg-[#d5d5d5] rounded-xl">
             <div class="relative">
               <img
                 :src="ProductImage[selectedImageIndex]"
-                class="w-[40rem] h-[32rem] object-contain"
+                class="w-[40rem] md:h-[32rem] h-[23rem] object-contain"
               />
               <img
                 v-if="productData.isRecommend"
@@ -26,7 +26,7 @@
               v-for="(imageUrl, index) in ProductImage"
               :key="index"
               :src="imageUrl"
-              class="h-[8rem] w-[11rem] border-grey rounded-xl border-[1px] aspect-[10.5/9] object-contain bg-slate-400"
+              class="h-[8rem] w-[11rem] border-grey rounded-xl border-[1px] aspect-[10.5/9] object-contain bg-[#d5d5d5]"
               :class="{
                 ' blur-sm border-2 border-black': selectedImageIndex === index,
               }"

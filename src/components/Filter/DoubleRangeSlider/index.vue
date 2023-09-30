@@ -1,5 +1,5 @@
 <template>
-    <div class="relative w-[100%] h-[100px] text-[1.4rem]">
+    <div class="relative w-[100%] h-[100px] md:text-[1.3rem]">
         <div class="slider-track"></div>
         <div class="relative mt-[15px]">
             <input type="range" :min="minRange" :max="maxRange" v-model="value1" id="slider-1" class="range" :step="step" v-on:change="handleOnchange1" />

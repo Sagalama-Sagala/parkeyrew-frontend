@@ -66,8 +66,12 @@ import { ref, shallowRef } from "vue";
 import Info from "@/components/StepsRegister/Info/index.vue";
 import Password from "@/components/StepsRegister/Password/index.vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
+
 export default {
   setup() {
+    const router = useRouter();
+
     const formValue = ref({
       fname: "",
       lname: "",
@@ -82,6 +86,17 @@ export default {
         ...formValue.value,
         [payload.label]: payload.data,
       };
+    };
+
+    const submitForm = () => {
+      axios
+        .post("user/register", {})
+        .then((response) => {
+          router.push("/register");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
 
     return { formValue, testForm };

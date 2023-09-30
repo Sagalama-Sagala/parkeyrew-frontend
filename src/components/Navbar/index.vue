@@ -72,7 +72,7 @@
             @click="toggleProfile"
           ></div>
           <div
-            class="z-20 fixed top-[64px] right-[30px] px-8 bg-white py-5 rounded w-[200px]"
+            class="z-20 fixed top-[64px] right-[30px] px-8 bg-white py-5 rounded w-[200px] duration-500 transition-all ease-in-out"
             :class="isProfileToggle ? 'block' : 'hidden'"
           >
             <ul class="space-y-3">

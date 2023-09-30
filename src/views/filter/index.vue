@@ -200,7 +200,7 @@
               <h1>+</h1>
             </div>
             <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <input type="range" id="volume-slider" />
+              <DoubleRangeSlider/>
             </div>
           </div>
           <div class="w-[16rem] flex flex-col gap-3">
@@ -209,7 +209,7 @@
               <h1>+</h1>
             </div>
             <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <input type="range" id="volume-slider" />
+              <DoubleRangeSlider/>
             </div>
           </div>
         </div>
@@ -243,6 +243,7 @@
 import { ref } from "vue";
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
+import DoubleRangeSlider from '@/components/Filter/DoubleRangeSlider/index.vue'
 
 import { chat, call } from "@/assets/product";
 import { heart } from "@/assets/product";
@@ -253,6 +254,7 @@ export default {
   components: {
     ProductCard,
     Rating,
+    DoubleRangeSlider
   },
   methods: {
     handleMainClick() {

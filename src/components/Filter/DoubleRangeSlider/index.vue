@@ -1,8 +1,15 @@
 <template>
     <div class="container">
         <div class="slider-tracker"></div>
-        <input type="range" min="0" max="100" value="30" id="slider-1"/>
-        <input type="range" min="0" max="100" value="70" id="slider-2"/>
+        <div class="range-wrap">
+            <input type="range" min="0" max="100" v-model="value" id="slider-1" class="range" />
+            <output class="bubble2">{{ value2 }}</output>
+        </div>
+
+        <div class="range-wrap">
+            <input type="range" min="0" max="100" v-model="value2" id="slider-2" class="range" />
+            <output class="bubble1">{{ value }}</output>
+        </div>
     </div>
 </template>
   
@@ -17,10 +24,42 @@
       },
     },
     methods: {
+        setBubble(value) {
+            const val = this.value;
+            const min = this.$el.querySelector(".range").min || 0;
+            const max = this.$el.querySelector(".range").max || 100;
+            const newVal = Number(((val - min) * 100) / (max - min));
+            this.$el.querySelector(".bubble1").innerHTML = val;
+
+            this.$el.querySelector(".bubble1").style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
+            },
+        setBubble2() {
+        const val = this.value2;
+        const min = this.$el.querySelector(".range").min || 0;
+        const max = this.$el.querySelector(".range").max || 100;
+        const newVal = Number(((val - min) * 100) / (max - min));
+        this.$el.querySelector(".bubble2").innerHTML = val;
+
+        this.$el.querySelector(".bubble2").style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
+        },
     },
-    setup() {},
+    mounted()
+    {
+        this.setBubble();
+        this.setBubble2();
+    },
+    watch:{
+        value() {
+            this.setBubble();
+        },
+        value2() {
+            this.setBubble2();
+        },
+    },
     data() {
       return {
+        value:30,
+        value2:70,
       };
     },
   };
@@ -59,6 +98,37 @@ input[type="range"]
     top:0;
     bottom: 0;
     border-radius: 5px;
+}
+
+.range-wrap
+{
+    position: relative;
+    margin-top: 15px;
+}
+
+.range
+{
+    width: 100%;
+}
+
+.bubble1 {
+  color: black;
+  padding: 4px 12px;
+  position: absolute;
+  border-radius: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+}
+
+.bubble2 {
+  color: black;
+  padding: 4px 12px;
+  position: absolute;
+  border-radius: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
 }
 
 input[type='range']::-webkit-slider-runnable-track

@@ -7,15 +7,14 @@
         </div>
     </div>
     <div class="border-b-[0.08rem] border-black mr-12 my-8 w-full"></div>
-    
     <div class="md:text-2xl text-lg flex md:flex-row flex-col-reverse">
-        <div class="w-full flex flex-col md:mt-0 mt-4 ">
-            <div v-for="(record, index) in records" class="flex justify-center w-full font-light md:flex " :key="index">
-                <div class="md:m-10 m-2 md:w-1/2 w-1/4 ">{{record.title}}</div>
-                <div class="md:m-10 m-2 md:w-1/2 w-1/4 font-semibold">{{record.value}}</div>
-            </div>
+        <div v-if="pageState === 0">
+            <Defaultrecord/>
         </div>
-        <!-- <div v-if="pageState === 0" class="md:w-1/4 w-1/2 md:pl-0 pl-4 font-semibold">
+        <div v-if="pageState === 1">
+            <Edit/>
+        </div>
+        <!-- <div  class="md:w-1/4 w-1/2 md:pl-0 pl-4 font-semibold">
         </div>
         <div v-else-if="pageState === 1" class="w-1/4">
             <div class="m-12">
@@ -56,7 +55,7 @@
             </button>
             <button
                 class="my-2  border-2 border-[#204E8F] font-semibold text-[#204E8F] py-2 px-6 rounded-lg"
-                @click="saveProfile"
+                @click="save"
             >
                 บันทึก
             </button>
@@ -64,7 +63,7 @@
         <button
             v-if="pageState === 0"
             class="my-2 border-2 border-[#204E8F] font-semibold text-[#204E8F] py-2 px-6 rounded-lg"
-            @click="editProfile"
+            @click="edit"
         >
             แก้ไข
         </button>
@@ -74,26 +73,39 @@
 
 <script>
 import { view } from "@/assets/profile";
+import Defaultrecord from "@/components/StepsEditRecord/Default/index.vue";
+import Edit from "@/components/StepsEditRecord/Edit/index.vue";
+
 export default {
+    components: {
+    Defaultrecord,
+    Edit,
+    },
     data() {
         return {
             view,
-            records:[
-                {title: "ชื่อผู้ใช้", value: "mmayyiisuay"},
-                {title: "ชื่อ", value: "ณัชชา"},
-                {title: "นามสกุล", value: "สวยสะอาด"},
-                {title: "เบอร์โทร", value: "0949193350"},
-            ],
+            // steps: [
+            // {
+            //     component: shallowRef(Default),
+            //     label: "defaultrecord",
+            // },
+            // {
+            //     component: shallowRef(Edit),
+            //     label:"editrecord",
+            // }
+            // ],
+        
             pageState: 0,
         };
     },
     methods: {
-        editProfile() {
+        edit() {
             this.pageState = 1;
         },
-        saveProfile() {
+        save() {
             this.pageState = 0;
         },
+        
     },
 };
 </script>

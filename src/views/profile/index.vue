@@ -92,8 +92,9 @@ export default {
         Mybuy,
         Mysell,
         Myrecord,
+        
     },
-    methods: {},
+    methods: { },
     data() {
         return {
             focusPage: "record", //default

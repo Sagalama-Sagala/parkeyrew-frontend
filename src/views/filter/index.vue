@@ -111,7 +111,7 @@
               <h1>+</h1>
             </div>
             <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <DoubleRangeSlider :min-Range="0" :max-Range="100" :unit="'%'"/>
+              <DoubleRangeSlider :min-Range="conditionSlider.minRange" :max-Range="conditionSlider.maxRange" :unit="conditionSlider.unit"  v-model:m1="conditionSlider.value1" v-model:m2="conditionSlider.value2"/>
             </div>
           </div>
           <div class="w-[16rem] flex flex-col gap-3">
@@ -120,7 +120,7 @@
               <h1>+</h1>
             </div>
             <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <DoubleRangeSlider :min-Range="0" :max-Range="5000" :unit="'฿'" />
+              <DoubleRangeSlider :min-Range="priceSlider.minRange" :max-Range="priceSlider.maxRange" :unit="priceSlider.unit"  v-model:m1="priceSlider.value1" v-model:m2="priceSlider.value2"/>
             </div>
           </div>
         </div>
@@ -200,7 +200,7 @@
               <h1>+</h1>
             </div>
             <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <DoubleRangeSlider :min-Range="0" :max-Range="100" :unit="'%'"/>
+              <DoubleRangeSlider :min-Range="conditionSlider.minRange" :max-Range="conditionSlider.maxRange" :unit="conditionSlider.unit"  v-model:m1="conditionSlider.value1" v-model:m2="conditionSlider.value2"/>
             </div>
           </div>
           <div class="w-[16rem] flex flex-col gap-3">
@@ -209,7 +209,8 @@
               <h1>+</h1>
             </div>
             <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <DoubleRangeSlider :min-Range="0" :max-Range="5000" :unit="'฿'" />
+              <DoubleRangeSlider :min-Range="priceSlider.minRange" :max-Range="priceSlider.maxRange" :unit="priceSlider.unit" :step="priceSlider.step"  v-model:m1="priceSlider.value1" v-model:m2="priceSlider.value2"/>
+              
             </div>
           </div>
         </div>
@@ -303,6 +304,8 @@ export default {
       isOpen: false,
       selectedOption: null,
       isFilterBarToggle: ref({ value: false }),
+      priceSlider:ref({minRange:0, maxRange:5000, step:100,unit:"฿", value1:0,value2:5000}),
+      conditionSlider:{minRange:0, maxRange:100, step:1,unit:"%", value1:0,value2:100},
       sizeOptions: [
         { id: "S", label: "S" ,isCheck: false },
         { id: "M", label: "M" ,isCheck: false},

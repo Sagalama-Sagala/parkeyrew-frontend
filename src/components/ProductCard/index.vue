@@ -89,10 +89,6 @@ export default {
       type: String,
       default: "placeholderText",
     },
-    itemName: {
-      type: String,
-      default: "placeholderText",
-    },
     tags: {
       type: Array,
       default: () => [],

@@ -2,12 +2,12 @@
     <div class="relative w-[100%] h-[100px] md:text-[1.3rem]">
         <div class="slider-track"></div>
         <div class="relative mt-[15px]">
-            <input type="range" :min="minRange" :max="maxRange" v-model="value1" id="slider-1" class="range" :step="step" v-on:change="handleOnchange1" />
+            <input type="range" :min="minRange" :max="maxRange" :value="m1" id="slider-1" class="range" :step="step" @input="$emit('update:m1',parseInt($event.target.value))" @change="$emit('onChange1',parseInt($event.target.value))" />
             <span class="bubble1">test</span>
         </div>
 
         <div class="relative mt-[15px]">
-            <input type="range" :min="minRange" :max="maxRange" v-model="value2" id="slider-2" class="range" :step="step" v-on:change="handleOnchange2" />
+            <input type="range" :min="minRange" :max="maxRange" :value="m2" id="slider-2" class="range" :step="step" @input="$emit('update:m2',parseInt($event.target.value))" @change="$emit('onChange2',parseInt($event.target.value))"  />
             <span class="bubble2">test</span>
         </div>
     </div>
@@ -31,31 +31,20 @@ export default {
       type: String,
       default: ''
     },
-    startValue:
-    {
-      type:Number,
-      default: null
-    },
-    endValue:
-    {
-      type:Number,
-      default: null, 
-    },
     step:
     {
       type:Number,
       default: 1, 
-    }
-  },
-  default:
-  {
-    startValue() 
-    {
-      return this.maxRange;
     },
-    endValue()
+    m1:
     {
-      return this.minRange
+      type:Number,
+      default:0
+    },
+    m2:
+    {
+      type:Number,
+      default:0
     }
   },
   methods: {
@@ -70,12 +59,12 @@ export default {
       bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
     },
     updateSliderValues() {
-      this.updateSlider('value1', 'bubble1', 'slider-1');
-      this.updateSlider('value2', 'bubble2', 'slider-2');
+      this.updateSlider('m1', 'bubble1', 'slider-1');
+      this.updateSlider('m2', 'bubble2', 'slider-2');
     },
     updateSliderTrack() {
-      const percent1 = (this.$el.querySelector('#slider-1').value / this.$el.querySelector('#slider-1').max) * 100;
-      const percent2 = (this.$el.querySelector('#slider-2').value / this.$el.querySelector('#slider-1').max) * 100;
+      const percent1 = (this.m1 / this.maxRange) * 100;
+      const percent2 = (this.m2 / this.maxRange) * 100;
       const sliderTrack = this.$el.querySelector('.slider-track');
       const gradientValue = `linear-gradient(to right, #dadae5 ${percent1}%, #000000 ${percent1}%, #000000 ${percent2}%, #dadae5 ${percent2}%)`;
       sliderTrack.setAttribute('style', `background: ${gradientValue}`);
@@ -93,11 +82,11 @@ export default {
     this.updateSliderTrack();
   },
   watch: {
-    value1() {
-      if (parseInt(this.$el.querySelector('#slider-2').value) - parseInt(this.$el.querySelector('#slider-1').value) <= 0) {
-        this.value1 = this.$el.querySelector('#slider-2').value;
+    m1() {
+      if (this.m2 - this.m1 <= 0) {
+        this.$emit('update:m1',this.m2)
       }
-      if (parseInt(this.$el.querySelector('#slider-1').value) === this.maxRange) {
+      if (this.m1 === this.maxRange) {
         this.$el.querySelector('#slider-2').disabled = true;
       } else {
         this.$el.querySelector('#slider-2').disabled = false;
@@ -105,19 +94,13 @@ export default {
       this.updateSliderValues();
       this.updateSliderTrack();
     },
-    value2() {
-      if (parseInt(this.$el.querySelector('#slider-2').value) - parseInt(this.$el.querySelector('#slider-1').value) <= 0) {
-        this.value2 = this.$el.querySelector('#slider-1').value;
+    m2() {
+      if (this.m2 - this.m1 <= 0) {
+        this.$emit('update:m2',this.m1)
       }
       this.updateSliderValues();
       this.updateSliderTrack();
     },
-  },
-  data() {
-    return {
-      value1: this.startValue === null ? this.minRange : this.startValue,
-      value2: this.endValue === null ? this.maxRange : this.endValue,
-    };
   },
 };
 </script>

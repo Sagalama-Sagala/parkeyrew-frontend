@@ -52,13 +52,16 @@
           :key="item.title"
           :is-recommended="item.recommended"
           :item-name="item.name"
-          :tags="item.tags"
           :item-price="item.price"
           :item-image="item.productImage"
           :rating="item.owner.reviewStar"
           :seller-image="item.sellerImage"
           :seller-name="item.owner.username"
           :liked="item.liked"
+          :color="item.color"
+          :size="item.size"
+          :brand="item.brand"
+          :condition="item.condition"
         />
       </div>
     </div>
@@ -91,6 +94,7 @@ export default {
     axios
       .get("/product")
       .then((response) => {
+        console.log(response.data);
         products.value = response.data;
       })
       .catch((err) => {

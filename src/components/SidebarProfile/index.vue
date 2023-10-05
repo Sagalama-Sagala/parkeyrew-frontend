@@ -1,5 +1,5 @@
-<template>
-  <div class="bg-gray-200 md:pt-[120px] pt-[66px] md:block">
+<template >
+  <div class="bg-gray-200  md:pt-[120px] pt-[66px] md:block">
     <div
       class="m-2 text-sm md:text-xl ml-0 md:ml-80 pl-4 md:pl-0 md:flex inline-flex items-center z-0 cursor-pointer"
       @click="toggleSidebar"

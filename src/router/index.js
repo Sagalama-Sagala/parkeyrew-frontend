@@ -81,7 +81,7 @@ const routes = [
       },
       {
         path: "product/:id",
-        name: "Product",
+        name: "ProductInfo",
         component: () => import("@/views/product/index.vue"),
       },
       {
@@ -96,6 +96,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior() {
+    return { top: 0, left: 0 };
+  },
 });
 
 export default router;

@@ -11,11 +11,7 @@
                 :src="ProductImage[selectedImageIndex]"
                 class="w-[40rem] md:h-[32rem] h-[23rem] object-contain"
               />
-              <img
-                v-if="productData.isRecommend"
-                :src="recommend"
-                class="w-[4rem] absolute top-0 right-3"
-              />
+              <img :src="recommend" class="w-[4rem] absolute top-0 right-3" />
             </div>
           </div>
 
@@ -35,8 +31,8 @@
           </div>
 
           <div class="flex justify-between mx-10">
-            <h1>สถิติการเข้าดู : {{ productData.viewCount }}</h1>
-            <h1>มีคนถูกใจสินค้า : {{ productData.likeCount }}</h1>
+            <h1>สถิติการเข้าดู : {{ infoProducts?.product?.viewCount }}</h1>
+            <h1>มีคนถูกใจสินค้า : {{ infoProducts?.product?.likeCount }}</h1>
           </div>
         </div>
 
@@ -45,8 +41,8 @@
             <div
               class="flex flex-row md:flex-col md:justify-end justify-between md:text-[1.5rem] font-bold"
             >
-              <h1>ชื่อ : {{ productData.name }}</h1>
-              <h1>ราคา : {{ productData.price }} บาท</h1>
+              <h1>ชื่อ : {{ infoProducts?.product?.name }}</h1>
+              <h1>ราคา : {{ infoProducts?.product?.price }}</h1>
             </div>
 
             <div
@@ -62,13 +58,15 @@
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center hover:bg-secondary md:w-14 w-10 p-2"
                 />
               </div>
-              <span>สินค้าคงเหลือ: {{ productData.remain }}</span>
+              <span>สินค้าคงเหลือ: {{ infoProducts?.product?.remain }}</span>
             </div>
           </div>
 
           <div>
             <p>รายละเอียดสินค้า</p>
-            <p class="text-[1.1rem] font-light">{{ productData.description }}</p>
+            <p class="text-[1.1rem] font-light">
+              {{ infoProducts?.product?.description }}
+            </p>
           </div>
 
           <div class="flex justify-between gap-20">
@@ -80,10 +78,10 @@
                 <h1>ไซส์</h1>
               </div>
               <div class="md:font-normal font-light">
-                <h1>{{ productData.brand }}</h1>
-                <h1>{{ productData.color }}</h1>
-                <h1>{{ productData.condition }}</h1>
-                <h1>{{ productData.size }}</h1>
+                <h1>{{ infoProducts?.product?.brand }}</h1>
+                <h1>{{ infoProducts?.product?.color }}</h1>
+                <h1>{{ infoProducts?.product?.condition }}</h1>
+                <h1>{{ infoProducts?.product?.size }}</h1>
               </div>
             </div>
 
@@ -94,9 +92,11 @@
                 <h1>ส่งจาก</h1>
               </div>
               <div class="md:font-normal font-light overflow-hidden">
-                <h1>{{ productData.category}}</h1>
-                <h1 class="whitespace-nowrap ">{{ productData.createdAt.split('T')[0] }}</h1>
-                <h1>{{ productData.sendFrom }}</h1>
+                <h1>{{ infoProducts?.product?.category }}</h1>
+                <h1 class="whitespace-nowrap">
+                  {{ formatDate(infoProducts?.product?.createdAt) }}
+                </h1>
+                <h1>{{ infoProducts?.product?.sendFrom }}</h1>
               </div>
             </div>
           </div>
@@ -106,15 +106,15 @@
           >
             <div class="flex items-center gap-4">
               <img
-                :src="productData.sellerImage"
+                src=""
                 class="hover:bg-secondary hover:cursor-pointer w-[4rem] h-[4rem] rounded-full object-cover border-4"
               />
               <div>
                 <h1 class="hover:underline hover:cursor-pointer">
-                  {{ sellerData.username }}
+                  {{ infoProducts?.username }}
                 </h1>
                 <Rating
-                  :rating="sellerData.reviewStar"
+                  :rating="infoProducts?.reviewStar"
                   @childButtonClick="greet"
                   :clickable="true"
                 />
@@ -151,18 +151,21 @@
     <div class="flex overflow-x-auto pb-10">
       <div class="flex gap-x-5 mx-auto">
         <ProductCard
-          v-for="(item, index) in products"
-          :id="item.id"
+          v-for="(item, index) in infoProducts?.productsOfUser"
+          :id="item._id"
           :key="item.title"
           :is-recommended="item.recommended"
-          :item-name="item.title"
-          :tags="item.tags"
+          :item-name="item.name"
           :item-price="item.price"
           :item-image="item.productImage"
-          :rating="item.rating"
+          :rating="item.owner.reviewStar"
           :seller-image="item.sellerImage"
+          :seller-name="item.owner.username"
           :liked="item.liked"
-          @sellerClick="greet(item.title)"
+          :color="item.color"
+          :size="item.size"
+          :brand="item.brand"
+          :condition="item.condition"
         />
       </div>
     </div>
@@ -170,7 +173,7 @@
 </template>
 
 <script>
-import {ref} from "vue";
+import { ref } from "vue";
 import axios from "axios";
 import { shareArrow, heart, chat, call } from "@/assets/product";
 import { recommend } from "@/assets/product_card";
@@ -178,8 +181,26 @@ import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
+import { useRoute } from "vue-router";
+import { formatDate } from "@/common/js/utils.js";
 
 export default {
+  setup() {
+    const infoProducts = ref([]);
+    const route = useRoute();
+    const productId = route.params.id;
+    axios
+      .get(`/product/get-info-product-page/${productId}`)
+      .then((response) => {
+        console.log(response.data);
+        infoProducts.value = response.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return { infoProducts };
+  },
   components: {
     ProductCard,
     Rating,
@@ -191,22 +212,10 @@ export default {
     greet(sellerNAme) {
       console.log(`you click ${sellerNAme}`);
     },
-    test()
-    {
+    test() {
       console.log(this.sellerData);
-    }
-  },
-  beforeMount() {
-    axios
-      .get(`/product/get-info-product-page/${this.$route.params.id}`)
-      .then((response) => {
-        console.log(response.data);
-        this.sellerData = {username: response.data.username, reviewStar:response.data.reviewStar};
-        this.productData = response.data.product;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    },
+    formatDate,
   },
   data() {
     return {
@@ -216,90 +225,7 @@ export default {
       chat,
       call,
       selectedImageIndex: 0,
-      baseURL: "http://localhost:5173/product/a0000002",
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
-      sellderData: {},
-      productData: {},
-      products: [
-        {
-          id: "a0000001",
-          recommended: true,
-          title: "ขdsยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.45,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 0, label: "no-brand" },
-          ],
-        },
-        {
-          id: "a0000002",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000003",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000004",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-      ],
     };
   },
 };

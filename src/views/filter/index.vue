@@ -262,6 +262,7 @@
 
 <script>
 import { ref } from "vue";
+import axios from "axios";
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import DoubleRangeSlider from '@/components/Filter/DoubleRangeSlider/index.vue'
@@ -316,6 +317,21 @@ export default {
       console.log(this.isFilterBarToggle.value);
     },
 
+  },
+  setup(){
+    const products = ref([]);
+
+    axios
+      .get("/product")
+      .then((response) => {
+        console.log(response.data);
+        products.value = response.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return { products };
   },
   data() {
     return {

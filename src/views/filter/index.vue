@@ -318,7 +318,7 @@ export default {
     toggleFilterBar()
     {
       this.isFilterBarToggle.value = !this.isFilterBarToggle.value
-      console.log(this.isFilterBarToggle.value)
+      console.log(this.isFilterBarToggle.value);
     },
 
   },

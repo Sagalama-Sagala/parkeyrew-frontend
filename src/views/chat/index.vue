@@ -17,10 +17,10 @@
 
     <!-- chat box -->
     <div class="h-full overflow-y-auto">
-      <div v-for="(item, index) in mockupChat" :key="item.roomId">
+      <div v-for="(item, index) in chatRooms" :key="item.product">
         <div
           @click="handleChatPrivate(item.roomId)"
-          class="flex justify-between items-center border-b-[1px] border-black md:text-lg text-sm py-1"
+          class="flex justify-between items-center border-b-[1px] border-black md:text-lg text-sm py-1 cursor-pointer"
         >
           <div class="flex justify-center items-center gap-x-2">
             <img
@@ -29,7 +29,7 @@
               class="md:w-20 md:h-20 w-12 h-12"
             />
             <div class="flex flex-col justify-around items-start h-full py-2">
-              <h2 class="font-semibold">{{ item.chatName }}</h2>
+              <h2 class="font-semibold">{{ item.customer?.username }}</h2>
               <h3 class="font-light">{{ item.lastMessage }}</h3>
             </div>
           </div>
@@ -58,7 +58,21 @@
 <script>
 import { noti, profile } from "@/assets/chat";
 import Container from "@/components/ChatContainer/index.vue";
+import { socket } from "@/socket";
+import { ref, onBeforeMount } from "vue";
+
 export default {
+  setup() {
+    const chatRooms = ref([]);
+
+    socket.on("rooms", (response) => {
+      console.log("hello");
+      console.log(response);
+      chatRooms.value = response;
+    });
+
+    return { chatRooms };
+  },
   components: {
     Container,
   },
@@ -94,70 +108,6 @@ export default {
           lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
           role: "buyer",
           unread: true,
-          profileIcon: profile,
-        },
-        {
-          roomId: "003",
-          chatName: "John3",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "seller",
-          unread: true,
-          profileIcon: profile,
-        },
-        {
-          roomId: "004",
-          chatName: "John4",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "seller",
-          unread: true,
-          profileIcon: profile,
-        },
-        {
-          roomId: "005",
-          chatName: "John5",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "seller",
-          unread: true,
-          profileIcon: profile,
-        },
-        {
-          roomId: "006",
-          chatName: "John6",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "buyer",
-          unread: false,
-          profileIcon: profile,
-        },
-        {
-          roomId: "003",
-          chatName: "John3",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "seller",
-          unread: false,
-          profileIcon: profile,
-        },
-        {
-          roomId: "004",
-          chatName: "John4",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "seller",
-          unread: false,
-          profileIcon: profile,
-        },
-        {
-          roomId: "005",
-          chatName: "John5",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "seller",
-          unread: false,
-          profileIcon: profile,
-        },
-        {
-          roomId: "006",
-          chatName: "John6",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "buyer",
-          unread: false,
           profileIcon: profile,
         },
       ],

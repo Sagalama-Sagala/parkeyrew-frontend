@@ -124,6 +124,7 @@
             <div class="flex gap-3">
               <div
                 class="flex border-[1px] border-[#393838] md:border-black w-[4rem] md:w-[6rem] h-[4rem] rounded-full md:rounded-xl justify-center items-center gap-2 hover:bg-secondary hover:cursor-pointer"
+                @click="createChatRoom()"
               >
                 <img :src="call" class="w-7" />
                 <h1 class="hidden md:block">แชท</h1>
@@ -132,7 +133,7 @@
               <div
                 class="flex border-[1px] border-[#393838] md:border-black w-[4rem] md:w-[6rem] h-[4rem] rounded-full md:rounded-xl justify-center items-center gap-2 hover:bg-secondary hover:cursor-pointer"
               >
-                <img :src="chat" class="w-[1.5rem]" @click="test" />
+                <img :src="chat" class="w-[1.5rem]" />
                 <h1 class="hidden md:blcok">โทร</h1>
               </div>
             </div>
@@ -183,6 +184,7 @@ import Rating from "@/components/Rating/index.vue";
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
 import { useRoute } from "vue-router";
 import { formatDate } from "@/common/js/utils.js";
+import { socket } from "@/socket";
 
 export default {
   setup() {
@@ -199,7 +201,14 @@ export default {
         console.log(err);
       });
 
-    return { infoProducts };
+    const createChatRoom = () => {
+      socket.emit("createRoom", {
+        product: infoProducts.value.product,
+        seller: infoProducts.value.product.owner,
+      });
+    };
+
+    return { infoProducts, createChatRoom };
   },
   components: {
     ProductCard,
@@ -211,9 +220,6 @@ export default {
     },
     greet(sellerNAme) {
       console.log(`you click ${sellerNAme}`);
-    },
-    test() {
-      console.log(this.sellerData);
     },
     formatDate,
   },

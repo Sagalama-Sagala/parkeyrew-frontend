@@ -142,7 +142,6 @@ export default {
       return [brand, size, condition, color];
     },
     handleClick() {
-      console.log(this.id);
       this.$router.push(`/product/${this.id}`);
     },
   },

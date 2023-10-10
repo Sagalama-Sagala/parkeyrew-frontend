@@ -6,7 +6,7 @@
     <div
       class="flex items-end h-[9rem] w-[12.5rem] absolute flex-col mt-[-0.5rem] right-5 justify-stretch"
     >
-      <img v-if="isRecommended" :src="recommend" class="w-14 z-10" />
+      <img v-if="isRecommended(rating)" :src="recommend" class="w-14 z-10" />
     </div>
 
     <div class="px-2">
@@ -18,12 +18,11 @@
     <div class="px-4 pt-2">
       <h1 class="text-xl font-semibold pb-2">{{ itemName }}</h1>
       <div class="flex overflow-x-auto mx-auto gap-x-1">
-        <div v-for="item in tags" :key="item.id">
+        <div v-for="item in getTags(brand, size, condition, color)" :key="item">
           <div
-            class="border-[1px] border-black rounded-md px-1 text-center text-sm w-full m-1 hover:bg-secondary hover:cursor-pointer whitespace-nowrap"
-            @click.stop="handleTagClick(item.id)"
+            class="border-[1px] border-black rounded-md px-1 text-center text-sm w-full m-1 whitespace-nowrap"
           >
-            {{ item.label }}
+            {{ item }}
           </div>
         </div>
       </div>
@@ -77,25 +76,25 @@ export default {
       type: String,
       default: null,
     },
-    isRecommended: {
-      type: Boolean,
-      default: false,
-    },
     likeshow: {
       type: Boolean,
       default: true,
     },
-    itemName: {
+    brand: {
       type: String,
-      default: "placeholderText",
+      default: "no-brand",
+    },
+    color: {
+      type: String,
+      default: "ไม่ระบุสี",
+    },
+    size: {
+      type: String,
+      default: "ไม่ระบุไซส์",
     },
     itemName: {
       type: String,
       default: "placeholderText",
-    },
-    tags: {
-      type: Array,
-      default: () => [],
     },
     itemImage: {
       type: String,
@@ -121,16 +120,26 @@ export default {
       type: Boolean,
       default: false,
     },
+    condition: {
+      type: Number,
+      default: 50,
+    },
   },
   methods: {
-    handleTagClick(index) {
-      this.$emit("tagClick", index);
-    },
     handleHeartClick() {
       this.$emit("heartClick");
     },
     handleSellerClick() {
       this.$emit("sellerClick");
+    },
+    isRecommended(rating) {
+      if (rating > 3) {
+        return true;
+      }
+      return false;
+    },
+    getTags(brand, size, condition, color) {
+      return [brand, size, condition, color];
     },
   },
   setup() {},

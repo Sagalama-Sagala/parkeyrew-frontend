@@ -48,16 +48,20 @@
       >
         <ProductCard
           v-for="(item, index) in products"
-          :id="item.id"
+          :id="item._id"
           :key="item.title"
           :is-recommended="item.recommended"
-          :item-name="item.title"
-          :tags="item.tags"
+          :item-name="item.name"
           :item-price="item.price"
           :item-image="item.productImage"
-          :rating="item.rating"
+          :rating="item.owner.reviewStar"
           :seller-image="item.sellerImage"
+          :seller-name="item.owner.username"
           :liked="item.liked"
+          :color="item.color"
+          :size="item.size"
+          :brand="item.brand"
+          :condition="item.condition"
         />
       </div>
     </div>
@@ -80,9 +84,25 @@ import {
   trousers,
 } from "@/assets/home";
 import ProductCard from "@/components/ProductCard/index.vue";
+import { ref } from "vue";
+import axios from "axios";
 
 export default {
-  setup() {},
+  setup() {
+    const products = ref([]);
+
+    axios
+      .get("/product")
+      .then((response) => {
+        console.log(response.data);
+        products.value = response.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return { products };
+  },
   components: {
     ProductCard,
   },
@@ -110,87 +130,6 @@ export default {
         { icon: shirt2, title: "ชุดทำงาน" },
         { icon: shoes, title: "รองเท่้า" },
         { icon: jumpsuit, title: "จั๊มป์สูท" },
-      ],
-      products: [
-        {
-          id: "a0000001",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: false,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 0, label: "no-brand" },
-          ],
-        },
-        {
-          id: "a0000002",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: false,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000003",
-
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: false,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000004",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
       ],
     };
   },

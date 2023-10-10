@@ -72,7 +72,7 @@
             @click="toggleProfile"
           ></div>
           <div
-            class="z-20 fixed top-[64px] right-[30px] px-8 bg-white py-5 rounded w-[200px]"
+            class="z-20 fixed top-[64px] right-[30px] px-8 bg-white py-5 rounded w-[200px] duration-500 transition-all ease-in-out"
             :class="isProfileToggle ? 'block' : 'hidden'"
           >
             <ul class="space-y-3">
@@ -128,7 +128,12 @@
           </li>
         </ul>
         <ul v-if="isAuth() && !isAuthPage()" class="pl-9 pt-4">
-          <li class="py-2 font-semibold">ออกจากระบบ</li>
+          <li
+            class="py-2 font-semibold cursor-pointer"
+            @click="handleLogoutSidebar()"
+          >
+            ออกจากระบบ
+          </li>
         </ul>
       </div>
       <div
@@ -217,8 +222,13 @@ export default {
       this.$router.push("/login");
       this.toggleProfile();
     },
+    handleLogoutSidebar() {
+      removeLocal("token");
+      this.$router.push("/login");
+      this.toggleNav();
+    },
     pushProfilePage() {
-      this.$router.push("/profile");
+      this.$router.push("/profile/record");
       this.toggleProfile();
     },
   },
@@ -249,7 +259,7 @@ export default {
         {
           icon: profile,
           icon_white: profileWhite,
-          path: "/profile",
+          path: "/profile/record",
           next: this.toggleProfile,
         },
       ],

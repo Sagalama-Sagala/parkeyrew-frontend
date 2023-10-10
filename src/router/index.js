@@ -43,8 +43,36 @@ const routes = [
 
       {
         path: "profile",
-        name: "Profile",
-        component: () => import("@/views/profile/index.vue"),
+        component: () => import("@/layouts/profile/index.vue"),
+        children: [
+          {
+            path: "record",
+            name: "Record",
+            component: () => import("@/views/profile/account/record/index.vue"),
+          },
+          {
+            path: "address",
+            name: "Address",
+            component: () =>
+              import("@/views/profile/account/address/index.vue"),
+          },
+          {
+            path: "password",
+            name: "Password",
+            component: () =>
+              import("@/views/profile/account/password/index.vue"),
+          },
+          {
+            path: "purchase",
+            name: "Purchase",
+            component: () => import("@/views/profile/purchase/index.vue"),
+          },
+          {
+            path: "sales",
+            name: "Sales",
+            component: () => import("@/views/profile/sales/index.vue"),
+          },
+        ],
       },
       {
         path: "contact",

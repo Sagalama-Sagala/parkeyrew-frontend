@@ -7,8 +7,8 @@
       name="name"
       class="focus:outline-none mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
       placeholder="ชื่อ"
-      v-model="formValue.fname"
-      @input="updateForm('fname', $event.target.value)"
+      v-model="formValue.firstname"
+      @input="updateForm('firstname', $event.target.value)"
       required
     />
     <input
@@ -16,8 +16,8 @@
       name="sername"
       class="focus:outline-none mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
       placeholder="นามสกุล"
-      v-model="formValue.lname"
-      @input="updateForm('lname', $event.target.value)"
+      v-model="formValue.lastname"
+      @input="updateForm('lastname', $event.target.value)"
       required
     />
     <input

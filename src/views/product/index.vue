@@ -5,11 +5,11 @@
         class="border-b-[1px] border-b-black text-black flex md:gap-[10rem] gap-4 md:text-[1.3rem] text-[1.2rem] w-full mx-4 justify-center flex-wrap px-5 pb-3"
       >
         <div class="flex flex-col gap-5 w-[40rem]">
-          <div class="flex flex-wrap gap-2 bg-black rounded-xl">
+          <div class="flex flex-wrap gap-2 bg-[#d5d5d5] rounded-xl">
             <div class="relative">
               <img
                 :src="ProductImage[selectedImageIndex]"
-                class="w-[40rem] h-[32rem] object-contain"
+                class="w-[40rem] md:h-[32rem] h-[23rem] object-contain"
               />
               <img
                 v-if="productData.isRecommend"
@@ -26,7 +26,7 @@
               v-for="(imageUrl, index) in ProductImage"
               :key="index"
               :src="imageUrl"
-              class="h-[8rem] w-[11rem] border-grey rounded-xl border-[1px] aspect-[10.5/9] object-contain bg-slate-400"
+              class="h-[8rem] w-[11rem] border-grey rounded-xl border-[1px] aspect-[10.5/9] object-contain bg-[#d5d5d5]"
               :class="{
                 ' blur-sm border-2 border-black': selectedImageIndex === index,
               }"
@@ -35,8 +35,8 @@
           </div>
 
           <div class="flex justify-between mx-10">
-            <h1>สถิติการเข้าดู</h1>
-            <h1>มีคนถูกใจสินค้า</h1>
+            <h1>สถิติการเข้าดู : {{ productData.viewCount }}</h1>
+            <h1>มีคนถูกใจสินค้า : {{ productData.likeCount }}</h1>
           </div>
         </div>
 
@@ -68,10 +68,10 @@
 
           <div>
             <p>รายละเอียดสินค้า</p>
-            <p class="text-[1.1rem] font-light">{{ productData.detail }}</p>
+            <p class="text-[1.1rem] font-light">{{ productData.description }}</p>
           </div>
 
-          <div class="flex justify-between">
+          <div class="flex justify-between gap-20">
             <div class="flex gap-4 md:font-bold">
               <div>
                 <h1>แบรนด์</h1>
@@ -90,13 +90,13 @@
             <div class="flex gap-4 md:font-bold">
               <div>
                 <h1>หมวดหมู่</h1>
-                <h1>ลงขายเมื่อ</h1>
+                <h1 class="whitespace-nowrap">ลงขายเมื่อ</h1>
                 <h1>ส่งจาก</h1>
               </div>
-              <div class="md:font-normal font-light">
-                <h1>Tags</h1>
-                <h1>{{ productData.postCreateDate }}</h1>
-                <h1>{{ productData.shippingSource }}</h1>
+              <div class="md:font-normal font-light overflow-hidden">
+                <h1>{{ productData.category}}</h1>
+                <h1 class="whitespace-nowrap ">{{ productData.createdAt.split('T')[0] }}</h1>
+                <h1>{{ productData.sendFrom }}</h1>
               </div>
             </div>
           </div>
@@ -111,10 +111,10 @@
               />
               <div>
                 <h1 class="hover:underline hover:cursor-pointer">
-                  {{ productData.sellerName }}
+                  {{ sellerData.username }}
                 </h1>
                 <Rating
-                  :rating="productData.rating"
+                  :rating="sellerData.reviewStar"
                   @childButtonClick="greet"
                   :clickable="true"
                 />
@@ -132,7 +132,7 @@
               <div
                 class="flex border-[1px] border-[#393838] md:border-black w-[4rem] md:w-[6rem] h-[4rem] rounded-full md:rounded-xl justify-center items-center gap-2 hover:bg-secondary hover:cursor-pointer"
               >
-                <img :src="chat" class="w-[1.5rem]" />
+                <img :src="chat" class="w-[1.5rem]" @click="test" />
                 <h1 class="hidden md:blcok">โทร</h1>
               </div>
             </div>
@@ -163,6 +163,7 @@
           :seller-image="item.sellerImage"
           :liked="item.liked"
           @sellerClick="greet(item.title)"
+          @click=""
         />
       </div>
     </div>
@@ -170,6 +171,8 @@
 </template>
 
 <script>
+import {ref} from "vue";
+import axios from "axios";
 import { shareArrow, heart, chat, call } from "@/assets/product";
 import { recommend } from "@/assets/product_card";
 import ProductCard from "@/components/ProductCard/index.vue";
@@ -189,6 +192,23 @@ export default {
     greet(sellerNAme) {
       console.log(`you click ${sellerNAme}`);
     },
+    test()
+    {
+      console.log(this.sellerData);
+    }
+  },
+  beforeMount() {
+    axios
+      .get(`/product/get-info-product-page/${this.$route.params.id}`)
+      .then((response) => {
+        console.log(response.data);
+        this.sellerData = {username: response.data.username, reviewStar:response.data.reviewStar};
+        this.productData = response.data.product;
+        this.products = response.data.productsOfUser.map((item) => ({id:item._id, recommend:true,title:item.name,price:item.price,productImage:item.image,rating:this.sellderData.reviewStar,sellerImage:item.sellerImage,liked:true,tags:[{id:0,label:item.color},{id:1,label:item.size},{id:2,label:item.condition},{id:0,label:item.brand}]}));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   data() {
     return {
@@ -199,26 +219,9 @@ export default {
       call,
       selectedImageIndex: 0,
       baseURL: "http://localhost:5173/product/a0000002",
-      productData: {
-        id: 0,
-        name: "กางเกงเป็ด",
-        price: 1000,
-        detail:
-          "รายละเอียดสินค้ารายละเอียดสินค้ารายละเอียดสินค้ารายละเอียดสินค้ารายละเอียดสินค้ารายละเอียดสินค้ารายละเอียดสินค้า",
-        isRecommend: true,
-        remain: 0,
-        brand: "nike",
-        color: "แดง",
-        condition: "ใหม่",
-        size: "xl",
-        postCreateDate: "4:23 AM 18/09/2023",
-        shippingSource: "กรุงเทพ",
-        sellerName: "ชาบู",
-        sellerImage:
-          "https://ichef.bbci.co.uk/news/976/cpsprodpb/16620/production/_91408619_55df76d5-2245-41c1-8031-07a4da3f313f.jpg",
-        rating: 4.6,
-      },
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
+      sellderData: {},
+      productData: {},
       products: [
         {
           id: "a0000001",

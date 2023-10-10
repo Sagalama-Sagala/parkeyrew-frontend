@@ -1,5 +1,5 @@
 <template>
-    
+        
     <div class="md:text-2xl text-lg">
         <div class="md:text-2xl text-lg my-2 font-semibold">ข้อมูลของฉัน</div>
         <div class="md:text-lg text-sm my-2">
@@ -21,6 +21,10 @@
             >
                 เลือกรูป
             </button>
+            <div v-if="pageState === 1" class="text-xs mb-2">
+                <p>ขนาดไฟล์: สูงสุด 1 MB</p>
+                <p>ไฟล์ที่รองรับ: .JPEG, .PNG</p>
+            </div>
         </div>
     </div>
     <div class="flex md:mt-10 justify-center">
@@ -44,30 +48,30 @@
 </template>
 
 <script>
-import { view } from "@/assets/profile";
-import Defaultrecord from "@/components/StepsEditRecord/Default/index.vue";
-import Edit from "@/components/StepsEditRecord/Edit/index.vue";
+    import { view } from "@/assets/profile";
+    import Defaultrecord from "@/components/StepsEditRecord/Default/index.vue";
+    import Edit from "@/components/StepsEditRecord/Edit/index.vue";
 
-export default {
-    components: {
-    Defaultrecord,
-    Edit,
-    },
-    data() {
-        return {
-            view,
-            pageState: 0,
+    export default {
+                components: {
+                Defaultrecord,
+                Edit,
+                },
+            data() {
+                return {
+                    view,
+                    pageState: 0,
+                };
+            },
+            methods: {
+                edit() {
+                    this.pageState = 1;
+                },
+                save() {
+                    this.pageState = 0;
+                },
+                
+            },
         };
-    },
-    methods: {
-        edit() {
-            this.pageState = 1;
-        },
-        save() {
-            this.pageState = 0;
-        },
-        
-    },
-};
 </script>
 

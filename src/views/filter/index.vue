@@ -4,7 +4,7 @@
       class="bg-white md:h-[8rem] h-[8rem] w-full flex text-black items-end iten font-bold"
     >
       <div
-        class="md:mx-20 mx-10 my-1 md:my-3 justify-between w-full flex md:item-end items-center"
+        class="md:mx-20 mx-5 my-1 md:my-3 justify-between w-full flex md:item-end items-center"
       >
         <div class="flex md:text-xl text-[1rem] justify-center">
           <h1
@@ -16,7 +16,7 @@
           <h1 class="text-primary">/&nbsp;{{ $route.params.id }}</h1>
         </div>
 
-        <img :src="filter" class="w-[3rem] border-2 rounded-lg md:hidden" />
+        <img :src="filter" class="w-10  rounded-lg md:hidden  " @click="toggleFilterBar" />
 
         <div class="md:flex gap-2 justify-center items-center hidden">
           <h1>เรียงตาม</h1>
@@ -33,16 +33,19 @@
         </div>
       </div>
     </div>
-
-    <div class="flex flex-1 gap-10">
-      <div
-        class="w-[25%] bg-white hidden md:block mt-[1px] text-2xl font-[500]"
+    <div
+      class="h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30 z-30 md:hidden"
+      :class="isFilterBarToggle.value ? 'block' : 'hidden'"
+      @click="toggleFilterBar"
+    ></div>
+    <div
+      class="bg-white h-screen top- w-9/12 fixed transition-all ease-in duration-300 z-40 md:hidden"
+      :class="isFilterBarToggle.value ? 'right-[0px]' : 'right-[-600px]'"
       >
         <div class="flex flex-col gap-5 justify-evenly items-center h-full">
           <div class="w-[16rem] flex flex-col gap-3">
             <div class="flex w-full justify-between">
               <h1>แบรนด์</h1>
-              <h1>+</h1>
             </div>
             <div class="flex flex-col justify-around ml-5">
               <div
@@ -64,7 +67,6 @@
           <div class="w-[16rem] flex flex-col gap-3">
             <div class="flex w-full justify-between">
               <h1>ไซต์</h1>
-              <h1>+</h1>
             </div>
             <div class="flex flex-col ml-5 flex-wrap h-[6rem]">
               <div
@@ -86,7 +88,6 @@
           <div class="w-[16rem] flex flex-col gap-3">
             <div class="flex w-full justify-between">
               <h1>สี</h1>
-              <h1>+</h1>
             </div>
             <div class="flex ml-5 flex-wrap w-[12rem] gap-4">
               <div
@@ -104,19 +105,132 @@
           <div class="w-[16rem] flex flex-col gap-3">
             <div class="flex w-full justify-between">
               <h1>สภาพ</h1>
-              <h1>+</h1>
             </div>
-            <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <input type="range" id="volume-slider" />
+            <div class=" ml-5 flex-wrap h-[2rem]">
+              <DoubleRangeSlider :min-Range="conditionSlider.minRange" :max-Range="conditionSlider.maxRange" :unit="conditionSlider.unit"  v-model:m1="conditionSlider.value1" v-model:m2="conditionSlider.value2"/>
             </div>
           </div>
           <div class="w-[16rem] flex flex-col gap-3">
             <div class="flex w-full justify-between">
               <h1>ราคา</h1>
-              <h1>+</h1>
             </div>
-            <div class="flex flex-col ml-5 flex-wrap h-[2rem]">
-              <input type="range" id="volume-slider" />
+            <div class=" ml-5 flex-wrap h-[2rem]">
+              <DoubleRangeSlider :min-Range="priceSlider.minRange" :max-Range="priceSlider.maxRange" :unit="priceSlider.unit"  v-model:m1="priceSlider.value1" v-model:m2="priceSlider.value2"/>
+            </div>
+          </div>
+        </div>
+    </div>
+    
+
+    <div class="flex flex-1 gap-10">
+      <div
+        class="w-[25rem] bg-white  mt-[1px] text-2xl font-[500] hidden md:block"
+      >
+        <div class="flex flex-col gap-14  items-center h-full ">
+          <div class="w-[20rem] flex flex-col gap-3 mt-10 "
+              :class="isBrandDropdown && 'border-b-2'  "
+          >
+            <div class="flex w-full justify-between">
+              <h1>แบรนด์</h1>
+              <h1 @click="()=>{isBrandDropdown = !isBrandDropdown}" class="hover:cursor-pointer select-none">{{ isBrandDropdown ? '+' : '-'}}</h1>
+            </div>
+            <div 
+            class="flex flex-col justify-around ml-5  overflow-hidden  duration-75"
+            :class="isBrandDropdown ? 'h-[0px]' : 'h-[6rem]' "
+            >
+              <div
+                v-for="Option in brandOptions"
+                :key="Option.id"
+                class="flex gap-3"
+              >
+                <input
+                  type="checkbox"
+                  v-model="Option.isCheck"
+                  :value="Option.id"
+                  class="w-[1.2rem]"
+                  @click="handleBrandCheck(Option)"
+                />
+                <label>{{ Option.label }}</label>
+              </div>
+            </div>
+          </div>
+          <div class="w-[20rem] flex flex-col gap-3 "
+              :class="isSizeDropdown && 'border-b-2'  "
+          >
+            <div class="flex w-full justify-between">
+              <h1>ไซต์</h1>
+              <h1 @click="()=>{isSizeDropdown = !isSizeDropdown}" class="hover:cursor-pointer select-none">{{ isSizeDropdown ? '+' : '-'}}</h1>
+            </div>
+            <div 
+            class="grid grid-cols-2 overflow-hidden ml-5 duration-75"
+            :class="isSizeDropdown ? 'h-[0px]' : 'h-[6rem]' "
+            >
+              <div
+                v-for="Option in sizeOptions"
+                :key="Option.id"
+                class="flex gap-3"
+              >
+                <input
+                  type="checkbox"
+                  v-model="Option.isCheck"
+                  :value="Option.id"
+                  class="w-[1.2rem]"
+                  @click="handleSizeCheck(Option)"
+                />
+                <label>{{ Option.label }}</label>
+              </div>
+            </div>
+          </div>
+          <div class="w-[20rem] flex flex-col gap-3 "
+              :class="isColorDropdown && 'border-b-2'  "
+          >
+            <div class="flex w-full justify-between">
+              <h1>สี</h1>
+              <h1 @click="()=>{isColorDropdown = !isColorDropdown}" class="hover:cursor-pointer select-none">{{ isColorDropdown ? '+' : '-'}}</h1>
+            </div>
+            <div 
+            class="flex ml-5 flex-wrap w-[12rem] gap-4  duration-75"
+            :class="isColorDropdown ? 'h-[0px] overflow-hidden' : 'h-[3rem]'"
+            >
+              <div
+                v-for="color in colorOptions"
+                :key="color.id"
+                class="flex gap-3"
+              >
+                <div
+                  class="w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5] hover:border-[2px] border-black"
+                  :style="{ backgroundColor: color.label }"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div class="w-[20rem] flex flex-col gap-3 "
+              :class="isConditionDropdown && 'border-b-2'  "
+          >
+            <div class="flex w-full justify-between">
+              <h1>สภาพ</h1>
+              <h1 @click="()=>{isConditionDropdown = !isConditionDropdown}" class="hover:cursor-pointer select-none">{{ isConditionDropdown ? '+' : '-'}}</h1>
+            </div>
+            <div 
+            class=" ml-5 flex-wrap  duration-75"
+            :class="isConditionDropdown ? 'h-[0px] overflow-hidden' : 'h-[2rem]'"
+            >
+              <DoubleRangeSlider :min-Range="conditionSlider.minRange" :max-Range="conditionSlider.maxRange" :unit="conditionSlider.unit"  v-model:m1="conditionSlider.value1" v-model:m2="conditionSlider.value2"/>
+            </div>
+          </div>
+          <div class="w-[20rem] flex flex-col gap-3 "
+              :class="isPriceDropdown && 'border-b-2'  "
+          >
+            <div class="flex w-full justify-between">
+              <h1>ราคา</h1>
+              <h1 @click="()=>{isPriceDropdown = !isPriceDropdown}" class="hover:cursor-pointer select-none">{{ isPriceDropdown ? '+' : '-'}}</h1>
+            </div>
+            <div 
+            class=" ml-5 flex-wrap   duration-75"
+            :class="isPriceDropdown ? 'h-[0rem] overflow-hidden' : 'h-[2rem]'"
+            >
+              <DoubleRangeSlider :min-Range="priceSlider.minRange" :max-Range="priceSlider.maxRange" :unit="priceSlider.unit" :step="priceSlider.step"  v-model:m1="priceSlider.value1" v-model:m2="priceSlider.value2"/>
+              
             </div>
           </div>
         </div>
@@ -143,24 +257,26 @@
         </div>
       </div>
     </div>
-    <button @click="console.log(brand)">test</button>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+import axios from "axios";
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
+import DoubleRangeSlider from '@/components/Filter/DoubleRangeSlider/index.vue'
 
 import { chat, call } from "@/assets/product";
 import { heart } from "@/assets/product";
 import { filter } from "@/assets/filter";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
-
 export default {
   components: {
     ProductCard,
     Rating,
+    DoubleRangeSlider
   },
   methods: {
     handleMainClick() {
@@ -195,6 +311,27 @@ export default {
         this.storeVariableToUrl(this.urlVariable);
       }
     },
+    toggleFilterBar()
+    {
+      this.isFilterBarToggle.value = !this.isFilterBarToggle.value
+      console.log(this.isFilterBarToggle.value);
+    },
+
+  },
+  setup(){
+    const products = ref([]);
+
+    axios
+      .get("/product")
+      .then((response) => {
+        console.log(response.data);
+        products.value = response.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return { products };
   },
   data() {
     return {
@@ -202,6 +339,14 @@ export default {
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
       isOpen: false,
       selectedOption: null,
+      isFilterBarToggle: ref({ value: false }),
+      isBrandDropdown: true,
+      isSizeDropdown: true,
+      isColorDropdown: true,
+      isConditionDropdown: true,
+      isPriceDropdown: true,
+      priceSlider:ref({minRange:0, maxRange:5000, step:100,unit:"฿", value1:0,value2:5000}),
+      conditionSlider:{minRange:0, maxRange:100, step:1,unit:"%", value1:0,value2:100},
       sizeOptions: [
         { id: "S", label: "S" ,isCheck: false },
         { id: "M", label: "M" ,isCheck: false},

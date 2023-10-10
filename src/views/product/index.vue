@@ -163,6 +163,7 @@
           :seller-image="item.sellerImage"
           :liked="item.liked"
           @sellerClick="greet(item.title)"
+          @click=""
         />
       </div>
     </div>
@@ -203,6 +204,7 @@ export default {
         console.log(response.data);
         this.sellerData = {username: response.data.username, reviewStar:response.data.reviewStar};
         this.productData = response.data.product;
+        this.products = response.data.productsOfUser.map((item) => ({id:item._id, recommend:true,title:item.name,price:item.price,productImage:item.image,rating:this.sellderData.reviewStar,sellerImage:item.sellerImage,liked:true,tags:[{id:0,label:item.color},{id:1,label:item.size},{id:2,label:item.condition},{id:0,label:item.brand}]}));
       })
       .catch((err) => {
         console.log(err);

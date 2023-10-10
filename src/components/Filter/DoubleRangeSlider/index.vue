@@ -1,5 +1,5 @@
 <template>
-    <div class="relative w-[100%] h-[100px] md:text-[1.3rem]">
+    <div class="relative w-[100%]  md:text-[1.3rem]">
         <div class="slider-track"></div>
         <div class="relative mt-[15px]">
             <input type="range" :min="minRange" :max="maxRange" :value="m1" id="slider-1" class="range" :step="step" @input="$emit('update:m1',parseInt($event.target.value))" @change="$emit('onChange1',parseInt($event.target.value))" />

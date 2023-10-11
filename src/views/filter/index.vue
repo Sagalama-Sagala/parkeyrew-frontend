@@ -1,12 +1,32 @@
 <template>
   <div class="bg-secondary min-h-screen flex flex-col overflow-hidden relative">
+    <div class="relative pt-16">
+      <img :src="cover" alt="cover" class="md:h-[166px] h-[130px] w-full object-cover" />
+      <div class="absolute inset-0 flex top-[6rem] justify-center">
+        <div class="text-center space-y-2">
+          <h1 class="text-white text-2xl">ผ้าขี้ริ้วห่อทอง ผ้ามือสองห่อใจ</h1>
+          <div class="relative">
+            <input
+              type="text"
+              class="bg-transparent border-[1px] border-white h-10 rounded-xl w-full pr-9 pl-3 text-white focus:outline-none"
+            />
+            <span
+              class="absolute right-3 top-3 h-full cursor-pointer"
+              @click="handleSearch"
+            >
+              <img :src="search" alt="search" class="w-4" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div
-      class="bg-white md:h-[8rem] h-[8rem] w-full flex text-black items-end iten font-bold"
+      class="bg-white h-[4.5rem] w-full flex text-black items-center iten font-bold "
     >
       <div
         class="md:mx-20 mx-5 my-1 md:my-3 justify-between w-full flex md:item-end items-center"
       >
-        <div class="flex md:text-xl text-[1rem] justify-center">
+        <div class="flex md:text-xl text-[1rem] justify-center ">
           <h1
             class="text-[#949494] hover:cursor-pointer hover:text-[#838383]"
             @click="handleMainClick"
@@ -39,7 +59,7 @@
       @click="toggleFilterBar"
     ></div>
     <div
-      class="bg-white h-screen top- w-9/12 fixed transition-all ease-in duration-300 z-40 md:hidden"
+      class="bg-white h-screen top- w-9/12 fixed transition-all ease-in duration-300 z-40 md:hidden "
       :class="isFilterBarToggle.value ? 'right-[0px]' : 'right-[-600px]'"
       >
         <div class="flex flex-col gap-5 justify-evenly items-center h-full">
@@ -47,7 +67,7 @@
             <div class="flex w-full justify-between">
               <h1>แบรนด์</h1>
             </div>
-            <div class="flex flex-col justify-around ml-5">
+            <div class="flex flex-col  ml-4">
               <div
                 v-for="Option in brandOptions"
                 :key="Option.id"
@@ -89,16 +109,20 @@
             <div class="flex w-full justify-between">
               <h1>สี</h1>
             </div>
-            <div class="flex ml-5 flex-wrap w-[12rem] gap-4">
+            <div class="grid ml-5 grid-cols-2 w-[12rem] ">
               <div
-                v-for="color in colorOptions"
-                :key="color.id"
+                v-for="Option in colorOptions"
+                :key="Option.id"
                 class="flex gap-3"
               >
-                <div
-                  class="w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5] hover:border-[2px] border-black"
-                  :style="{ backgroundColor: color.label }"
-                ></div>
+                <input
+                  type="checkbox"
+                  v-model="Option.isCheck"
+                  :value="Option.id"
+                  class="w-[1.2rem]"
+                  @click="handleSizeCheck(Option)"
+                />
+                <label>{{ Option.label }}</label>
               </div>
             </div>
           </div>
@@ -124,9 +148,9 @@
 
     <div class="flex flex-1 gap-10">
       <div
-        class="w-[25rem] bg-white  mt-[1px] text-2xl font-[500] hidden md:block"
+        class="w-[25rem] bg-white  mt-[1px] text-2xl font-[500] hidden md:block  "
       >
-        <div class="flex flex-col gap-14  items-center h-full ">
+        <div class="flex flex-col gap-14  items-center h-full mb-10   ">
           <div class="w-[20rem] flex flex-col gap-3 mt-10 "
               :class="isBrandDropdown && 'border-b-2'  "
           >
@@ -135,8 +159,8 @@
               <h1 @click="()=>{isBrandDropdown = !isBrandDropdown}" class="hover:cursor-pointer select-none">{{ isBrandDropdown ? '+' : '-'}}</h1>
             </div>
             <div 
-            class="flex flex-col justify-around ml-5  overflow-hidden  duration-75"
-            :class="isBrandDropdown ? 'h-[0px]' : 'h-[6rem]' "
+            class="flex flex-col ml-5  overflow-hidden  duration-75"
+            :class="isBrandDropdown ? 'h-[0px]' : 'h-[4rem]' "
             >
               <div
                 v-for="Option in brandOptions"
@@ -189,18 +213,22 @@
               <h1 @click="()=>{isColorDropdown = !isColorDropdown}" class="hover:cursor-pointer select-none">{{ isColorDropdown ? '+' : '-'}}</h1>
             </div>
             <div 
-            class="flex ml-5 flex-wrap w-[12rem] gap-4  duration-75"
-            :class="isColorDropdown ? 'h-[0px] overflow-hidden' : 'h-[3rem]'"
+            class="grid grid-cols-2 overflow-hidden ml-5 duration-75"
+            :class="isColorDropdown ? 'h-[0px]' : 'h-[12rem]' "
             >
               <div
-                v-for="color in colorOptions"
-                :key="color.id"
+                v-for="Option in colorOptions"
+                :key="Option.id"
                 class="flex gap-3"
               >
-                <div
-                  class="w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5] hover:border-[2px] border-black"
-                  :style="{ backgroundColor: color.label }"
-                ></div>
+                <input
+                  type="checkbox"
+                  v-model="Option.isCheck"
+                  :value="Option.id"
+                  class="w-[1.2rem]"
+                  @click="handleColorCheck(Option)"
+                />
+                <label>{{ Option.label }}</label>
               </div>
             </div>
           </div>
@@ -236,25 +264,27 @@
         </div>
       </div>
 
-      <div class="flex-1 flex flex-wrap mx-auto overflow-y-auto">
-        <div
-          class="flex flex-wrap mt-10 gap-5 h-[0px] justify-center md:justify-start"
-        >
+      <div class="flex-1 flex flex-wrap mx-auto overflow-y-auto ">
+        <div v-if="products.length > 0" class="flex flex-wrap mt-10 gap-5 h-[0px] justify-center">
           <ProductCard
-            class="w-[16rem]"
             v-for="(item, index) in products"
-            :id="item.id"
+            :id="item._id"
             :key="item.title"
             :is-recommended="item.recommended"
-            :item-name="item.title"
-            :tags="item.tags"
+            :item-name="item.name"
             :item-price="item.price"
             :item-image="item.productImage"
-            :rating="item.rating"
+            :rating="item.owner.reviewStar"
             :seller-image="item.sellerImage"
+            :seller-name="item.owner.username"
             :liked="item.liked"
+            :color="item.color"
+            :size="item.size"
+            :brand="item.brand"
+            :condition="item.condition"
           />
         </div>
+        <div  v-else class="w-full flex justify-center items-center text-3xl "> Product not found </div>
       </div>
     </div>
   </div>
@@ -263,6 +293,7 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
+import { useRoute } from "vue-router";
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import DoubleRangeSlider from '@/components/Filter/DoubleRangeSlider/index.vue'
@@ -272,6 +303,10 @@ import { heart } from "@/assets/product";
 import { filter } from "@/assets/filter";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
+import {
+  cover,
+  search,
+} from "@/assets/home";
 export default {
   components: {
     ProductCard,
@@ -311,6 +346,19 @@ export default {
         this.storeVariableToUrl(this.urlVariable);
       }
     },
+    handleColorCheck(value)
+    {
+      if (Array.isArray(this.urlVariable.color)) {
+        if (value.isCheck) {
+          this.urlVariable.color = this.urlVariable.color.filter(
+            (item) => item !== value.label,
+          );
+        } else {
+          this.urlVariable.color.push(value.label);
+        }
+        this.storeVariableToUrl(this.urlVariable);
+      }
+    },
     toggleFilterBar()
     {
       this.isFilterBarToggle.value = !this.isFilterBarToggle.value
@@ -320,12 +368,13 @@ export default {
   },
   setup(){
     const products = ref([]);
-
+    const route = useRoute();
+    const category = route.params.id;
     axios
       .get("/product")
       .then((response) => {
+        products.value = response.data.filter(item => item.category === category);
         console.log(response.data);
-        products.value = response.data;
       })
       .catch((err) => {
         console.log(err);
@@ -335,6 +384,8 @@ export default {
   },
   data() {
     return {
+      cover: cover,
+      search: search,
       filter: filter,
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
       isOpen: false,
@@ -360,119 +411,24 @@ export default {
         { id: 1, label: "มีแบรนด์", isCheck: false },
       ],
       colorOptions: [
-        { id: 0, label: "#000000", isCheck: false },
-        { id: 1, label: "#1FFC11", isCheck: false },
-        { id: 2, label: "#6F3222", isCheck: false },
-        { id: 3, label: "#F14131", isCheck: false },
-        { id: 4, label: "#123456", isCheck: false },
-        { id: 5, label: "#555555", isCheck: false },
+        { id: 0, label: "ขาว", isCheck: false },
+        { id: 1, label: "ดำ", isCheck: false },
+        { id: 2, label: "ม่วง", isCheck: false },
+        { id: 3, label: "ฟ้า", isCheck: false },
+        { id: 4, label: "น้ำเงิน", isCheck: false },
+        { id: 5, label: "เขียว", isCheck: false },
+        { id: 6, label: "ชมพู", isCheck: false },
+        { id: 7, label: "เหลือง", isCheck: false },
+        { id: 8, label: "ส้ม", isCheck: false },
+        { id: 9, label: "แดง", isCheck: false },
+        { id: 10, label: "เทา", isCheck: false },
+        { id: 11, label: "น้ำตาล", isCheck: false },
       ],
       urlVariable: {
         brand: this.$route.query.brand || [],
         size: this.$route.query.size || [],
         color: this.$route.query.color || [],
       },
-      products: [
-        {
-          id: "a0000001",
-          recommended: true,
-          title: "ขdsยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.45,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 0, label: "no-brand" },
-          ],
-          category: "0",
-        },
-        {
-          id: "a0000002",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000003",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000004",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000004",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-      ],
     };
   },
   created() {

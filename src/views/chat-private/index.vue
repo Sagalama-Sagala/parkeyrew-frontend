@@ -14,12 +14,6 @@
     <div>
       <button @click="handleSubmitNewMessage">send</button>
     </div>
-    <button
-      class="border-black bg-blue-300 w-fit p-2 rounded"
-      @click="createChatRoom()"
-    >
-      create room
-    </button>
   </Container>
 </template>
 
@@ -37,16 +31,7 @@ export default {
       console.log(chats);
     });
 
-    const createChatRoom = () => {
-      console.log("... on create");
-      socket.emit("createRoom", {
-        name: "test1",
-        description: "this chat is test1",
-        users: [],
-      });
-    };
-
-    return { chats, createChatRoom };
+    return { chats };
   },
   computed: {
     connected() {
@@ -57,12 +42,6 @@ export default {
     handleSubmitNewMessage() {
       console.log(this.chatInput);
       socket.emit("message", this.chatInput);
-    },
-    connect() {
-      socket.connect();
-    },
-    disconnect() {
-      socket.disconnect();
     },
   },
   components: {

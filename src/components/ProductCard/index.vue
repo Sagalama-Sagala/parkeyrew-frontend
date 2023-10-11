@@ -1,7 +1,7 @@
 <template>
   <div
     class="bg-white p-2 rounded-xl w-[320px] h-[400px] flex flex-col relative cursor-pointer"
-    @click="this.$router.push(`/product/${this.id}`)"
+    @click="handleClick()"
   >
     <div
       class="flex items-end h-[9rem] w-[12.5rem] absolute flex-col mt-[-0.5rem] right-5 justify-stretch"
@@ -140,6 +140,9 @@ export default {
     },
     getTags(brand, size, condition, color) {
       return [brand, size, condition, color];
+    },
+    handleClick() {
+      this.$router.push(`/product/${this.id}`);
     },
   },
   setup() {},

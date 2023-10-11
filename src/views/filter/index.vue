@@ -284,7 +284,7 @@
             :condition="item.condition"
           />
         </div>
-        <div  v-else> Oh no</div>
+        <div  v-else class="w-full flex justify-center items-center text-3xl "> Product not found </div>
       </div>
     </div>
   </div>

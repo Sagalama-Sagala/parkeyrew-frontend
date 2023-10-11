@@ -238,7 +238,7 @@ export default {
     return {
       NavItems: [
         { title: "เลือกซื้อ", path: "/" },
-        { title: "ร้านของฉัน", path: "/mystore" },
+        { title: "ร้านของฉัน", path: "/mystore/store" },
         { title: "ติดต่อเรา", path: "/contact" },
       ],
       ProfileMenu: [

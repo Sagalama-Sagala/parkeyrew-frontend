@@ -9,7 +9,6 @@
             <input
               type="text"
               class="bg-transparent border-[1px] border-white h-10 rounded-xl w-full pr-9 pl-3 text-white focus:outline-none"
-              v-model="searchInput"
             />
             <span
               class="absolute right-3 top-3 h-full cursor-pointer"
@@ -265,25 +264,27 @@
         </div>
       </div>
 
-      <div class="flex-1 flex flex-wrap mx-auto overflow-y-auto">
-        <div
-          class="flex flex-wrap mt-10 gap-5 h-[0px] justify-center md:justify-start"
-        >
+      <div class="flex-1 flex flex-wrap mx-auto overflow-y-auto ">
+        <div v-if="products.length > 0" class="flex flex-wrap mt-10 gap-5 h-[0px] justify-center">
           <ProductCard
-            class="w-[16rem]"
             v-for="(item, index) in products"
-            :id="item.id"
+            :id="item._id"
             :key="item.title"
             :is-recommended="item.recommended"
-            :item-name="item.title"
-            :tags="item.tags"
+            :item-name="item.name"
             :item-price="item.price"
             :item-image="item.productImage"
-            :rating="item.rating"
+            :rating="item.owner.reviewStar"
             :seller-image="item.sellerImage"
+            :seller-name="item.owner.username"
             :liked="item.liked"
+            :color="item.color"
+            :size="item.size"
+            :brand="item.brand"
+            :condition="item.condition"
           />
         </div>
+        <div  v-else class="w-full flex justify-center items-center text-3xl "> Product not found </div>
       </div>
     </div>
   </div>
@@ -292,6 +293,7 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
+import { useRoute } from "vue-router";
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import DoubleRangeSlider from '@/components/Filter/DoubleRangeSlider/index.vue'
@@ -366,12 +368,13 @@ export default {
   },
   setup(){
     const products = ref([]);
-
+    const route = useRoute();
+    const category = route.params.id;
     axios
       .get("/product")
       .then((response) => {
+        products.value = response.data.filter(item => item.category === category);
         console.log(response.data);
-        products.value = response.data;
       })
       .catch((err) => {
         console.log(err);
@@ -426,107 +429,6 @@ export default {
         size: this.$route.query.size || [],
         color: this.$route.query.color || [],
       },
-      products: [
-        {
-          id: "a0000001",
-          recommended: true,
-          title: "ขdsยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.45,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 0, label: "no-brand" },
-          ],
-          category: "0",
-        },
-        {
-          id: "a0000002",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000003",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000004",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000004",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-      ],
     };
   },
   created() {

@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div class="w-[40rem] flex flex-col md:gap-12 gap-7">
+        <div class="w-[30rem] flex flex-col md:gap-12 gap-7">
           <div class="flex justify-between md:flex-row flex-col">
             <div
               class="flex flex-row md:flex-col md:justify-end justify-between md:text-[1.5rem] font-bold"
@@ -69,7 +69,7 @@
             </p>
           </div>
 
-          <div class="flex flex-col md:flex-row justify-between md:gap-20   ">
+          <div class="flex flex-col md:flex-row justify-between  md:gap-10   ">
             <div class="flex gap-4 md:font-bold">
               <div class="w-[5.5rem] md:w-auto">
                 <h1>แบรนด์</h1>
@@ -218,6 +218,10 @@ export default {
     },
     greet(sellerNAme) {
       console.log(`you click ${sellerNAme}`);
+    },
+    handleLikeClick()
+    {
+
     },
     formatDate,
   },

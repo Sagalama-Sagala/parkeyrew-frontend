@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div class="w-[30rem] flex flex-col md:gap-12 gap-7">
+        <div class="w-[40rem] flex flex-col md:gap-12 gap-7">
           <div class="flex justify-between md:flex-row flex-col">
             <div
               class="flex flex-row md:flex-col md:justify-end justify-between md:text-[1.5rem] font-bold"
@@ -69,9 +69,9 @@
             </p>
           </div>
 
-          <div class="flex justify-between gap-20">
+          <div class="flex flex-col md:flex-row justify-between md:gap-20   ">
             <div class="flex gap-4 md:font-bold">
-              <div>
+              <div class="w-[5.5rem] md:w-auto">
                 <h1>แบรนด์</h1>
                 <h1>สี</h1>
                 <h1>สภาพ</h1>
@@ -85,17 +85,15 @@
               </div>
             </div>
 
-            <div class="flex gap-4 md:font-bold">
-              <div>
+            <div class="flex gap-4 md:font-bold whitespace-nowrap ">
+              <div class="w-[5.5rem] md:w-auto">
                 <h1>หมวดหมู่</h1>
-                <h1 class="whitespace-nowrap">ลงขายเมื่อ</h1>
+                <h1>ลงขายเมื่อ</h1>
                 <h1>ส่งจาก</h1>
               </div>
-              <div class="md:font-normal font-light overflow-hidden">
-                <h1>{{ infoProducts?.product?.category }}</h1>
-                <h1 class="whitespace-nowrap">
-                  {{ formatDate(infoProducts?.product?.createdAt) }}
-                </h1>
+              <div class="md:font-normal font-light w-[6rem] ">
+                <h1 >{{ infoProducts?.product?.category }}</h1>
+                <h1 > {{ formatDate(infoProducts?.product?.createdAt) }}</h1>
                 <h1>{{ infoProducts?.product?.sendFrom }}</h1>
               </div>
             </div>

@@ -21,9 +21,19 @@ const routes = [
         component: () => import("@/views/register/index.vue"),
       },
       {
-        path: "mystore",
-        name: "MyStore",
-        component: () => import("@/views/mystore/index.vue"),
+        path : "mystore",
+        children: [
+          {
+            path: "store",
+            name: "Store",
+            component: () => import("@/views/mystore/store/index.vue"),
+          },
+          {
+            path: "review",
+            name: "Review",
+            component: () => import("@/views/mystore/review/index.vue"),
+          },
+        ],
       },
       {
         path: "favorite",
@@ -89,6 +99,7 @@ const routes = [
         name: "Filter",
         component: () => import("@/views/filter/index.vue"),
       },
+
     ],
   },
 ];

@@ -179,6 +179,7 @@ import {
 } from "@/assets/navbar";
 import { getLocal } from "@/common/js/utils.js";
 import { removeLocal } from "@/common/js/utils.js";
+import { socket } from "@/socket";
 
 export default {
   setup() {
@@ -224,6 +225,7 @@ export default {
     },
     handleLogoutSidebar() {
       removeLocal("token");
+
       this.$router.push("/login");
       this.toggleNav();
     },

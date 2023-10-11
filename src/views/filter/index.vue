@@ -1,12 +1,33 @@
 <template>
   <div class="bg-secondary min-h-screen flex flex-col overflow-hidden relative">
+    <div class="relative pt-16">
+      <img :src="cover" alt="cover" class="h-[166px] w-full" />
+      <div class="absolute inset-0 flex top-[6rem] justify-center">
+        <div class="text-center space-y-2">
+          <h1 class="text-white text-2xl">ผ้าขี้ริ้วห่อทอง ผ้ามือสองห่อใจ</h1>
+          <div class="relative">
+            <input
+              type="text"
+              class="bg-transparent border-[1px] border-white h-10 rounded-xl w-full pr-9 pl-3 text-white focus:outline-none"
+              v-model="searchInput"
+            />
+            <span
+              class="absolute right-3 top-3 h-full cursor-pointer"
+              @click="handleSearch"
+            >
+              <img :src="search" alt="search" class="w-4" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div
-      class="bg-white md:h-[8rem] h-[8rem] w-full flex text-black items-end iten font-bold"
+      class="bg-white h-[4.5rem] w-full flex text-black items-center iten font-bold "
     >
       <div
         class="md:mx-20 mx-5 my-1 md:my-3 justify-between w-full flex md:item-end items-center"
       >
-        <div class="flex md:text-xl text-[1rem] justify-center">
+        <div class="flex md:text-xl text-[1rem] justify-center ">
           <h1
             class="text-[#949494] hover:cursor-pointer hover:text-[#838383]"
             @click="handleMainClick"
@@ -39,7 +60,7 @@
       @click="toggleFilterBar"
     ></div>
     <div
-      class="bg-white h-screen top- w-9/12 fixed transition-all ease-in duration-300 z-40 md:hidden"
+      class="bg-white h-screen top- w-9/12 fixed transition-all ease-in duration-300 z-40 md:hidden "
       :class="isFilterBarToggle.value ? 'right-[0px]' : 'right-[-600px]'"
       >
         <div class="flex flex-col gap-5 justify-evenly items-center h-full">
@@ -124,9 +145,9 @@
 
     <div class="flex flex-1 gap-10">
       <div
-        class="w-[25rem] bg-white  mt-[1px] text-2xl font-[500] hidden md:block"
+        class="w-[25rem] bg-white  mt-[1px] text-2xl font-[500] hidden md:block  "
       >
-        <div class="flex flex-col gap-14  items-center h-full ">
+        <div class="flex flex-col gap-14  items-center h-full mb-10   ">
           <div class="w-[20rem] flex flex-col gap-3 mt-10 "
               :class="isBrandDropdown && 'border-b-2'  "
           >
@@ -272,6 +293,10 @@ import { heart } from "@/assets/product";
 import { filter } from "@/assets/filter";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
+import {
+  cover,
+  search,
+} from "@/assets/home";
 export default {
   components: {
     ProductCard,
@@ -335,6 +360,8 @@ export default {
   },
   data() {
     return {
+      cover: cover,
+      search: search,
       filter: filter,
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
       isOpen: false,

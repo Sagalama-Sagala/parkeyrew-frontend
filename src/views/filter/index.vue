@@ -1,7 +1,7 @@
 <template>
   <div class="bg-secondary min-h-screen flex flex-col overflow-hidden relative">
     <div class="relative pt-16">
-      <img :src="cover" alt="cover" class="h-[166px] w-full" />
+      <img :src="cover" alt="cover" class="md:h-[166px] h-[130px] w-full object-cover" />
       <div class="absolute inset-0 flex top-[6rem] justify-center">
         <div class="text-center space-y-2">
           <h1 class="text-white text-2xl">ผ้าขี้ริ้วห่อทอง ผ้ามือสองห่อใจ</h1>
@@ -68,7 +68,7 @@
             <div class="flex w-full justify-between">
               <h1>แบรนด์</h1>
             </div>
-            <div class="flex flex-col justify-around ml-5">
+            <div class="flex flex-col  ml-4">
               <div
                 v-for="Option in brandOptions"
                 :key="Option.id"
@@ -110,16 +110,20 @@
             <div class="flex w-full justify-between">
               <h1>สี</h1>
             </div>
-            <div class="flex ml-5 flex-wrap w-[12rem] gap-4">
+            <div class="grid ml-5 grid-cols-2 w-[12rem] ">
               <div
-                v-for="color in colorOptions"
-                :key="color.id"
+                v-for="Option in colorOptions"
+                :key="Option.id"
                 class="flex gap-3"
               >
-                <div
-                  class="w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5] hover:border-[2px] border-black"
-                  :style="{ backgroundColor: color.label }"
-                ></div>
+                <input
+                  type="checkbox"
+                  v-model="Option.isCheck"
+                  :value="Option.id"
+                  class="w-[1.2rem]"
+                  @click="handleSizeCheck(Option)"
+                />
+                <label>{{ Option.label }}</label>
               </div>
             </div>
           </div>
@@ -156,8 +160,8 @@
               <h1 @click="()=>{isBrandDropdown = !isBrandDropdown}" class="hover:cursor-pointer select-none">{{ isBrandDropdown ? '+' : '-'}}</h1>
             </div>
             <div 
-            class="flex flex-col justify-around ml-5  overflow-hidden  duration-75"
-            :class="isBrandDropdown ? 'h-[0px]' : 'h-[6rem]' "
+            class="flex flex-col ml-5  overflow-hidden  duration-75"
+            :class="isBrandDropdown ? 'h-[0px]' : 'h-[4rem]' "
             >
               <div
                 v-for="Option in brandOptions"
@@ -210,18 +214,22 @@
               <h1 @click="()=>{isColorDropdown = !isColorDropdown}" class="hover:cursor-pointer select-none">{{ isColorDropdown ? '+' : '-'}}</h1>
             </div>
             <div 
-            class="flex ml-5 flex-wrap w-[12rem] gap-4  duration-75"
-            :class="isColorDropdown ? 'h-[0px] overflow-hidden' : 'h-[3rem]'"
+            class="grid grid-cols-2 overflow-hidden ml-5 duration-75"
+            :class="isColorDropdown ? 'h-[0px]' : 'h-[12rem]' "
             >
               <div
-                v-for="color in colorOptions"
-                :key="color.id"
+                v-for="Option in colorOptions"
+                :key="Option.id"
                 class="flex gap-3"
               >
-                <div
-                  class="w-[1.2rem] aspect-square rounded-full hover:opacity-[0.5] hover:border-[2px] border-black"
-                  :style="{ backgroundColor: color.label }"
-                ></div>
+                <input
+                  type="checkbox"
+                  v-model="Option.isCheck"
+                  :value="Option.id"
+                  class="w-[1.2rem]"
+                  @click="handleColorCheck(Option)"
+                />
+                <label>{{ Option.label }}</label>
               </div>
             </div>
           </div>
@@ -336,6 +344,19 @@ export default {
         this.storeVariableToUrl(this.urlVariable);
       }
     },
+    handleColorCheck(value)
+    {
+      if (Array.isArray(this.urlVariable.color)) {
+        if (value.isCheck) {
+          this.urlVariable.color = this.urlVariable.color.filter(
+            (item) => item !== value.label,
+          );
+        } else {
+          this.urlVariable.color.push(value.label);
+        }
+        this.storeVariableToUrl(this.urlVariable);
+      }
+    },
     toggleFilterBar()
     {
       this.isFilterBarToggle.value = !this.isFilterBarToggle.value
@@ -387,12 +408,18 @@ export default {
         { id: 1, label: "มีแบรนด์", isCheck: false },
       ],
       colorOptions: [
-        { id: 0, label: "#000000", isCheck: false },
-        { id: 1, label: "#1FFC11", isCheck: false },
-        { id: 2, label: "#6F3222", isCheck: false },
-        { id: 3, label: "#F14131", isCheck: false },
-        { id: 4, label: "#123456", isCheck: false },
-        { id: 5, label: "#555555", isCheck: false },
+        { id: 0, label: "ขาว", isCheck: false },
+        { id: 1, label: "ดำ", isCheck: false },
+        { id: 2, label: "ม่วง", isCheck: false },
+        { id: 3, label: "ฟ้า", isCheck: false },
+        { id: 4, label: "น้ำเงิน", isCheck: false },
+        { id: 5, label: "เขียว", isCheck: false },
+        { id: 6, label: "ชมพู", isCheck: false },
+        { id: 7, label: "เหลือง", isCheck: false },
+        { id: 8, label: "ส้ม", isCheck: false },
+        { id: 9, label: "แดง", isCheck: false },
+        { id: 10, label: "เทา", isCheck: false },
+        { id: 11, label: "น้ำตาล", isCheck: false },
       ],
       urlVariable: {
         brand: this.$route.query.brand || [],

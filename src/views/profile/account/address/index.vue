@@ -14,11 +14,11 @@
         @click="togglePopup"
     ></div>
     <div
-        class="z-30 fixed top-[20%] h-[500px] px-5 py-5 m-4 bg-white rounded shadow-xl text-sm w-5/6 md:w-1/2"
+        class="z-30 fixed top-[20%] h-[500px] px-5 py-5 m-4 bg-white rounded shadow-xl md:text-base text-sm w-5/6 md:w-1/2"
         :class="showPopup ? 'block' : 'hidden'"
     >
         <div class="">
-            <p class="text-2xl font-bold">ที่อยู่ใหม่</p>
+            <p class="text-lg md:text-2xl font-bold">ที่อยู่ใหม่</p>
             <input
                 type="text"
                 class="focus:outline-none mt-6 block w-full px-2 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"

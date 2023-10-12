@@ -47,7 +47,7 @@
         <img alt="user profile" :src="item.profileURL" class="rounded-full w-[5.5rem] h-[5.5rem]">
         <div class="flex flex-col md:w-[24rem] w-full gap-2">
           <div class="flex flex-row md:w-[24rem] w-full justify-start gap-20 text-[#707070]">
-            <b class="text-black w-full">{{ item.username }}</b>
+            <b class="text-black md:w-[10rem] w-full">{{ item.username }}</b>
             <div class="md:block hidden">{{ item.reviewDate }} </div> 
           </div>
           {{ item.description }}

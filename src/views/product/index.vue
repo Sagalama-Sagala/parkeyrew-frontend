@@ -206,7 +206,7 @@ export default {
         seller: infoProducts.value.product.owner,
       });
 
-      socket.on("room", (response) => {
+      socket.on("roomId", (response) => {
         console.log("socket");
         if (response.constructor === String) {
           router.push(`/chat/${response}`);

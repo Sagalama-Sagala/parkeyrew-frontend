@@ -32,10 +32,10 @@
       </div>
     </div>
     <div
-      class="w-full md:pt-32 pt-48 pb-28 text-lg font-semibold h-full overflow-auto z-0"
+      class="w-full justify-end md:pt-32 pt-48 pb-28 text-lg font-semibold h-full overflow-auto z-0 scroll-smooth"
     >
       <div
-        v-for="(item, index) in mockChat"
+        v-for="(item, index) in messages"
         :key="index"
         class="w-full items-center justify-end flex gap-x-3 md:gap-x-5 border-b-[1px] first:border-t-[1px] border-[#D9D9D9] md:px-16 px-4 md:py-4 py-2"
         :class="item.user ? '' : 'flex-row-reverse'"
@@ -54,11 +54,13 @@
             <img :src="add" class="w-9 border-[1px] border-black rounded p-1" />
           </button>
           <input
+            v-model="chatInput"
             class="border-[1px] border-black px-3 py-2 w-full rounded"
             placeholder="พิมพ์ข้อความของคุณ..."
           />
           <button
             class="flex items-center gap-x-2 border-black border-[1px] rounded px-4"
+            @click="handleSubmitNewMessage()"
           >
             <span>
               <img :src="send" class="w-10" />
@@ -81,16 +83,27 @@ import { chevronLeft, threePointLeader, send, add } from "@/assets/common";
 export default {
   setup() {
     const room = ref([]);
+    const messages = ref([]);
     const route = useRoute();
 
     socket.emit("getRoom", route.params.id);
 
     socket.on("room", (response) => {
       room.value = response;
-      console.log(JSON.stringify(response, null, 2));
     });
 
-    return { room };
+    socket.emit("joinRoom", route.params.id);
+
+    socket.on("messages", (response) => {
+      messages.value = response;
+    });
+
+    socket.on("message", (response) => {
+      messages.value.push(response);
+      console.log(response);
+    });
+
+    return { room, messages };
   },
   computed: {
     connected() {
@@ -99,14 +112,13 @@ export default {
   },
   methods: {
     handleSubmitNewMessage() {
-      console.log(this.chatInput);
       socket.emit("addMessage", {
-        text: this.chatInput,
+        roomId: this.$route.params.id,
+        message: { text: this.chatInput },
       });
     },
     handleBack() {
       this.$router.push("/chat");
-      console.log("back");
     },
   },
   components: {

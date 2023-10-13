@@ -384,6 +384,7 @@ export default {
   },
   data() {
     return {
+      maginkaow: 1000,
       cover: cover,
       search: search,
       filter: filter,

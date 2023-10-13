@@ -1,5 +1,5 @@
 <template>
-  <container>
+  <Container>
     <div
       class="flex md:flex-row flex-col items-center w-full py-5 px-10 absolute top-0 z-10 bg-white border-b-black border-[1px] rounded-t-2xl"
     >
@@ -10,7 +10,7 @@
           <img :src="chevronLeft" alt="back" class="w-5" />
           <p>กลับ</p>
         </button>
-        <div>{{ room.otheruser?.user?.username }}</div>
+        <div>{{ chatStore.chatRoom?.otherUser?.user?.username }}</div>
         <div>
           <img
             :src="threePointLeader"
@@ -23,27 +23,28 @@
         class="md:w-fit w-full flex items-center justify-start md:justify-center gap-x-2 md:mr-16 md:border-black md:border-l-[1px] md:px-3 font-semibold md:pt-0 pt-5"
       >
         <div class="w-16">
-          <img :src="defaultimg" alt="product_image" class="rounded-lg" />
+          <img :src="defaultImg" alt="product_image" class="rounded-lg" />
         </div>
         <div class="whitespace-nowrap">
-          <p>{{ room.product?.name }}</p>
-          <p>฿ {{ room.product?.price }}</p>
+          <p>{{ chatStore.chatRoom?.product?.name }}</p>
+          <p>฿ {{ chatStore.chatRoom?.product?.price }}</p>
         </div>
       </div>
     </div>
+    <!-- chat -->
     <div
-      class="w-full flex flex-col md:pt-32 pt-48 pb-28 text-lg font-semibold h-full overflow-y-auto z-0 scroll-smooth"
+      class="w-full flex flex-col-reverse md:pt-32 pt-48 pb-28 text-lg font-semibold h-full overflow-y-auto z-0 scroll-smooth"
     >
       <div
-        v-for="(item, index) in messages"
+        v-for="(item, index) in messages.slice().reverse()"
         :key="index"
-        class="w-full items-center justify-end flex gap-x-3 md:gap-x-5 border-b-[1px] first:border-t-[1px] border-[#d9d9d9] md:px-16 px-4 md:py-4 py-2"
+        class="w-full items-center justify-end flex gap-x-3 md:gap-x-5 border-b-[1px] last:border-t-[1px] border-[#d9d9d9] md:px-16 px-4 md:py-4 py-2"
         :class="item.isMyMessage ? '' : 'flex-row-reverse'"
       >
         <p class="pt-5">{{ item.text }}</p>
 
         <span>
-          <img :src="mockprofile" class="w-16" />
+          <img :src="mockProfile" class="w-16" />
         </span>
       </div>
     </div>
@@ -54,9 +55,10 @@
             <img :src="add" class="w-9 border-[1px] border-black rounded p-1" />
           </button>
           <input
-            v-model="chatinput"
+            v-model="chatInput"
             class="border-[1px] border-black px-3 py-2 w-full rounded"
             placeholder="พิมพ์ข้อความของคุณ..."
+            @keyup.enter="handleSubmitNewMessage()"
           />
           <button
             class="flex items-center gap-x-2 border-black border-[1px] rounded px-4"
@@ -70,24 +72,27 @@
         </div>
       </div>
     </div>
-  </container>
+  </Container>
 </template>
 
 <script>
-import container from "@/components/chatcontainer/index.vue";
+import Container from "@/components/ChatContainer/index.vue";
 import { state, socket } from "@/socket";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { chevronLeft, threePointLeader, send, add } from "@/assets/common";
 import { onBeforeRouteLeave } from "vue-router";
+import { useChatStore } from "@/store/chat.store.js";
 
 export default {
   setup() {
     const room = ref([]);
     const messages = ref([]);
     const route = useRoute();
+    const chatStore = useChatStore();
 
     onBeforeRouteLeave((to, from) => {
+      chatStore.clearChatRoom();
       socket.emit("leaveRoom");
     });
 
@@ -100,7 +105,6 @@ export default {
     socket.emit("joinRoom", route.params.id);
 
     socket.on("messages", (response) => {
-      console.log(response);
       messages.value = response;
     });
 
@@ -110,7 +114,7 @@ export default {
       }
     });
 
-    return { room, messages };
+    return { room, messages, chatStore };
   },
   computed: {
     connected() {
@@ -119,28 +123,30 @@ export default {
   },
   methods: {
     handleSubmitNewMessage() {
-      console.log("add message");
-      socket.emit("addMessage", {
-        roomId: this.$route.params.id,
-        message: { text: this.chatinput },
-      });
+      if (this.chatInput !== "") {
+        socket.emit("addMessage", {
+          roomId: this.$route.params.id,
+          message: { text: this.chatInput },
+        });
+        this.chatInput = "";
+      }
     },
     handleBack() {
       this.$router.push("/chat");
     },
   },
   components: {
-    container,
+    Container,
   },
   data() {
     return {
-      chatinput: "",
-      defaultimg: "https://placehold.co/200x200",
+      chatInput: "",
+      defaultImg: "https://placehold.co/200x200",
       chevronLeft,
       threePointLeader,
       send,
       add,
-      mockprofile:
+      mockProfile:
         "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Circle_Davys-Grey_Solid.svg/1024px-Circle_Davys-Grey_Solid.svg.png",
     };
   },

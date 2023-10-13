@@ -20,7 +20,7 @@
       <div class="h-full overflow-y-auto">
         <div v-for="(item, index) in chatRooms" :key="item.product">
           <div
-            @click="handleChatPrivate(item.id)"
+            @click="handleChatPrivate(item)"
             class="flex justify-between items-center border-b-[1px] border-black md:text-lg text-sm py-1 cursor-pointer"
           >
             <div class="flex justify-center items-center gap-x-2">
@@ -66,10 +66,12 @@ import { socket } from "@/socket";
 import { ref } from "vue";
 import { getLocal } from "@/common/js/utils.js";
 import { io } from "socket.io-client";
+import { useChatStore } from "@/store/chat.store.js";
 
 export default {
   setup() {
     const chatRooms = ref([]);
+    const chatStore = useChatStore();
 
     socket.emit("getRooms");
 
@@ -77,7 +79,7 @@ export default {
       chatRooms.value = response;
     });
 
-    return { chatRooms };
+    return { chatRooms, chatStore };
   },
   components: {
     Container,
@@ -88,8 +90,9 @@ export default {
         item.isActive = index === menuIndex;
       });
     },
-    handleChatPrivate(roomId) {
-      this.$router.push(`chat/${roomId}`);
+    handleChatPrivate(room) {
+      this.chatStore.setChatRoom(room);
+      this.$router.push(`chat/${room.id}`);
     },
   },
   data() {
@@ -98,24 +101,6 @@ export default {
         { title: "แชททั้งหมด", isActive: true },
         { title: "แชทกับผู้ขาย", isActive: false },
         { title: "แชทกับผู้ซื้อ", isActive: false },
-      ],
-      mockupChat: [
-        {
-          roomId: "001",
-          chatName: "John1",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "seller",
-          unread: true,
-          profileIcon: profile,
-        },
-        {
-          roomId: "002",
-          chatName: "John2",
-          lastMessage: "ปริญญาไม่มีแต่มี...นะจ๊ะ",
-          role: "buyer",
-          unread: true,
-          profileIcon: profile,
-        },
       ],
       profile,
       noti,

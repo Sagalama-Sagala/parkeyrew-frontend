@@ -3,15 +3,16 @@ import { io } from "socket.io-client";
 import { getLocal } from "@/common/js/utils.js";
 
 export const state = reactive({
-  connected: false,
-  fooEvents: [],
-  barEvents: [],
+    connected: false,
+    fooEvents: [],
+    barEvents: [],
 });
 
-const URL = "http://localhost:3000";
+const URL = import.meta.env.VITE_APP_API || "http://localhost:3000";
 
 export const socket = io(URL, {
-  extraHeaders: {
-    Authorization: getLocal("token"),
-  },
+    extraHeaders: {
+        Authorization: getLocal("token"),
+    },
 });
+

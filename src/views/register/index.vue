@@ -114,7 +114,13 @@ export default {
   },
   methods: {
     next() {
-      this.currentStep += 1;
+      if (
+        this.formValue.firstname.length > 0 &&
+        this.formValue.lastname.length > 0 &&
+        this.formValue.username.length > 0
+      ) {
+        this.currentStep += 1;
+      }
     },
     prev() {
       this.currentStep -= 1;

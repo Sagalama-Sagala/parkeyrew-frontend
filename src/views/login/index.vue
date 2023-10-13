@@ -14,27 +14,25 @@
       >
         <h2 class="text-center text-lg font-semibold mb-4">เข้าสู่ระบบ</h2>
 
-        <form
-          action=""
-          @submit.prevent="submitForm"
-          class="flex flex-col gap-4 input-group input-group-lg"
-        >
+        <div class="flex flex-col gap-4 input-group input-group-lg">
           <input
             type="text"
             name="username"
             class="focus:outline-none mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
             placeholder="ชื่อผู้ใช้"
             v-model="formValue.username"
-            required
+            v-on:keypress="isAllowed($event)"
           />
+          <p class="text-red-400 text-sm">{{ formError.username }}</p>
           <div class="relative">
             <input
               :type="inputTypeIcon"
               class="focus:outline-none form-control mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
               placeholder="รหัสผ่าน"
               v-model="formValue.password"
-              required
+              v-on:keypress="isAllowed($event)"
             />
+            <p class="mt-3 text-red-400 text-sm">{{ formError.password }}</p>
             <button class="input-group-text" @click.prevent="toggleInputIcon">
               <img
                 :src="inputTypeIcon === 'password' ? eye : eyeOff"
@@ -43,6 +41,7 @@
             </button>
 
             <button
+              @click="submitForm"
               type="submit"
               class="mt-1 block w-full px-3 py-1 bg-tertiary font-normal rounded-md hover:scale-105 duration-300"
             >
@@ -58,7 +57,7 @@
               สมัครใหม่
             </button>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   </section>
@@ -73,22 +72,6 @@ import { useRouter } from "vue-router";
 export default {
   setup() {
     const router = useRouter();
-    const formValue = ref({
-      username: "",
-      password: "",
-    });
-    const submitForm = () => {
-      axios
-        .post("/auth/login", formValue.value)
-        .then((response) => {
-          setLocal("token", response.data.access_token);
-          router.push("/");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    return { submitForm, formValue };
   },
   data() {
     return {
@@ -97,9 +80,86 @@ export default {
       logo2,
       eye,
       eyeOff,
+      formValue: {
+        username: "",
+        password: "",
+      },
+      formError: {
+        username: "",
+        password: "",
+      },
     };
   },
   methods: {
+    validation() {
+      //รีเซ็ต username and password
+      this.formError.username = "";
+      this.formError.password = "";
+
+      //validation สำหรับ username
+      if (this.formValue.username === "") {
+        this.formError.username = "กรุณากรอกชื่อผู้ใช้";
+      } else if (this.formValue.username.match(/[a-z]/) === null) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย a-z";
+      } else if (this.formValue.username.match(/[A-Z]/) === null) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย A-Z";
+      } else if (this.formValue.username.match(/[0-9]/) === null) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย 0-9";
+      } else if (this.formValue.username.match(/[!@#$%^&*]/) === null) {
+        this.formError.username =
+          "ชื่อผู้ใช้งานต้องประกอบไปด้วยอักขระพิเศษ (!@#$%^&*)";
+      } else if (this.formValue.username.length < 8) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องยาวมากกว่า 7 ตัวอักษร";
+      }
+
+      //validation สำหรับ password
+      if (this.formValue.password === "") {
+        this.formError.password = "กรุณากรอกรหัสผ่าน";
+      } else if (this.formValue.password.match(/[a-z]/) === null) {
+        this.formError.password = "รหัสผ่านต้องประกอบไปด้วย a-z";
+      } else if (this.formValue.password.match(/[A-Z]/) === null) {
+        this.formError.password = "รหัสผ่านต้องประกอบไปด้วย A-Z";
+      } else if (this.formValue.password.match(/[0-9]/) === null) {
+        this.formError.password = "รหัสผ่านต้องประกอบไปด้วย 0-9";
+      } else if (this.formValue.password.match(/[!@#$%^&*]/) === null) {
+        this.formError.password =
+          "รหัสผ่านต้องประกอบไปด้วยอักขระพิเศษ (!@#$%^&*)";
+      } else if (this.formValue.password.length < 8) {
+        this.formError.password = "รหัสผ่านต้องยาวมากกว่า 7 ตัวอักษร";
+      }
+
+      //validation สำหรับ password
+      if (this.formValue.password === "") {
+        this.formError.password = "กรุณากรอกรหัสผ่าน";
+      }
+    },
+    submitForm() {
+      //เรียกใช้งานเกี่ยวกับฟังก์ชัน validate
+      this.validation();
+
+      //ถ้า username หรือ password มี error ให้จบฟังก์ชันทันที
+      if (this.formError.username !== "" || this.formError.password !== "") {
+        return;
+      }
+
+      axios
+        .post("/auth/login", this.formValue.value)
+        .then((response) => {
+          setLocal("token", response.data.access_token);
+          router.push("/");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    isAllowed(e) {
+      let char = String.fromCharCode(e.keyCode); // Get the character
+      if (/^[A-Za-z0-9!@#$%^&*]+$/.test(char)) {
+        return true; // Match with regex
+      } else {
+        e.preventDefault(); // If not match, don't add to input text
+      }
+    },
     toggleInputIcon() {
       this.inputTypeIcon =
         this.inputTypeIcon === "password" ? "text" : "password";

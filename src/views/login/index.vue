@@ -68,13 +68,11 @@
 import { logo1, logo2, eye, eyeOff } from "@/assets/login_register";
 import axios from "axios";
 import { setLocal } from "@/common/js/utils.js";
-import { useUserStore } from "@/store/user.store.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 export default {
   setup() {
     const router = useRouter();
-    const userStore = useUserStore();
     const formValue = ref({
       username: "",
       password: "",
@@ -83,7 +81,6 @@ export default {
       axios
         .post("/auth/login", formValue.value)
         .then((response) => {
-          userStore.setUser(response.data.user);
           setLocal("token", response.data.access_token);
           router.push("/");
         })
@@ -91,7 +88,7 @@ export default {
           console.log(err);
         });
     };
-    return { submitForm, formValue, userStore };
+    return { submitForm, formValue };
   },
   data() {
     return {

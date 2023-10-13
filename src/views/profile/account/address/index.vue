@@ -8,6 +8,8 @@
             เพิ่ม +
         </button>
     </div>
+
+    <!-- modal -->
     <div
         v-if="showPopup"
         class="z-20 h-screen w-full fixed left-0 top-0 bg-black bg-opacity-30"
@@ -17,7 +19,7 @@
         class="z-30 fixed top-[20%] h-[500px] px-5 py-5 m-4 bg-white rounded shadow-xl md:text-base text-sm w-5/6 md:w-1/2"
         :class="showPopup ? 'block' : 'hidden'"
     >
-        <div class="">
+        <div class="ml-12">
             <p class="text-lg md:text-2xl font-bold">ที่อยู่ใหม่</p>
             <input
                 type="text"
@@ -64,18 +66,18 @@
     <div class="border-b-[0.08rem] border-black mr-12 my-8 w-full"></div>
     <div
         v-for="(adr, index) in address"
-        class="w-full font-bold flex items-center justify-start my-2"
+        class="w-full font-bold flex items-center justify-start my-2 md:px-8"
         :key="index"
     >
         <!-- desktop scale -->
         <div class="w-full my-4 pl-4 hidden md:block">
             <div class="flex justify-around mr-8">
-                <p class="">{{ adr.name }}</p>
-                <p class="">{{ adr.lastname }}</p>
+                <p class="md:text-xl">{{ adr.name }}</p>
+                <p class="md:text-xl">{{ adr.lastname }}</p>
                 <div
                     class="w-[10px] border-r-[0.08rem] h-[24px] border-black"
                 ></div>
-                <p class="w-1/4">{{ adr.phone }}</p>
+                <p class="w-1/4 md:text-xl">{{ adr.phone }}</p>
             </div>
             <div class="w-full font-normal">
                 <p class="break-words mt-2">

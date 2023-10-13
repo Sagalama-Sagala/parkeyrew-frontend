@@ -56,6 +56,7 @@
                 <img
                   :src="shareArrow"
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center hover:bg-secondary md:w-14 w-10 p-2"
+                  @click="handleModal()"
                 />
               </div>
               <span>สินค้าคงเหลือ: {{ infoProducts?.product?.remain }}</span>
@@ -168,22 +169,27 @@
         />
       </div>
     </div>
+  <PopupForm :isModalOpen="isModalOpen" @toggleModal="handleModal" :productData="infoProducts"/>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
 import axios from "axios";
-import { shareArrow, heart, chat, call } from "@/assets/product";
-import { recommend } from "@/assets/product_card";
-import ProductCard from "@/components/ProductCard/index.vue";
-import Rating from "@/components/Rating/index.vue";
-
-import { T1, T2, T3, T4 } from "@/assets/TestImage";
 import { useRoute, useRouter } from "vue-router";
 import { formatDate } from "@/common/js/utils.js";
 import { socket } from "@/socket";
 import { useChatStore } from "@/store/chat.store.js";
+
+
+import ProductCard from "@/components/ProductCard/index.vue";
+import Rating from "@/components/Rating/index.vue";
+import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
+
+import { T1, T2, T3, T4 } from "@/assets/TestImage";
+import { shareArrow, heart, chat, call } from "@/assets/product";
+import { recommend } from "@/assets/product_card";
+
 
 export default {
   setup() {
@@ -218,6 +224,7 @@ export default {
   components: {
     ProductCard,
     Rating,
+    PopupForm,
   },
   methods: {
     updateSelectedImage(index) {
@@ -228,6 +235,9 @@ export default {
     },
     handleLikeClick() {},
     formatDate,
+    handleModal() {
+      this.isModalOpen = !this.isModalOpen;
+    },
   },
   data() {
     return {
@@ -238,6 +248,7 @@ export default {
       call,
       selectedImageIndex: 0,
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
+      isModalOpen: false,
     };
   },
 };

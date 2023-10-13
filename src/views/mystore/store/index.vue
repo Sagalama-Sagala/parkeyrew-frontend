@@ -1,53 +1,57 @@
 <template>
-  <div class="min-h-screen flex flex-col">
-    <div class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem]">
-      <div class="bg-secondary text-black flex flex-col gap-6 items-center justify-center w-[48rem] h-[24rem] mt-12 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg">
-        <div class="flex flex-row justify-between items-center w-[36rem] h-[4rem]">
+  <div class="min-h-screen flex flex-col min-w-full">
+    <div class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8">
+      <div class="bg-secondary text-black flex flex-col md:gap-6 gap-16 items-center justify-center md:w-[48rem] w-[16rem] md:h-[24rem] h-full mt-12 md:pb-0 pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg">
+        <div class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8">
           <div>
-            <img class="h-[7rem] rounded-full mb-4" src="https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&" alt="profile picture">
+            <img class="h-[7rem] rounded-full mb-4" :src=profileURL alt="profile picture">
           </div>
-          <div class="flex flex-col justify-center w-[12rem]">
+          <div class="flex flex-col justify-center w-[12rem] md:pt-0 pt-4">
             <div>
               <b>{{ username }}</b>
             </div>
-            <div>
-              Star Rating
+            <div class="md:pt-0 pt-3">
+              <Rating :rating="reviewStar"/>
             </div>
           </div>
           <div class="flex flex-col">
-            <div @click="increaseFollowing">
-              <img class="w-[3rem] border-2 border-gray-400 rounded-2xl mb-2" src="https://cdn.discordapp.com/attachments/968217024440455258/1161330054744252536/edit-svgrepo-com.png?ex=6537e7e5&is=652572e5&hm=85dcc419e180f775aa0c9861ac725c92523e960e7df8a6fad7d3cb6bc2fd5393&" alt="edit profile icon">
+            <div>
+              <img class="w-[3rem] rounded-2xl mb-2 hover:cursor-pointer md:block hidden" :src=editIcon alt="edit profile icon">
             </div>
             <div>
-              <img class="w-[3rem] border-2 border-gray-400 rounded-2xl mb-3" src="https://cdn.discordapp.com/attachments/968217024440455258/1161331860752834671/share-svgrepo-com.png?ex=6537e994&is=65257494&hm=efaf9991467e9b9501382d33078bd0c9a42ff0a3b89e2477d587a0e0fd6e9673&" alt="share icon">
+              <img class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden" :src=shareIcon alt="share icon">
             </div>
           </div>
         </div>
-        <div class="flex flex-row justify-center items-center w-[36rem] h-[4rem] border-b-2 border-t-2 border-black gap-10 pb-6 pt-6">
-          <div>
+        <div class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]">
+          <div class="hover:cursor-pointer" @click="openFollower">
             <b>{{ follower }}  ผู้ติดตาม</b>
           </div>
+          <Dialog v-if="followerDialog" @close="closeFollower" title="ผู้ติดตาม">
+            TEST Following Dialog
+          </Dialog>
           |
-          <div>
+          <div class="hover:cursor-pointer" @click="openFollowing">
             <b>{{ following }}  กำลังติดตาม</b>
           </div>
+          <Dialog v-if="followingDialog" @close="closeFollowing" title="กำลังติดตาม"/>
         </div>
-        <div class="flex flex-col w-[32rem] h-[4rem] mb-8">
+        <div class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12">
           <b>คำอธิบาย</b>
           <div>{{ description }}</div>
         </div>
       </div>
-      <div class="flex text-black items-center justify-center space-x-5 w-1/2 mt-6">
-        <div class="bg-tertiary flex items-center justify-center w-1/2 h-12 text-xl rounded-[1rem]"><h1><b>ร้านค้า</b></h1></div>
-        <div class="bg-secondary flex items-center justify-center w-1/2 h-12 text-xl rounded-[1rem]"><h1><b>รีวิว</b></h1></div>
+      <div class="flex md:flex-row flex-col gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 pb-6">
+        <div class="bg-tertiary flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer" @click="routeTomyStore()"><h1><b>ร้านค้า</b></h1></div>
+        <div class="bg-secondary flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer" @click="routeToReview()"><h1><b>รีวิว</b></h1></div>
       </div>
     </div>
     <div class="bg-secondary text-black flex flex-col flex-1 h-full items-center">
       <div class="text-primary border-primary active:text-secondary active:bg-primary flex items-center justify-center w-40 h-8 mt-5 text-lg border-2 rounded-md hover:cursor-pointer">
         <h1>+ ลงขายสินค้า</h1>
       </div>
-      <div class="bg-secondary flex-1 flex flex-col w-full mt-6 ml-44 overflow-y-auto">
-        <div class="flex flex-wrap w-full gap-5 justify-start">
+      <div class="bg-secondary flex-1 flex flex-col w-full pt-6 overflow-y-auto">
+        <div class="flex md:flex-row md:flex-wrap flex-col w-full gap-5 justify-start md:pl-[5.2rem]">
           <ProductCard
             v-for="(item, index) in products"
             :id="item.id"
@@ -69,14 +73,25 @@
 
 <script >
 import ProductCard from "@/components/ProductCard/index.vue";
+import Rating from "@/components/Rating/index.vue";
+import Dialog from "@/components/Dialog/index.vue";
+import {editIcon, shareIcon } from "@/assets/mystore";
 
 export default{
   components: {
     ProductCard,
+    Rating,
+    Dialog,
   },
   data(){
     return{
+      followerDialog: false,
+      followingDialog: false,
+      editIcon,
+      shareIcon,
+      profileURL : "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
       username : "HARIBO Goldbears",
+      reviewStar : 4,
       follower : 29,
       following : 9,
       description : "สวัสดีครับ ท่านสมาชิกชมรมคนชอบ🐻 วันพระวันเจ้าไม่เว้นกันเลยอยากจะดูแต่🐻 ไม่เข้าใจจริงๆเลยทั้งเด็กทั้งผู้ใหญ่ตะโกนหาสรรหาแต่🐻 เป็นอะไรกัน! เฮ้ยย ",
@@ -180,12 +195,24 @@ export default{
     }
   },
   methods : {
-    decreaseFollowing(){
-      this.following--;
+    routeTomyStore(){
+      this.$router.push(`/mystore/store`)
     },
-    increaseFollowing(){
-      this.following++;
-    }
+    routeToReview(){
+      this.$router.push(`/mystore/review`)
+    },
+    openFollower(){
+      this.followerDialog = true;
+    },
+    closeFollower(){
+      this.followerDialog = false;
+    },
+    openFollowing(){
+      this.followingDialog = true;
+    },
+    closeFollowing(){
+      this.followingDialog = false;
+    },
   }
 }
 </script>

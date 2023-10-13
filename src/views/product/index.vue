@@ -56,6 +56,7 @@
                 <img
                   :src="shareArrow"
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center hover:bg-secondary md:w-14 w-10 p-2"
+                  @click="handleModal()"
                 />
               </div>
               <span>สินค้าคงเหลือ: {{ infoProducts?.product?.remain }}</span>
@@ -69,7 +70,7 @@
             </p>
           </div>
 
-          <div class="flex flex-col md:flex-row justify-between  md:gap-10   ">
+          <div class="flex flex-col md:flex-row justify-between md:gap-10">
             <div class="flex gap-4 md:font-bold">
               <div class="w-[5.5rem] md:w-auto">
                 <h1>แบรนด์</h1>
@@ -85,15 +86,15 @@
               </div>
             </div>
 
-            <div class="flex gap-4 md:font-bold whitespace-nowrap ">
+            <div class="flex gap-4 md:font-bold whitespace-nowrap">
               <div class="w-[5.5rem] md:w-auto">
                 <h1>หมวดหมู่</h1>
                 <h1>ลงขายเมื่อ</h1>
                 <h1>ส่งจาก</h1>
               </div>
-              <div class="md:font-normal font-light w-[6rem] ">
-                <h1 >{{ infoProducts?.product?.category }}</h1>
-                <h1 > {{ formatDate(infoProducts?.product?.createdAt) }}</h1>
+              <div class="md:font-normal font-light w-[6rem]">
+                <h1>{{ infoProducts?.product?.category }}</h1>
+                <h1>{{ formatDate(infoProducts?.product?.createdAt) }}</h1>
                 <h1>{{ infoProducts?.product?.sendFrom }}</h1>
               </div>
             </div>
@@ -109,10 +110,10 @@
               />
               <div>
                 <h1 class="hover:underline hover:cursor-pointer">
-                  {{ infoProducts?.username }}
+                  {{ infoProducts?.product?.owner?.username }}
                 </h1>
                 <Rating
-                  :rating="infoProducts?.reviewStar"
+                  :rating="infoProducts?.product?.owner?.reviewStar"
                   @childButtonClick="greet"
                   :clickable="true"
                 />
@@ -122,7 +123,7 @@
             <div class="flex gap-3">
               <div
                 class="flex border-[1px] border-[#393838] md:border-black w-[4rem] md:w-[6rem] h-[4rem] rounded-full md:rounded-xl justify-center items-center gap-2 hover:bg-secondary hover:cursor-pointer"
-                @click="createChatRoom()"
+                @click="connectChatRoom()"
               >
                 <img :src="call" class="w-7" />
                 <h1 class="hidden md:block">แชท</h1>
@@ -168,49 +169,64 @@
         />
       </div>
     </div>
+    <PopupForm
+      :isModalOpen="isModalOpen"
+      @toggleModal="handleModal"
+      :productData="infoProducts"
+    />
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
 import axios from "axios";
-import { shareArrow, heart, chat, call } from "@/assets/product";
-import { recommend } from "@/assets/product_card";
-import ProductCard from "@/components/ProductCard/index.vue";
-import Rating from "@/components/Rating/index.vue";
-
-import { T1, T2, T3, T4 } from "@/assets/TestImage";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { formatDate } from "@/common/js/utils.js";
 import { socket } from "@/socket";
+import { useChatStore } from "@/store/chat.store.js";
+
+import ProductCard from "@/components/ProductCard/index.vue";
+import Rating from "@/components/Rating/index.vue";
+import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
+
+import { T1, T2, T3, T4 } from "@/assets/TestImage";
+import { shareArrow, heart, chat, call } from "@/assets/product";
+import { recommend } from "@/assets/product_card";
 
 export default {
   setup() {
     const infoProducts = ref([]);
     const route = useRoute();
+    const router = useRouter();
     const productId = route.params.id;
+    const chatStore = useChatStore();
     axios
       .get(`/product/get-info-product-page/${productId}`)
       .then((response) => {
-        console.log(response.data);
         infoProducts.value = response.data;
       })
       .catch((err) => {
         console.log(err);
       });
 
-    const createChatRoom = () => {
-      socket.emit("createRoom", {
+    const connectChatRoom = () => {
+      let roomId = "";
+      socket.emit("connectRoom", {
         product: infoProducts.value.product,
         seller: infoProducts.value.product.owner,
       });
+      socket.on("roomId", (response) => {
+        chatStore.setChatRoom(response);
+        router.push(`/chat/${response.id}`);
+      });
     };
 
-    return { infoProducts, createChatRoom };
+    return { infoProducts, connectChatRoom };
   },
   components: {
     ProductCard,
     Rating,
+    PopupForm,
   },
   methods: {
     updateSelectedImage(index) {
@@ -219,11 +235,11 @@ export default {
     greet(sellerNAme) {
       console.log(`you click ${sellerNAme}`);
     },
-    handleLikeClick()
-    {
-
-    },
+    handleLikeClick() {},
     formatDate,
+    handleModal() {
+      this.isModalOpen = !this.isModalOpen;
+    },
   },
   data() {
     return {
@@ -234,6 +250,7 @@ export default {
       call,
       selectedImageIndex: 0,
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
+      isModalOpen: false,
     };
   },
 };

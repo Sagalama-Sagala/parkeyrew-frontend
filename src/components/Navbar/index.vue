@@ -179,6 +179,7 @@ import {
 } from "@/assets/navbar";
 import { getLocal } from "@/common/js/utils.js";
 import { removeLocal } from "@/common/js/utils.js";
+import { socket } from "@/socket";
 
 export default {
   setup() {
@@ -224,6 +225,7 @@ export default {
     },
     handleLogoutSidebar() {
       removeLocal("token");
+
       this.$router.push("/login");
       this.toggleNav();
     },
@@ -236,7 +238,7 @@ export default {
     return {
       NavItems: [
         { title: "เลือกซื้อ", path: "/" },
-        { title: "ร้านของฉัน", path: "/mystore" },
+        { title: "ร้านของฉัน", path: "/mystore/store" },
         { title: "ติดต่อเรา", path: "/contact" },
       ],
       ProfileMenu: [

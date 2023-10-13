@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { getLocal } from "@/common/js/utils.js";
 
 const routes = [
   {
@@ -9,41 +10,60 @@ const routes = [
         path: "",
         name: "Home",
         component: () => import("@/views/index/index.vue"),
+        meta: { auth: false },
       },
       {
         path: "login",
         name: "Login",
         component: () => import("@/views/login/index.vue"),
+        meta: { auth: false },
       },
       {
         path: "register",
         name: "Register",
         component: () => import("@/views/register/index.vue"),
+        meta: { auth: false },
       },
       {
         path: "mystore",
-        name: "MyStore",
-        component: () => import("@/views/mystore/index.vue"),
+        children: [
+          {
+            path: "store",
+            name: "Store",
+            component: () => import("@/views/mystore/store/index.vue"),
+            meta: { auth: true },
+          },
+          {
+            path: "review",
+            name: "Review",
+            component: () => import("@/views/mystore/review/index.vue"),
+            meta: { auth: true },
+          },
+        ],
       },
       {
         path: "favorite",
         name: "Favorite",
         component: () => import("@/views/favorite/index.vue"),
+        meta: { auth: true },
       },
       {
         path: "chat",
         name: "Chat",
         component: () => import("@/views/chat/index.vue"),
+        meta: { auth: true },
       },
       {
         path: "chat/:id",
         name: "PrivateChat",
         component: () => import("@/views/chat-private/index.vue"),
+        meta: { auth: true },
       },
 
       {
         path: "profile",
         component: () => import("@/layouts/profile/index.vue"),
+        meta: { auth: true },
         children: [
           {
             path: "record",
@@ -78,16 +98,19 @@ const routes = [
         path: "contact",
         name: "Contact",
         component: () => import("@/views/contact/index.vue"),
+        meta: { auth: false },
       },
       {
         path: "product/:id",
         name: "ProductInfo",
         component: () => import("@/views/product/index.vue"),
+        meta: { auth: false },
       },
       {
         path: "filter/:id",
         name: "Filter",
         component: () => import("@/views/filter/index.vue"),
+        meta: { auth: false },
       },
     ],
   },
@@ -99,6 +122,14 @@ const router = createRouter({
   scrollBehavior() {
     return { top: 0, left: 0 };
   },
+});
+
+router.beforeEach(async (to) => {
+  if (to.meta.auth) {
+    if (!getLocal("token")) {
+      return { path: "login" };
+    }
+  }
 });
 
 export default router;

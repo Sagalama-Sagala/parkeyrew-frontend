@@ -23,9 +23,15 @@
         <transition name="" mode="out-in">
           <img :src="members[currentIndex].src" alt="Image" class="w-[325px]  h-56 object-cover rounded-2xl " :key="currentIndex" />
         </transition>        
+        <div  class="absolute z-50 flex space-x-3  bottom-5 left-[28%]">
+          <button v-for="i in 9" type="button" class="w-3 h-3 rounded-full " 
+            :class="i-1 === currentStep ? 'bg-yellow-400' : 'bg-gray-300'" 
+            @click="pushStep(i-1)">
+          </button>
+        </div>
       
         <button class="absolute top-0 left-0 z-30 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none"
-                @click=prevSlide     
+                @click=prevSlide      
         >
           <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 dark:bg-gray-300 group-hover:bg-white/50 dark:group-hover:bg-gray-500  ">
             <img :src="prev" class="w-4 h-4"/>
@@ -40,6 +46,7 @@
         </button>
       </div>
       <p class="justify-center flex w-full mt-2">{{members[currentIndex].name}}</p> 
+      <p class="justify-center text-xs flex w-full ">{{members[currentIndex].dis}}</p> 
       
       
       
@@ -108,63 +115,64 @@ import {naning,mayji,jap,hon,boss,bambie,chompu,cd,card,jark,next,prev,circleBla
 export default {
   data() {
       return {
-        
         next,
         prev,
         showAlert: '',
         clearMessage: '',
         members: [
                 {
-                    name: "นะนิ้ง เองจ้าา",
-                    src: naning,
-                },
-                {
-                    name: "มอจ้อ ท้อชิบ",
-                    src: mayji,
+                    name: "แบมบี้ ไผสิมางามเกิน",
+                    src: bambie,
+                    dis: "phamuesong back-end team",
                 },
                 {
                     name: "ผมแจ๊ป ยอดนักบิด",
                     src: jap,
+                    dis: "phamuesong back-end team",
                 },
                 {
-                    name: "ฮอนด้า ยามาฮ่าอิซูซุ",
-                    src: hon,
-                },
-                {
-                    name: "บอส ตะเอ๋ตะเอง",
-                    src: boss,
-                },
-                {
-                    name: "แบมบี้ ไผสิมางามเกิน",
-                    src: bambie,
+                    name: "นะนิ้ง เองจ้าา",
+                    src: naning,
+                    dis: "phamuesong front-end team",
                 },
                 {
                     name: "ชมพู่ คอนเกรตเกลือ",
                     src: chompu,
+                    dis: "phamuesong front-end team",
                 },
                 {
                     name: "ซีดี ดีวีดี",
                     src: cd,
+                    dis: "phamuesong front-end team"
+                },
+                {
+                    name: "มอจ้อ ท้อชิบ",
+                    src: mayji,
+                    dis: "phamuesong front-end/UXUI team",
                 },
                 {
                     name: "วอนนาเพลย์ การ์ด ",
                     src: card,
+                    dis: "phamuesong front-end team"
+                },
+                {
+                    name: "ฮอนด้า ยามาฮ่าอิซูซุ",
+                    src: hon,
+                    dis: "phamuesong devops team",
+                },
+                {
+                    name: "บอส ตะเอ๋ตะเอง",
+                    src: boss,
+                    dis: "phamuesong full stack team",
                 },
             ],
         currentIndex: 0,
+        currentStep: 0,
       };
     },
     
     methods: {
-      nextImage() {
-        // this.currentImage = (this.currentImage + 1) % this.images.length;
-      },
-      prevImage() {
-        //this.currentImage = (this.currentImage - 1 + this.images.length) % this.images.length;
-      },
-      pushStep(step) {
-      this.currentStep = step;
-      },
+      
       sendEmail() {
       emailjs.sendForm('service_x4d0cem', 'template_nuj1nau', this.$refs.form, 'MGXaQzcdX9_gSx5lO')
         .then((result) => {
@@ -185,21 +193,34 @@ export default {
         this.currentIndex = index;
       },
       prevSlide() {
-        
-        if (this.currentIndex <= 0){
-          this.currentIndex = 0;
+        if (this.currentIndex == 0){
+          this.currentIndex = this.members.length - 1;
         }else {
           this.currentIndex = this.currentIndex - 1;
         }
-        console.log(this.currentIndex)
+        if (this.currentStep == 0){
+          this.currentStep = this.members.length - 1;
+        }else {
+          this.currentStep = this.currentStep - 1;
+        }
+        console.log(this.currentStep)
       },
       nextSlide() {
-        if (this.currentIndex >= this.members.length - 1){
-          this.currentIndex = this.members.length - 1;
+        if (this.currentIndex == this.members.length - 1){
+          this.currentIndex = 0;
         }else {
           this.currentIndex = this.currentIndex + 1;
         }
-        console.log(this.currentIndex)
+        if (this.currentStep  == this.members.length - 1){
+          this.currentStep  = 0;
+        }else {
+          this.currentStep  = this.currentStep + 1;
+        }
+        console.log(this.currentStep)
+      },
+      pushStep(step) {
+        this.currentStep = step;
+        this.currentIndex = step;
       },
 
     },
@@ -213,7 +234,7 @@ export default {
     script2.type = 'text/javascript';
     script2.innerHTML = `
       (function(){
-        emailjs.init("YOUR_PUBLIC_KEY");
+        emailjs.init("MGXaQzcdX9_gSx5lO");
       })();
     `;
     document.body.appendChild(script2);

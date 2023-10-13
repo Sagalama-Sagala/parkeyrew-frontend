@@ -172,7 +172,7 @@
     <PopupForm
       :isModalOpen="isModalOpen"
       @toggleModal="handleModal"
-      :productData="infoProducts"
+      :productData="infoProducts.product"
     />
   </div>
 </template>

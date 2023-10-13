@@ -1,5 +1,16 @@
-import jark from "./jark.png";
-import next from "./next.svg";
-import prev from "./prev.svg";
+import mayji from "./mayji.png"
+import hon from "./hon.png"
+import boss from "./boss.png"
+import bambie from "./bambie.png"
+import card from "./card.png"
+import cd from "./cd.png"
+import chompu from "./chompu.png"
+import jap from "./jap.png"
+import naning from "./naning.png"
+import jark from "./jark.png"
+import next from "./next.svg"
+import prev from "./prev.svg"
+import circleBlack from "./circle-black.svg"
+import circleGray from "./circle-gray.svg"
 
-export {jark,next,prev};
+export {naning,mayji,jap,hon,boss,bambie,chompu,cd,card,jark,next,prev,circleBlack,circleGray};

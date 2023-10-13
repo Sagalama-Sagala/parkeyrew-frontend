@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="bg-secondary text-black flex flex-col flex-1 h-full items-center">
-      <div class="text-primary border-primary active:text-secondary active:bg-primary flex items-center justify-center w-40 h-8 mt-5 text-lg border-2 rounded-md hover:cursor-pointer">
+      <div @click="handleToggle" class="text-primary border-primary active:text-secondary active:bg-primary flex items-center justify-center w-40 h-8 mt-5 text-lg border-2 rounded-md hover:cursor-pointer">
         <h1>+ ลงขายสินค้า</h1>
       </div>
       <div class="bg-secondary flex-1 flex flex-col w-full pt-6 overflow-y-auto">
@@ -68,23 +68,33 @@
         </div>
       </div>
     </div>
+    <PopupForm
+      :isModalOpen="isModalOpen"
+      @toggleModal="handleToggle"
+      @handleOk="handleOk"
+    />
   </div>
 </template>
 
 <script >
 import ProductCard from "@/components/ProductCard/index.vue";
+import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import Dialog from "@/components/Dialog/index.vue";
 import {editIcon, shareIcon } from "@/assets/mystore";
+import axios from 'axios';
 
 export default{
   components: {
     ProductCard,
     Rating,
     Dialog,
+    PopupForm,
   },
+
   data(){
     return{
+      isModalOpen:false,
       followerDialog: false,
       followingDialog: false,
       editIcon,
@@ -213,6 +223,44 @@ export default{
     closeFollowing(){
       this.followingDialog = false;
     },
+    handleToggle()
+    {
+      this.isModalOpen = !this.isModalOpen;
+    },
+    handleOk(value)
+    {
+        const newData =
+      {
+          "name": value.name,
+          "price": value.price,
+          "deliveryFee": value.deliveryFee,
+          "description": value.description,
+          "brand": value.brand,
+          "color": value.color,
+          "size": value.size,
+          "category": value.category,
+          "condition": value.condition,
+          "sendFrom": value.sendFrom,
+          "remain": value.remain,
+        }
+        axios.post('product/create-product', newData, {
+        headers: { Authorization : "Bearer " + `${localStorage.getItem('token')}`,  }
+        })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        err.response.data.message.forEach(item=>
+        {
+          alert(item)
+        }
+        )
+      });
+      console.log(newData )
+      
+    }
+    
   }
 }
 </script>

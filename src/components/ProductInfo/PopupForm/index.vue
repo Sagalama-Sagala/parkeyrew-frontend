@@ -72,16 +72,13 @@
                         </div>
                         <div class="flex  items-center md:my-5 justify-center"> 
                             <h1 class="w-[4rem]">สภาพ</h1>
-                            <select class="border-[1px] border-black w-[6rem]" v-model="infoProducts.condition">
-                                <option disabled selected value="0" >เลือกสภาพ</option>
-                                <option v-for="option in conditionOptions" :key="option.id" :value="option.id">{{option.label}}</option>
-                            </select>
+                            <input class="border-[1px] border-black w-[6rem]" v-model.number="infoProducts.condition"/>
                         </div>
                     </div>
                     <div class="md:w-[12rem] ">
                         <div class="flex items-center my-5 justify-center"> 
                             <h1 class="w-[4rem]">ราคา</h1>
-                            <input class="border-[1px] border-black w-[6rem]" v-model="infoProducts.price"/>
+                            <input class="border-[1px] border-black w-[6rem]" v-model.number="infoProducts.price"/>
                         </div>
                         <div class="flex  items-center my-5 justify-center"> 
                             <h1 class="w-[4rem]">จำนวน</h1>
@@ -107,21 +104,21 @@
                 <div class="flex justify-center flex-col md:flex-row gap-3"> 
                     <div class="flex items-center justify-center md:my-5 w-[12rem]"> 
                         <h1 class="w-[4rem]">ส่งจาก</h1>
-                        <select class="border-[1px] border-black w-[6rem]"> 
+                        <select class="border-[1px] border-black w-[6rem]" v-model="infoProducts.sendFrom"> 
                             <option disabled selected value="0">เลือกจังหวัด</option>
                             <option v-for="option in shipFormOptions" :key="option.id" :value="option.id">{{option.label}}</option>
                         </select>
                     </div>
                     <div class="flex items-center justify-center w-[12rem] "> 
                         <h1 class="w-[4rem]">ค่าส่ง</h1>
-                        <input v-model="infoProducts.deliveryFee" class="border-[1px] border-black w-[6rem]"/>
+                        <input v-model.number="infoProducts.deliveryFee" class="border-[1px] border-black w-[6rem]"/>
                     </div>
                 </div>
             </div>
 
                 <div class="flex gap-6 h-[2.5rem] md:justify-end justify-center   ">
                     <button @click="handleToggleModal" class="text-[#969696] hover:text-black duration-100">ยกเลิก </button>
-                    <button @click="test" class="text-primary border-[1px] border-primary hover:bg-primary hover:text-white duration-100 rounded-lg px-4">ลงขาย</button>
+                    <button @click="handleOk" class="text-primary border-[1px] border-primary hover:bg-primary hover:text-white duration-100 rounded-lg px-4">ลงขาย</button>
                 </div>
             </div>
         </div>
@@ -133,22 +130,7 @@
 <script>
 
 import {imageHolder} from '@/assets/product'
-import {ref} from 'vue' 
-const defaultProductData = {
-  product: {
-    brand: '',
-    category: '',
-    color: '',
-    condition: '',
-    shipFrom: '',
-    size: '',
-    price: '',
-    description: '',
-    name: '',
-    remain: '',
-    deliveryFee: '',
-  },
-};
+import {watchEffect, ref, reactive} from 'vue' 
 export default {
   name: 'PopupForm',
   props: {
@@ -159,7 +141,7 @@ export default {
     productData:
     {
         type: Object,
-        default: () => defaultProductData
+        default: () => {}
     }
   },
   methods:{
@@ -178,15 +160,23 @@ export default {
     handleToggleModal() {
       this.$emit("toggleModal");
     },
-    handleClickOutside(event) {
-        if (event.target.classList.contains('fixed')) {
-        this.handleToggleModal();
-        }
+    handleOk() {
+       this.$emit("handleOk",this.infoProducts)
+       this.handleReset();
     },
-    test()
-    {   
-        console.log(this.productData)
-        console.log(this.infoProducts)
+    handleReset()
+    {
+        this.infoProducts.brand = '';
+        this.infoProducts.category = '';
+        this.infoProducts.condition = 0;
+        this.infoProducts.sendFrom = '';
+        this.infoProducts.size = '';
+        this.infoProducts.price = 0;
+        this.infoProducts.description = '';
+        this.infoProducts.name = '';
+        this.infoProducts.remain = 0;
+        this.infoProducts.deliveryFee = 0;
+        this.infoProducts.color = '';
     },
     handleIncrese()
     {
@@ -199,158 +189,88 @@ export default {
   },
   setup(props)
   {
-    
-    const colorOptions = [
-        { id: 1, label: "ขาว", isCheck: false },
-        { id: 2, label: "ดำ", isCheck: false },
-        { id: 3, label: "ม่วง", isCheck: false },
-        { id: 4, label: "ฟ้า", isCheck: false },
-        { id: 5, label: "น้ำเงิน", isCheck: false },
-        { id: 6, label: "เขียว", isCheck: false },
-        { id: 7, label: "ชมพู", isCheck: false },
-        { id: 8, label: "เหลือง", isCheck: false },
-        { id: 9, label: "ส้ม", isCheck: false },
-        { id: 10, label: "แดง", isCheck: false },
-        { id: 11, label: "เทา", isCheck: false },
-        { id: 12, label: "น้ำตาล", isCheck: false },
-    ]
-
-    const categoryOptions =  [
-        {id:1,label:"เดรส"},
-        {id:2,label:"ท็อปส์"},
-        {id:3,label:"กางเกง"},
-        {id:4,label:"เสื้อกันหนาว"},
-        {id:5,label:"กระโปรง"},
-        {id:6,label:"กระเป๋า"},
-        {id:7,label:"ชุดว่ายน้ำ"},
-        {id:8,label:"ชุดทำงาน"},
-        {id:9,label:"รองเท้า"},
-        {id:10,label:"จัํมป์สูท"},
-    ]
-    const brandOptions =  [{id:1,label:"มีแบรนด์"},{id:2,label:"ไม่มีแบรนด์"}]
-    const conditionOptions = [{id:1,label:"ใหม่"},{id:2,label:"เก่า"}]
-    const sizeOptions =  
-    [   
-        { id: 1, label: "S" ,isCheck: false },
-        { id: 2, label: "M" ,isCheck: false},
-        { id: 3, label: "L" ,isCheck: false},
-        { id: 4, label: "XL" ,isCheck: false},
-        { id: 5, label: "XXL" ,isCheck: false},
-        { id: 6, label: "Oversize" ,isCheck: false}
-    ]
-    const shipFormOptions = [
-    { "id": 1, "label": "กรุงเทพมหานคร" },
-    { "id": 2, "label": "สมุทรปราการ" },
-    { "id": 3, "label": "นนทบุรี" },
-    { "id": 4, "label": "ปทุมธานี" },
-    { "id": 5, "label": "พระนครศรีอยุธยา" },
-    { "id": 6, "label": "อ่างทอง" },
-    { "id": 7, "label": "ลพบุรี" },
-    { "id": 8, "label": "สิงห์บุรี" },
-    { "id": 9, "label": "ชัยนาท" },
-    { "id": 10, "label": "สระบุรี" },
-    { "id": 11, "label": "ชลบุรี" },
-    { "id": 12, "label": "ระยอง" },
-    { "id": 13, "label": "จันทบุรี" },
-    { "id": 14, "label": "ตราด" },
-    { "id": 15, "label": "ฉะเชิงเทรา" },
-    { "id": 16, "label": "ปราจีนบุรี" },
-    { "id": 17, "label": "นครนายก" },
-    { "id": 18, "label": "สระแก้ว" },
-    { "id": 19, "label": "นครราชสีมา" },
-    { "id": 20, "label": "บุรีรัมย์" },
-    { "id": 21, "label": "สุรินทร์" },
-    { "id": 22, "label": "ศรีสะเกษ" },
-    { "id": 23, "label": "อุบลราชธานี" },
-    { "id": 24, "label": "ยโสธร" },
-    { "id": 25, "label": "ชัยภูมิ" },
-    { "id": 26, "label": "อำนาจเจริญ" },
-    { "id": 27, "label": "บึงกาฬ" },
-    { "id": 28, "label": "หนองบัวลำภู" },
-    { "id": 29, "label": "ขอนแก่น" },
-    { "id": 30, "label": "อุดรธานี" },
-    { "id": 31, "label": "เลย" },
-    { "id": 32, "label": "หนองคาย" },
-    { "id": 33, "label": "มหาสารคาม" },
-    { "id": 34, "label": "ร้อยเอ็ด" },
-    { "id": 35, "label": "กาฬสินธุ์" },
-    { "id": 36, "label": "สกลนคร" },
-    { "id": 37, "label": "นครพนม" },
-    { "id": 38, "label": "มุกดาหาร" },
-    { "id": 39, "label": "เชียงใหม่" },
-    { "id": 40, "label": "ลำพูน" },
-    { "id": 41, "label": "ลำปาง" },
-    { "id": 42, "label": "อุตรดิตถ์" },
-    { "id": 43, "label": "แพร่" },
-    { "id": 44, "label": "น่าน" },
-    { "id": 45, "label": "พะเยา" },
-    { "id": 46, "label": "เชียงราย" },
-    { "id": 47, "label": "แม่ฮ่องสอน" },
-    { "id": 48, "label": "นครสวรรค์" },
-    { "id": 49, "label": "อุทัยธานี" },
-    { "id": 50, "label": "กำแพงเพชร" },
-    { "id": 51, "label": "ตาก" },
-    { "id": 52, "label": "สุโขทัย" },
-    { "id": 53, "label": "พิษณุโลก" },
-    { "id": 54, "label": "พิจิตร" },
-    { "id": 55, "label": "เพชรบูรณ์" },
-    { "id": 56, "label": "ราชบุรี" },
-    { "id": 57, "label": "กาญจนบุรี" },
-    { "id": 58, "label": "สุพรรณบุรี" },
-    { "id": 59, "label": "นครปฐม" },
-    { "id": 60, "label": "สมุทรสาคร" },
-    { "id": 61, "label": "สมุทรสงคราม" },
-    { "id": 62, "label": "เพชรบุรี" },
-    { "id": 63, "label": "ประจวบคีรีขันธ์" },
-    { "id": 64, "label": "นครศรีธรรมราช" },
-    { "id": 65, "label": "กระบี่" },
-    { "id": 66, "label": "พังงา" },
-    { "id": 67, "label": "ภูเก็ต" },
-    { "id": 68, "label": "สุราษฎร์ธานี" },
-    { "id": 69, "label": "ระนอง" },
-    { "id": 70, "label": "ชุมพร" },
-    { "id": 71, "label": "สงขลา" },
-    { "id": 72, "label": "สตูล" },
-    { "id": 73, "label": "ตรัง" },
-    { "id": 74, "label": "พัทลุง" },
-    { "id": 75, "label": "ปัตตานี" },
-    { "id": 76, "label": "ยะลา" },
-    { "id": 77, "label": "นราธิวาส" }
-    ]
-    
-    const brandId = brandOptions.find((brand) => brand.label === props.productData.product.brand)?.id || 0;
-
-    const categoryId = categoryOptions.find((category) => category.label === props.productData.product.category)?.id || 0;
-    const colorId = colorOptions.find((color) => color.label === props.productData.product.color)?.id || 0
-    const conditionId = conditionOptions.find((condition) => condition.label === props.productData.product.condition)?.id || 0;
-    const sizeId = sizeOptions.find((size) => size.label === props.productData.product.size)?.id || 0;
-    const shipFromId = shipFormOptions.find((shipFrom) => shipFrom.label === props.productData.product.shipFrom)?.id || 0;
-
-
-    const infoProducts = ref({
-        brand:brandId,
-        category:categoryId,
-        color:colorId,
-        condition:conditionId,
-        shipFrom:shipFromId,
-        size:sizeId,
-        price:props.productData.product.price,
-        description:props.productData.product.description,
-        name:props.productData.product.name,
-        remain:props.productData.product.remain,
-        deliveryFee:props.productData.product.deliveryFee,
+    const infoProducts = reactive({
+    brand: '',
+    category: '',
+    color: '',
+    condition: 0,
+    sendFrom: '',
+    size: '',
+    price: 0,
+    description: '',
+    name: '',
+    remain: 0,
+    deliveryFee: 0,
     });
-    
-    return({colorOptions,categoryOptions,brandOptions,conditionOptions,sizeOptions ,shipFormOptions, infoProducts})
+    watchEffect(() => {
+    if (props.productData) {
+        infoProducts.brand = props.productData.brand;
+        infoProducts.category = props.productData.category;
+        infoProducts.condition =  props.productData.condition;
+        infoProducts.sendFrom =  props.productData.sendFrom;
+        infoProducts.size =  props.productData.size;
+        infoProducts.price =  props.productData.price;
+        infoProducts.description =  props.productData.description;
+        infoProducts.name =  props.productData.name;
+        infoProducts.remain =  props.productData.remain;
+        infoProducts.deliveryFee =  props.productData.deliveryFee;
+        infoProducts.color =  props.productData.color ;
+    }
+    });
+    return {infoProducts}
   },
-  data()
+  data(props)
   {
     return {
       imageList: [],
       imageHolder: imageHolder,
+
+        colorOptions :[
+            { id: "ขาว", label: "ขาว"},
+            { id: "ดำ", label: "ดำ"},
+            { id: "ม่วง", label: "ม่วง"},
+            { id: "ฟ้า", label: "ฟ้า" },
+            { id: "น้ำเงิน", label: "น้ำเงิน"},
+            { id: "เขียว", label: "เขียว"},
+            { id: "ชมพู", label: "ชมพู"},
+            { id: "เหลือง", label: "เหลือง"},
+            { id: "ส้ม", label: "ส้ม"},
+            { id: "แดง", label: "แดง"},
+            { id: "เทา", label: "เทา"},
+            { id: "น้ำตาล", label: "น้ำตาล"},
+        ],
+        categoryOptions : [
+            {id:"เดรส",label:"เดรส"},
+            {id:"ท็อปส์",label:"ท็อปส์"},
+            {id:"กางเกง",label:"กางเกง"},
+            {id:"เสื้อกันหนาว",label:"เสื้อกันหนาว"},
+            {id:"กระโปรง",label:"กระโปรง"},
+            {id:"กระเป๋า",label:"กระเป๋า"},
+            {id:"ชุดว่ายน้ำ",label:"ชุดว่ายน้ำ"},
+            {id:"ชุดทำงาน",label:"ชุดทำงาน"},
+            {id:"รองเท้า",label:"รองเท้า"},
+            {id:"จัํมป์สูท",label:"จัํมป์สูท"},
+        ],
+        brandOptions : [
+            {id:"มีแบรนด์",label:"มีแบรนด์"},{id:"ไม่มีแบรนด์",label:"ไม่มีแบรนด์"}
+        ],
+        sizeOptions :  [   
+            { id: "S", label: "S" },
+            { id: "M", label: "M",},
+            { id: "L", label: "L" },
+            { id: "XL", label: "XL" },
+            { id: "XXL", label: "XXL" },
+            { id: "Oversize", label: "Oversize" ,}
+        ],
+        shipFormOptions : [
+        { id: "กรุงเทพมหานคร", label: "กรุงเทพมหานคร" },
+        { id: "สมุทรปราการ", label: "สมุทรปราการ" },
+        { id: "นนทบุรี", label: "นนทบุรี" },
+        ],
     }
   }
 }
+
 </script>
 
 <style scoped>

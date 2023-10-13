@@ -169,7 +169,11 @@
         />
       </div>
     </div>
-  <PopupForm :isModalOpen="isModalOpen" @toggleModal="handleModal" :productData="infoProducts"/>
+    <PopupForm
+      :isModalOpen="isModalOpen"
+      @toggleModal="handleModal"
+      :productData="infoProducts"
+    />
   </div>
 </template>
 
@@ -181,7 +185,6 @@ import { formatDate } from "@/common/js/utils.js";
 import { socket } from "@/socket";
 import { useChatStore } from "@/store/chat.store.js";
 
-
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
@@ -189,7 +192,6 @@ import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
 import { shareArrow, heart, chat, call } from "@/assets/product";
 import { recommend } from "@/assets/product_card";
-
 
 export default {
   setup() {

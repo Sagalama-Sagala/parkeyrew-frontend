@@ -21,22 +21,24 @@
         <div v-for="(item, index) in chatRooms" :key="item.product">
           <div
             @click="handleChatPrivate(item)"
-            class="flex justify-between items-center border-b-[1px] border-black md:text-lg text-sm py-1 cursor-pointer"
+            class="flex justify-between items-start border-b-[1px] border-black md:text-lg text-sm py-1 cursor-pointer"
           >
-            <div class="flex justify-center items-center gap-x-2">
+            <div class="flex justify-center items-start gap-x-2">
               <img
-                :src="item.profileIcon"
+                :src="profile"
                 :alt="item.roomId"
                 class="md:w-20 md:h-20 w-12 h-12"
               />
-              <div class="flex flex-col justify-around items-start h-full py-2">
+              <div class="h-full py-2">
                 <h2 class="font-semibold">
                   {{ item.otherUser?.user?.username }}
                 </h2>
-                <h3 class="font-light">last message</h3>
+                <h3 class="font-light">
+                  {{ item.lastMessage?.text }}
+                </h3>
               </div>
             </div>
-            <div class="flex flex-col justify-around items-end h-full py-2">
+            <div class="h-full py-2">
               <h2 class="font-semibold">
                 {{ item.otherUser.role === "seller" ? "ผู้ขาย" : "ผู้ซื้อ" }}
               </h2>
@@ -76,6 +78,7 @@ export default {
     socket.emit("getRooms");
 
     socket.on("rooms", (response) => {
+      console.log(response);
       chatRooms.value = response;
     });
 
@@ -92,6 +95,7 @@ export default {
     },
     handleChatPrivate(room) {
       this.chatStore.setChatRoom(room);
+      console.log(room.id);
       this.$router.push(`chat/${room.id}`);
     },
   },

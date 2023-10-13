@@ -86,7 +86,6 @@ import { useChatStore } from "@/store/chat.store.js";
 
 export default {
   setup() {
-    const room = ref([]);
     const messages = ref([]);
     const route = useRoute();
     const chatStore = useChatStore();
@@ -94,12 +93,6 @@ export default {
     onBeforeRouteLeave((to, from) => {
       chatStore.clearChatRoom();
       socket.emit("leaveRoom");
-    });
-
-    socket.emit("getRoom", route.params.id);
-
-    socket.on("room", (response) => {
-      room.value = response;
     });
 
     socket.emit("joinRoom", route.params.id);
@@ -114,7 +107,7 @@ export default {
       }
     });
 
-    return { room, messages, chatStore };
+    return { messages, chatStore };
   },
   computed: {
     connected() {

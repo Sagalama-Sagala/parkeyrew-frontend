@@ -169,7 +169,11 @@
         />
       </div>
     </div>
-  <PopupForm :isModalOpen="isModalOpen" @toggleModal="handleModal" :productData="infoProducts"/>
+    <PopupForm
+      :isModalOpen="isModalOpen"
+      @toggleModal="handleModal"
+      :productData="infoProducts"
+    />
   </div>
 </template>
 
@@ -179,7 +183,7 @@ import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { formatDate } from "@/common/js/utils.js";
 import { socket } from "@/socket";
-
+import { useChatStore } from "@/store/chat.store.js";
 
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
@@ -189,13 +193,13 @@ import { T1, T2, T3, T4 } from "@/assets/TestImage";
 import { shareArrow, heart, chat, call } from "@/assets/product";
 import { recommend } from "@/assets/product_card";
 
-
 export default {
   setup() {
     const infoProducts = ref([]);
     const route = useRoute();
     const router = useRouter();
     const productId = route.params.id;
+    const chatStore = useChatStore();
     axios
       .get(`/product/get-info-product-page/${productId}`)
       .then((response) => {
@@ -211,12 +215,9 @@ export default {
         product: infoProducts.value.product,
         seller: infoProducts.value.product.owner,
       });
-
       socket.on("roomId", (response) => {
-        console.log("socket");
-        if (response.constructor === String) {
-          router.push(`/chat/${response}`);
-        }
+        chatStore.setChatRoom(response);
+        router.push(`/chat/${response.id}`);
       });
     };
 

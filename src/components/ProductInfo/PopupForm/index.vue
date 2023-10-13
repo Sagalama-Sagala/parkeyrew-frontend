@@ -131,8 +131,24 @@
 </template>
 
 <script>
+
 import {imageHolder} from '@/assets/product'
 import {ref} from 'vue' 
+const defaultProductData = {
+  product: {
+    brand: '',
+    category: '',
+    color: '',
+    condition: '',
+    shipFrom: '',
+    size: '',
+    price: '',
+    description: '',
+    name: '',
+    remain: '',
+    deliveryFee: '',
+  },
+};
 export default {
   name: 'PopupForm',
   props: {
@@ -143,7 +159,7 @@ export default {
     productData:
     {
         type: Object,
-        default: () => ({})
+        default: () => defaultProductData
     }
   },
   methods:{

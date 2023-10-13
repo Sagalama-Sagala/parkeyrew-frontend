@@ -24,13 +24,17 @@
           </div>
         </div>
         <div class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]">
-          <div>
+          <div class="hover:cursor-pointer" @click="openFollower">
             <b>{{ follower }}  ผู้ติดตาม</b>
           </div>
+          <Dialog v-if="followerDialog" @close="closeFollower" title="ผู้ติดตาม">
+            TEST Following Dialog
+          </Dialog>
           |
-          <div>
+          <div class="hover:cursor-pointer" @click="openFollowing">
             <b>{{ following }}  กำลังติดตาม</b>
           </div>
+          <Dialog v-if="followingDialog" @close="closeFollowing" title="กำลังติดตาม"/>
         </div>
         <div class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12">
           <b>คำอธิบาย</b>
@@ -70,15 +74,19 @@
 <script >
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
+import Dialog from "@/components/Dialog/index.vue";
 import {editIcon, shareIcon } from "@/assets/mystore";
 
 export default{
   components: {
     ProductCard,
     Rating,
+    Dialog,
   },
   data(){
     return{
+      followerDialog: false,
+      followingDialog: false,
       editIcon,
       shareIcon,
       profileURL : "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
@@ -192,6 +200,18 @@ export default{
     },
     routeToReview(){
       this.$router.push(`/mystore/review`)
+    },
+    openFollower(){
+      this.followerDialog = true;
+    },
+    closeFollower(){
+      this.followerDialog = false;
+    },
+    openFollowing(){
+      this.followingDialog = true;
+    },
+    closeFollowing(){
+      this.followingDialog = false;
     },
   }
 }

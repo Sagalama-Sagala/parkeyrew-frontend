@@ -168,21 +168,26 @@
         />
       </div>
     </div>
+  <PopupForm/>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
 import axios from "axios";
-import { shareArrow, heart, chat, call } from "@/assets/product";
-import { recommend } from "@/assets/product_card";
-import ProductCard from "@/components/ProductCard/index.vue";
-import Rating from "@/components/Rating/index.vue";
-
-import { T1, T2, T3, T4 } from "@/assets/TestImage";
 import { useRoute, useRouter } from "vue-router";
 import { formatDate } from "@/common/js/utils.js";
 import { socket } from "@/socket";
+
+
+import ProductCard from "@/components/ProductCard/index.vue";
+import Rating from "@/components/Rating/index.vue";
+import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
+
+import { T1, T2, T3, T4 } from "@/assets/TestImage";
+import { shareArrow, heart, chat, call } from "@/assets/product";
+import { recommend } from "@/assets/product_card";
+
 
 export default {
   setup() {
@@ -219,6 +224,7 @@ export default {
   components: {
     ProductCard,
     Rating,
+    PopupForm,
   },
   methods: {
     updateSelectedImage(index) {

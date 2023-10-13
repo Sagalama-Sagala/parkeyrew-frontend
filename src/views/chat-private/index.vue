@@ -10,7 +10,7 @@
           <img :src="chevronLeft" alt="back" class="w-5" />
           <p>กลับ</p>
         </button>
-        <div>{{ room.otherUser?.user?.username }}</div>
+        <div>{{ chatStore.chatRoom?.otherUser?.user?.username }}</div>
         <div>
           <img
             :src="threePointLeader"
@@ -26,19 +26,20 @@
           <img :src="defaultImg" alt="product_image" class="rounded-lg" />
         </div>
         <div class="whitespace-nowrap">
-          <p>{{ room.product?.name }}</p>
-          <p>฿ {{ room.product?.price }}</p>
+          <p>{{ chatStore.chatRoom?.product?.name }}</p>
+          <p>฿ {{ chatStore.chatRoom?.product?.price }}</p>
         </div>
       </div>
     </div>
+    <!-- chat -->
     <div
-      class="w-full justify-end md:pt-32 pt-48 pb-28 text-lg font-semibold h-full overflow-auto z-0 scroll-smooth"
+      class="w-full flex flex-col-reverse md:pt-32 pt-48 pb-28 text-lg font-semibold h-full overflow-y-auto z-0 scroll-smooth"
     >
       <div
-        v-for="(item, index) in messages"
+        v-for="(item, index) in messages.slice().reverse()"
         :key="index"
-        class="w-full items-center justify-end flex gap-x-3 md:gap-x-5 border-b-[1px] first:border-t-[1px] border-[#D9D9D9] md:px-16 px-4 md:py-4 py-2"
-        :class="item.user ? '' : 'flex-row-reverse'"
+        class="w-full items-center justify-end flex gap-x-3 md:gap-x-5 border-b-[1px] last:border-t-[1px] border-[#d9d9d9] md:px-16 px-4 md:py-4 py-2"
+        :class="item.isMyMessage ? '' : 'flex-row-reverse'"
       >
         <p class="pt-5">{{ item.text }}</p>
 
@@ -57,6 +58,7 @@
             v-model="chatInput"
             class="border-[1px] border-black px-3 py-2 w-full rounded"
             placeholder="พิมพ์ข้อความของคุณ..."
+            @keyup.enter="handleSubmitNewMessage()"
           />
           <button
             class="flex items-center gap-x-2 border-black border-[1px] rounded px-4"
@@ -79,12 +81,20 @@ import { state, socket } from "@/socket";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { chevronLeft, threePointLeader, send, add } from "@/assets/common";
+import { onBeforeRouteLeave } from "vue-router";
+import { useChatStore } from "@/store/chat.store.js";
 
 export default {
   setup() {
     const room = ref([]);
     const messages = ref([]);
     const route = useRoute();
+    const chatStore = useChatStore();
+
+    onBeforeRouteLeave((to, from) => {
+      chatStore.clearChatRoom();
+      socket.emit("leaveRoom");
+    });
 
     socket.emit("getRoom", route.params.id);
 
@@ -99,11 +109,12 @@ export default {
     });
 
     socket.on("message", (response) => {
-      messages.value.push(response);
-      console.log(response);
+      if (!messages.value.includes(response)) {
+        messages.value.push(response);
+      }
     });
 
-    return { room, messages };
+    return { room, messages, chatStore };
   },
   computed: {
     connected() {
@@ -112,10 +123,13 @@ export default {
   },
   methods: {
     handleSubmitNewMessage() {
-      socket.emit("addMessage", {
-        roomId: this.$route.params.id,
-        message: { text: this.chatInput },
-      });
+      if (this.chatInput !== "") {
+        socket.emit("addMessage", {
+          roomId: this.$route.params.id,
+          message: { text: this.chatInput },
+        });
+        this.chatInput = "";
+      }
     },
     handleBack() {
       this.$router.push("/chat");
@@ -134,17 +148,6 @@ export default {
       add,
       mockProfile:
         "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Circle_Davys-Grey_Solid.svg/1024px-Circle_Davys-Grey_Solid.svg.png",
-      mockChat: [
-        { text: "hello", user: true },
-        { text: "hi", user: false },
-        { text: "kuayrai", user: true },
-        { text: "nahee", user: false },
-        { text: "yedmaa", user: true },
-        { text: "toikumai", user: false },
-        { text: "io10", user: true },
-        { text: "fuck", user: false },
-        { text: "bitch", user: true },
-      ],
     };
   },
 };

@@ -17,7 +17,7 @@
         class="z-30 fixed top-[20%] h-[500px] px-5 py-5 m-4 bg-white rounded shadow-xl md:text-base text-sm w-5/6 md:w-1/2"
         :class="showPopup ? 'block' : 'hidden'"
     >
-        <div class="">
+        <div class="ml-12">
             <p class="text-lg md:text-2xl font-bold">ที่อยู่ใหม่</p>
             <input
                 type="text"

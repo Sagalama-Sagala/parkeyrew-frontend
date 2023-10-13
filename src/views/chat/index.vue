@@ -29,30 +29,35 @@
                 :alt="item.roomId"
                 class="md:w-20 md:h-20 w-12 h-12"
               />
-              <div class="h-full py-2">
+              <div class="h-full md:py-3">
                 <h2 class="font-semibold">
                   {{ item.otherUser?.user?.username }}
                 </h2>
                 <h3 class="font-light">
+                  {{ item.lastMessage?.user?.username }}
+                  <span v-if="item.lastMessage" class="px-1 text-lg">:</span>
                   {{ item.lastMessage?.text }}
                 </h3>
               </div>
             </div>
-            <div class="h-full py-2">
+            <div class="h-full py-2 flex-col flex justify-end items-end">
               <h2 class="font-semibold">
                 {{ item.otherUser.role === "seller" ? "ผู้ขาย" : "ผู้ซื้อ" }}
               </h2>
-              <div v-if="item.unread" class="pr-3">
+              <div
+                v-if="
+                  item.lastMessage &&
+                  !item.lastMessage?.otherUserRead &&
+                  item.user?.user?.username !== item.lastMessage?.user?.username
+                "
+                class="pr-3 text-center"
+              >
                 <img
                   :src="noti"
                   :alt="item.roomId"
                   class="md:w-[18px] md:h-[18px] w-[12px] h-[12px]"
                 />
               </div>
-              <div
-                v-else
-                class="block md:w-[18px] md:h-[18px] w-[12px] h-[12px]"
-              ></div>
             </div>
           </div>
         </div>

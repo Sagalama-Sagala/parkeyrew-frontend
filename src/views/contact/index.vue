@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary w-full md:justify-center  md:flex text-white md:pt-20 pt-5 md:h-screen h-full"> 
+  <div class="bg-primary w-full md:justify-center  md:flex text-white md:pt-16 pt-5 md:h-screen h-full"> 
     <div class="md:pl-48 pl-10 md:pr-0 pr-10 md:w-[50%] w-full">
       <p class="pt-20 md:text-3xl text-xl font-medium">ช่องทางติดต่อ</p>
       <p class="mt-2 ">
@@ -18,21 +18,33 @@
         <p class="mx-2 text-base ">phamuesong@gmail.com</p>
       </div>
       <p class="mt-6 md:text-2xl text-base font-medium">ทีมผู้พัฒนา  💻</p>
-      <div class="relative mt-4 flex md:justify-center">
-        <transition name="fade" mode="out-in">
-          <img :key="currentImage" :src=jark alt="Image" class="w-[325px]  h-64 object-cover rounded-2xl" />
-        </transition>
-        <button class="absolute top-0 left-0 z-30 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none">
+      
+      <div class=" relative mt-4 flex md:justify-center" >
+        <transition name="" mode="out-in">
+          <img :src="members[currentIndex].src" alt="Image" class="w-[325px]  h-56 object-cover rounded-2xl " :key="currentIndex" />
+        </transition>        
+      
+        <button class="absolute top-0 left-0 z-30 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none"
+                @click=prevSlide     
+        >
           <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 dark:bg-gray-300 group-hover:bg-white/50 dark:group-hover:bg-gray-500  ">
             <img :src="prev" class="w-4 h-4"/>
           </span>
         </button>
-        <button  class="absolute top-0 right-0 z-30 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none">
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 dark:bg-gray-300 group-hover:bg-white/50 dark:group-hover:bg-gray-500 ">
-              <img :src="next" class="w-4 h-4"/>
-            </span>
+        <button  class="absolute top-0 right-0 z-30 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none"
+                @click=nextSlide 
+        >
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 dark:bg-gray-300 group-hover:bg-white/50 dark:group-hover:bg-gray-500 ">
+            <img :src="next" class="w-4 h-4"/>
+          </span>
         </button>
       </div>
+      <p class="justify-center flex w-full mt-2">{{members[currentIndex].name}}</p> 
+      
+      
+      
+
+
     </div>
 
     <div class="flex justify-start pl-10 md:w-[50%] w-full text-black text-center md:pt-20 pt-10  ">
@@ -77,9 +89,7 @@
           <div v-if="showAlert" class="mt-4" :class="showAlert === 'Email sent successfully!' ? 'text-green-600' : 'text-red-600'">
             {{ showAlert  }}
           </div>
-          <!-- <div v-if="clearMessage" class="mt-4 text-red-600">
-            {{ errorMessage }}
-          </div> -->
+          
         </form>
       </div>
     </div>
@@ -93,16 +103,55 @@
 
 
 <script >
-import {jark,next,prev} from "@/assets/contact";
+import {naning,mayji,jap,hon,boss,bambie,chompu,cd,card,jark,next,prev,circleBlack,circleGray} from "@/assets/contact";
 
 export default {
   data() {
       return {
-        jark,
+        
         next,
         prev,
         showAlert: '',
         clearMessage: '',
+        members: [
+                {
+                    name: "นะนิ้ง เองจ้าา",
+                    src: naning,
+                },
+                {
+                    name: "มอจ้อ ท้อชิบ",
+                    src: mayji,
+                },
+                {
+                    name: "ผมแจ๊ป ยอดนักบิด",
+                    src: jap,
+                },
+                {
+                    name: "ฮอนด้า ยามาฮ่าอิซูซุ",
+                    src: hon,
+                },
+                {
+                    name: "บอส ตะเอ๋ตะเอง",
+                    src: boss,
+                },
+                {
+                    name: "แบมบี้ ไผสิมางามเกิน",
+                    src: bambie,
+                },
+                {
+                    name: "ชมพู่ คอนเกรตเกลือ",
+                    src: chompu,
+                },
+                {
+                    name: "ซีดี ดีวีดี",
+                    src: cd,
+                },
+                {
+                    name: "วอนนาเพลย์ การ์ด ",
+                    src: card,
+                },
+            ],
+        currentIndex: 0,
       };
     },
     
@@ -111,7 +160,7 @@ export default {
         // this.currentImage = (this.currentImage + 1) % this.images.length;
       },
       prevImage() {
-        this.currentImage = (this.currentImage - 1 + this.images.length) % this.images.length;
+        //this.currentImage = (this.currentImage - 1 + this.images.length) % this.images.length;
       },
       pushStep(step) {
       this.currentStep = step;
@@ -131,10 +180,27 @@ export default {
             this.clearMessage = ''; 
           }, 2000);
         });
+      },
+      goToSlide(index) {
+        this.currentIndex = index;
+      },
+      prevSlide() {
         
-        
-        
-    }
+        if (this.currentIndex <= 0){
+          this.currentIndex = 0;
+        }else {
+          this.currentIndex = this.currentIndex - 1;
+        }
+        console.log(this.currentIndex)
+      },
+      nextSlide() {
+        if (this.currentIndex >= this.members.length - 1){
+          this.currentIndex = this.members.length - 1;
+        }else {
+          this.currentIndex = this.currentIndex + 1;
+        }
+        console.log(this.currentIndex)
+      },
 
     },
     mounted() {

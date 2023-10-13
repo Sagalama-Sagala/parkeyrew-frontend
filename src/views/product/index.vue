@@ -56,6 +56,7 @@
                 <img
                   :src="shareArrow"
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center hover:bg-secondary md:w-14 w-10 p-2"
+                  @click="handleModal()"
                 />
               </div>
               <span>สินค้าคงเหลือ: {{ infoProducts?.product?.remain }}</span>
@@ -168,7 +169,7 @@
         />
       </div>
     </div>
-  <PopupForm/>
+  <PopupForm :isModalOpen="isModalOpen" @toggleModal="handleModal" :productData="infoProducts"/>
   </div>
 </template>
 
@@ -235,6 +236,9 @@ export default {
     },
     handleLikeClick() {},
     formatDate,
+    handleModal() {
+      this.isModalOpen = !this.isModalOpen;
+    },
   },
   data() {
     return {
@@ -245,6 +249,7 @@ export default {
       call,
       selectedImageIndex: 0,
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
+      isModalOpen: false,
     };
   },
 };

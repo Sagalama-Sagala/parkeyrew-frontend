@@ -45,7 +45,7 @@
                 <div class="flex justify-center">  
                     <div class="flex md:w-[24rem] items-center my-5 "> 
                         <select class="border-[1px] border-black w-[10rem]" v-model="infoProducts.category"> 
-                            <option disabled selected >เลือกหมวดหมู่</option>
+                            <option disabled selected value="0" >เลือกหมวดหมู่</option>
                             <option v-for="option in categoryOptions" :key="option.id" :value="option.id">{{option.label}}</option>
                         </select>
                     </div>
@@ -59,18 +59,21 @@
                         <div class="flex items-center my-5 justify-center"> 
                             <h1 class="w-[4rem]">แบรนด์</h1>
                             <select class="border-[1px] border-black w-[6rem]" v-model="infoProducts.brand">
+                                <option disabled selected value="0" >เลือกแบรนด์</option>
                                 <option v-for="option in brandOptions" :key="option.id" :value="option.id">{{option.label}}</option>
                             </select>
                         </div>
                         <div class="flex  items-center my-5 justify-center"> 
                             <h1 class="w-[4rem]">สี</h1>
                             <select class="border-[1px] border-black w-[6rem]" v-model="infoProducts.color">
+                                <option disabled selected value="0" >เลือกสี</option>
                                 <option v-for="option in colorOptions" :key="option.id" :value="option.id">{{option.label}}</option>
                             </select>
                         </div>
                         <div class="flex  items-center md:my-5 justify-center"> 
                             <h1 class="w-[4rem]">สภาพ</h1>
                             <select class="border-[1px] border-black w-[6rem]" v-model="infoProducts.condition">
+                                <option disabled selected value="0" >เลือกสภาพ</option>
                                 <option v-for="option in conditionOptions" :key="option.id" :value="option.id">{{option.label}}</option>
                             </select>
                         </div>
@@ -91,6 +94,7 @@
                         <div class="flex items-center my-5 justify-center"> 
                             <h1 class="w-[4rem]">ไซต์</h1>
                             <select class="border-[1px] border-black w-[6rem]" v-model="infoProducts.size">
+                                <option disabled selected value="0" >เลือกไซต์</option>
                                 <option v-for="option in sizeOptions" :key="option.id" :value="option.id">{{option.label}}</option>
                             </select>
                         </div>
@@ -104,7 +108,7 @@
                     <div class="flex items-center justify-center md:my-5 w-[12rem]"> 
                         <h1 class="w-[4rem]">ส่งจาก</h1>
                         <select class="border-[1px] border-black w-[6rem]"> 
-                            <option disabled selected >เลือกจังหวัด</option>
+                            <option disabled selected value="0">เลือกจังหวัด</option>
                             <option v-for="option in shipFormOptions" :key="option.id" :value="option.id">{{option.label}}</option>
                         </select>
                     </div>
@@ -181,18 +185,18 @@ export default {
   {
     
     const colorOptions = [
-        { id: 0, label: "ขาว", isCheck: false },
-        { id: 1, label: "ดำ", isCheck: false },
-        { id: 2, label: "ม่วง", isCheck: false },
-        { id: 3, label: "ฟ้า", isCheck: false },
-        { id: 4, label: "น้ำเงิน", isCheck: false },
-        { id: 5, label: "เขียว", isCheck: false },
-        { id: 6, label: "ชมพู", isCheck: false },
-        { id: 7, label: "เหลือง", isCheck: false },
-        { id: 8, label: "ส้ม", isCheck: false },
-        { id: 9, label: "แดง", isCheck: false },
-        { id: 10, label: "เทา", isCheck: false },
-        { id: 11, label: "น้ำตาล", isCheck: false },
+        { id: 1, label: "ขาว", isCheck: false },
+        { id: 2, label: "ดำ", isCheck: false },
+        { id: 3, label: "ม่วง", isCheck: false },
+        { id: 4, label: "ฟ้า", isCheck: false },
+        { id: 5, label: "น้ำเงิน", isCheck: false },
+        { id: 6, label: "เขียว", isCheck: false },
+        { id: 7, label: "ชมพู", isCheck: false },
+        { id: 8, label: "เหลือง", isCheck: false },
+        { id: 9, label: "ส้ม", isCheck: false },
+        { id: 10, label: "แดง", isCheck: false },
+        { id: 11, label: "เทา", isCheck: false },
+        { id: 12, label: "น้ำตาล", isCheck: false },
     ]
 
     const categoryOptions =  [
@@ -210,13 +214,13 @@ export default {
     const brandOptions =  [{id:1,label:"มีแบรนด์"},{id:2,label:"ไม่มีแบรนด์"}]
     const conditionOptions = [{id:1,label:"ใหม่"},{id:2,label:"เก่า"}]
     const sizeOptions =  
-    [
-        { id: 0, label: "S" ,isCheck: false },
-        { id: 1, label: "M" ,isCheck: false},
-        { id: 2, label: "L" ,isCheck: false},
-        { id: 3, label: "XL" ,isCheck: false},
-        { id: 4, label: "XXL" ,isCheck: false},
-        { id: 5, label: "Oversize" ,isCheck: false}
+    [   
+        { id: 1, label: "S" ,isCheck: false },
+        { id: 2, label: "M" ,isCheck: false},
+        { id: 3, label: "L" ,isCheck: false},
+        { id: 4, label: "XL" ,isCheck: false},
+        { id: 5, label: "XXL" ,isCheck: false},
+        { id: 6, label: "Oversize" ,isCheck: false}
     ]
     const shipFormOptions = [
     { "id": 1, "label": "กรุงเทพมหานคร" },
@@ -298,12 +302,13 @@ export default {
     { "id": 77, "label": "นราธิวาส" }
     ]
     
-    const brandId = brandOptions.find((brand) => brand.label === props.productData.product.brand)?.id;
-    const categoryId = categoryOptions.find((category) => category.label === props.productData.product.category)?.id;
-    const colorId = colorOptions.find((color) => color.label === props.productData.product.color)?.id;
-    const conditionId = conditionOptions.find((condition) => condition.label === props.productData.product.condition)?.id;
-    const sizeId = sizeOptions.find((size) => size.label === props.productData.product.size)?.id;
-    const shipFromId = shipFormOptions.find((shipFrom) => shipFrom.label === props.productData.product.shipFrom)?.id;
+    const brandId = brandOptions.find((brand) => brand.label === props.productData.product.brand)?.id || 0;
+
+    const categoryId = categoryOptions.find((category) => category.label === props.productData.product.category)?.id || 0;
+    const colorId = colorOptions.find((color) => color.label === props.productData.product.color)?.id || 0
+    const conditionId = conditionOptions.find((condition) => condition.label === props.productData.product.condition)?.id || 0;
+    const sizeId = sizeOptions.find((size) => size.label === props.productData.product.size)?.id || 0;
+    const shipFromId = shipFormOptions.find((shipFrom) => shipFrom.label === props.productData.product.shipFrom)?.id || 0;
 
 
     const infoProducts = ref({

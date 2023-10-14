@@ -17,6 +17,7 @@
         :size="item.size"
         :brand="item.brand"
         :condition="item.condition"
+        @toggle-like="toggleLike"
       />
     </div>
   </div>
@@ -35,6 +36,18 @@ export default {
     productStore.fetchWishList();
 
     return { productStore };
+  },
+  methods: {
+    toggleLike(id) {
+      axios
+        .put(`/user/add-user-wishlist/${id}`)
+        .then((response) => {
+          this.productStore.fetchWishList();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   components: {
     ProductCard,

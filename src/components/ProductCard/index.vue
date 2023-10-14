@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white p-2 rounded-xl w-[320px] h-[400px] flex flex-col relative cursor-pointer"
+    class="bg-white p-2 rounded-xl w-[320px] h-[400px] flex flex-col relative cursor-pointer z-0"
     @click="handleClick()"
   >
     <div
@@ -9,9 +9,12 @@
       <img v-if="isRecommended(rating)" :src="recommend" class="w-14 z-10" />
     </div>
 
-    <div class="px-2">
+    <div class="px-2 relative">
       <img :src="itemImage" class="rounded-xl h-[215px] w-[297px] bg-cover" />
-      <div class="absolute top-[11.8rem] right-[1.4rem]">
+      <div
+        class="absolute bottom-4 right-3 z-10"
+        @click.stop="$emit('toggleLike', id)"
+      >
         <img v-if="liked" :src="heartfilled" class="w-10" />
       </div>
     </div>
@@ -66,6 +69,7 @@ import {
 } from "@/assets/product_card";
 
 import Rating from "../../components/Rating/index.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -126,9 +130,6 @@ export default {
     },
   },
   methods: {
-    handleHeartClick() {
-      this.$emit("heartClick");
-    },
     handleSellerClick() {
       this.$emit("sellerClick");
     },

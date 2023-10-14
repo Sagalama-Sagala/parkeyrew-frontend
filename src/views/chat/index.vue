@@ -93,10 +93,19 @@ export default {
     Container,
   },
   methods: {
+    handleSellerChat() {},
+    handleCustomerChat() {},
     handleChatMenu(menuIndex) {
       this.chatMenu.forEach((item, index) => {
         item.isActive = index === menuIndex;
       });
+      if (menuIndex === 0) {
+        socket.emit("getRooms");
+      } else if (menuIndex === 1) {
+        socket.emit("getSellerRooms");
+      } else if (menuIndex === 2) {
+        socket.emit("getCustomerRooms");
+      }
     },
     handleChatPrivate(room) {
       this.chatStore.setChatRoom(room);

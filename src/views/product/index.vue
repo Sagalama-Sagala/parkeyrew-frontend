@@ -49,14 +49,19 @@
               class="flex md:flex-col md:justify-center justify-between items-center"
             >
               <div class="flex gap-2">
-                <img
+                <img v-if="!owner"
                   :src="heart"
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center p-1 hover:bg-secondary md:w-14 w-10"
+                />
+                <img v-else
+                  :src="editIcon"
+                  class="border-[2px] border-grey rounded-xl flex justify-center items-center p-1 hover:bg-secondary md:w-[3rem] w-10 "
+                  @click="handleModal()"
                 />
                 <img
                   :src="shareArrow"
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center hover:bg-secondary md:w-14 w-10 p-2"
-                  @click="handleModal()"
+                  @click="handleLikeClick()"
                 />
               </div>
               <span>สินค้าคงเหลือ: {{ infoProducts?.product?.remain }}</span>
@@ -173,6 +178,7 @@
       :isModalOpen="isModalOpen"
       @toggleModal="handleModal"
       :productData="infoProducts.product"
+      @handleOk="handleOk"
     />
   </div>
 </template>
@@ -190,7 +196,7 @@ import Rating from "@/components/Rating/index.vue";
 import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
-import { shareArrow, heart, chat, call } from "@/assets/product";
+import { shareArrow, heart, chat, call,editIcon } from "@/assets/product";
 import { recommend } from "@/assets/product_card";
 
 export default {
@@ -200,6 +206,7 @@ export default {
     const router = useRouter();
     const productId = route.params.id;
     const chatStore = useChatStore();
+    const owner = true;
     axios
       .get(`/product/get-info-product-page/${productId}`)
       .then((response) => {
@@ -221,7 +228,7 @@ export default {
       });
     };
 
-    return { infoProducts, connectChatRoom };
+    return { infoProducts, connectChatRoom, owner,productId};
   },
   components: {
     ProductCard,
@@ -235,10 +242,49 @@ export default {
     greet(sellerNAme) {
       console.log(`you click ${sellerNAme}`);
     },
-    handleLikeClick() {},
+    handleLikeClick() {
+
+    },
     formatDate,
     handleModal() {
       this.isModalOpen = !this.isModalOpen;
+    },
+    handleOk(value,resetData) {
+      
+      const newData =
+      {
+          "productId": this.productId,
+          "name": value.name,
+          "price": value.price,
+          "deliveryFee": value.deliveryFee,
+          "description": value.description,
+          "brand": value.brand,
+          "color": value.color,
+          "size": value.size,
+          "category": value.category,
+          "condition": value.condition,
+          "sendFrom": value.sendFrom,
+          "remain": value.remain,
+        }
+        axios.post('product/edit-product-info', newData, {
+        headers: { Authorization : "Bearer " + `${localStorage.getItem('token')}`,  }
+        })
+      .then((response) => {
+        const oldOwner = this.infoProducts.product.owner;
+        this.infoProducts.product = response.data; 
+        this.infoProducts.product.owner = oldOwner;
+        resetData();
+        this.isModalOpen = false;
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        err.response.data.message.forEach(item=>
+        {
+          alert(item)
+        }
+        )
+      });
+
     },
   },
   data() {
@@ -248,6 +294,7 @@ export default {
       recommend,
       chat,
       call,
+      editIcon,
       selectedImageIndex: 0,
       ProductImage: [T1, T2, T3, T4, call, chat, heart],
       isModalOpen: false,

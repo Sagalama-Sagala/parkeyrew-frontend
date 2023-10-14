@@ -227,7 +227,7 @@ export default{
     {
       this.isModalOpen = !this.isModalOpen;
     },
-    handleOk(value)
+    handleOk(value,resetData)
     {
         const newData =
       {
@@ -248,6 +248,8 @@ export default{
         })
       .then((response) => {
         console.log(response.data);
+        resetData();
+        this.isModalOpen = false;
       })
       .catch((err) => {
         console.log(err.response.data.message);
@@ -257,7 +259,8 @@ export default{
         }
         )
       });
-      console.log(newData )
+      
+      //console.log(infoProducts)
       
     }
     

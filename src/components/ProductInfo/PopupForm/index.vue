@@ -72,13 +72,13 @@
                         </div>
                         <div class="flex  items-center md:my-5 justify-center"> 
                             <h1 class="w-[4rem]">สภาพ</h1>
-                            <input class="border-[1px] border-black w-[6rem]" v-model.number="infoProducts.condition"/>
+                            <input type="number" class="border-[1px] border-black w-[6rem]" v-model.number="infoProducts.condition"/>
                         </div>
                     </div>
                     <div class="md:w-[12rem] ">
                         <div class="flex items-center my-5 justify-center"> 
                             <h1 class="w-[4rem]">ราคา</h1>
-                            <input class="border-[1px] border-black w-[6rem]" v-model.number="infoProducts.price"/>
+                            <input type="number" class="border-[1px] border-black w-[6rem]" v-model.number="infoProducts.price"/>
                         </div>
                         <div class="flex  items-center my-5 justify-center"> 
                             <h1 class="w-[4rem]">จำนวน</h1>
@@ -111,7 +111,7 @@
                     </div>
                     <div class="flex items-center justify-center w-[12rem] "> 
                         <h1 class="w-[4rem]">ค่าส่ง</h1>
-                        <input v-model.number="infoProducts.deliveryFee" class="border-[1px] border-black w-[6rem]"/>
+                        <input  type="number" v-model.number="infoProducts.deliveryFee" class="border-[1px] border-black w-[6rem]"/>
                     </div>
                 </div>
             </div>
@@ -161,22 +161,21 @@ export default {
       this.$emit("toggleModal");
     },
     handleOk() {
-       this.$emit("handleOk",this.infoProducts)
-       this.handleReset();
+       this.$emit("handleOk",this.infoProducts,this.handleReset)
     },
     handleReset()
     {
-        this.infoProducts.brand = '';
-        this.infoProducts.category = '';
+        this.infoProducts.brand = '0';
+        this.infoProducts.category = '0';
         this.infoProducts.condition = 0;
-        this.infoProducts.sendFrom = '';
-        this.infoProducts.size = '';
+        this.infoProducts.sendFrom = '0';
+        this.infoProducts.size = '0';
         this.infoProducts.price = 0;
-        this.infoProducts.description = '';
-        this.infoProducts.name = '';
+        this.infoProducts.description = '0';
+        this.infoProducts.name = '0';
         this.infoProducts.remain = 0;
         this.infoProducts.deliveryFee = 0;
-        this.infoProducts.color = '';
+        this.infoProducts.color = '0';
     },
     handleIncrese()
     {
@@ -184,18 +183,19 @@ export default {
     },
     handleDecrese()
     {
-        this.infoProducts.remain -= 1
+        if(this.infoProducts.remain > 0)
+        {this.infoProducts.remain -= 1}
     }
   },
   setup(props)
   {
     const infoProducts = reactive({
-    brand: '',
-    category: '',
-    color: '',
+    brand: '0',
+    category: '0',
+    color: '0',
     condition: 0,
-    sendFrom: '',
-    size: '',
+    sendFrom: '0',
+    size: '0',
     price: 0,
     description: '',
     name: '',
@@ -219,7 +219,7 @@ export default {
     });
     return {infoProducts}
   },
-  data(props)
+  data()
   {
     return {
       imageList: [],

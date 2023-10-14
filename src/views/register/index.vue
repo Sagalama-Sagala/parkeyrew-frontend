@@ -118,8 +118,7 @@ export default {
       } else if (this.formValue.firstname.match(/[a-z]/) === null) {
         this.formError.firstname = "ชื่อผู้ใช้ต้องประกอบไปด้วย a-z";
       } else if (this.formValue.firstname.length > 30) {
-        this.formError.firstname =
-          "ชื่อผู้ใช้ต้องมีความยาวไม่มากกว่า 30 ตัวอักษร";
+        this.formError.firstname = "ชื่อต้องมีความยาวไม่มากกว่า 30 ตัวอักษร";
       }
 
       //validation สำหรับ lastname
@@ -128,7 +127,7 @@ export default {
       } else if (this.formValue.lastname.match(/[a-z]/) === null) {
         this.formError.lastname = "นามสกุลต้องประกอบไปด้วย a-z";
       } else if (this.formValue.lastname.length > 30) {
-        this.formError.lastname = "นามสกุลต้องไม่มากกว่า 20 ตัวอักษร";
+        this.formError.lastname = "นามสกุลต้องมีความยาวไม่มากกว่า 30 ตัวอักษร";
       }
 
       //validation สำหรับ username

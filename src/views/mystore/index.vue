@@ -52,7 +52,6 @@
             @close="closeFollower"
             title="ผู้ติดตาม"
           >
-            TEST Following Dialog
           </Dialog>
           |
           <div class="hover:cursor-pointer" @click="openFollowing">

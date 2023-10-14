@@ -78,7 +78,7 @@
                   v-model="Option.isCheck"
                   :value="Option.id"
                   class="w-[1.2rem]"
-                  @click="handleBrandCheck(Option)"
+                  @click.prevent.stop="handleBrandCheck(Option)"
                 />
                 <label>{{ Option.label }}</label>
               </div>
@@ -318,7 +318,7 @@ export default {
       this.$router.push(`/`);
     },
     storeVariableToUrl(object) {
-      this.$router.push({
+      this.$router.replace({
         path: `/filter/${this.$route.params.id}`,
         query: object,
       });

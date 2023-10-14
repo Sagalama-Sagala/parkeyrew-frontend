@@ -118,8 +118,7 @@ export default {
       } else if (this.formValue.firstname.match(/[a-z]/) === null) {
         this.formError.firstname = "ชื่อผู้ใช้ต้องประกอบไปด้วย a-z";
       } else if (this.formValue.firstname.length > 30) {
-        this.formError.firstname =
-          "ชื่อผู้ใช้ต้องมีความยาวไม่มากกว่า 30 ตัวอักษร";
+        this.formError.firstname = "ชื่อต้องมีความยาวไม่มากกว่า 30 ตัวอักษร";
       }
 
       //validation สำหรับ lastname
@@ -128,7 +127,7 @@ export default {
       } else if (this.formValue.lastname.match(/[a-z]/) === null) {
         this.formError.lastname = "นามสกุลต้องประกอบไปด้วย a-z";
       } else if (this.formValue.lastname.length > 30) {
-        this.formError.lastname = "นามสกุลต้องไม่มากกว่า 20 ตัวอักษร";
+        this.formError.lastname = "นามสกุลต้องมีความยาวไม่มากกว่า 30 ตัวอักษร";
       }
 
       //validation สำหรับ username
@@ -163,44 +162,48 @@ export default {
       if (this.formValue.password === "") {
         this.formError.password = "กรุณากรอกรหัสผ่าน";
       } else if (this.formValue.password.match(/[a-z]/) === null) {
-        this.formError.password = "รหัสผ่านต้องประกอบไปด้วย a-z";
-      } else if (this.formValue.password.match(/[A-Z]/) === null) {
-        this.formError.password = "รหัสผ่านต้องประกอบไปด้วย A-Z";
-      } else if (this.formValue.password.match(/[0-9]/) === null) {
-        this.formError.password = "รหัสผ่านต้องประกอบไปด้วย 0-9";
-      } else if (this.formValue.password.match(/[!@#$%^&*]/) === null) {
         this.formError.password =
-          "รหัสผ่านต้องประกอบไปด้วยอักขระพิเศษ (!@#$%^&*)";
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.password.match(/[A-Z]/) === null) {
+        this.formError.password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.password.match(/[0-9]/) === null) {
+        this.formError.password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.password.match(/[!@#$%^&*_-]/) === null) {
+        this.formError.password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
       } else if (this.formValue.password.length < 8) {
-        this.formError.password = "รหัสผ่านต้องยาวมากกว่า 7 ตัวอักษร";
+        this.formError.password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
       }
 
       //validation สำหรับ confirm_password
       if (this.formValue.confirm_password === "") {
         this.formError.confirm_password = "กรุณากรอกรหัสผ่าน";
       } else if (this.formValue.confirm_password.match(/[a-z]/) === null) {
-        this.formError.confirm_password = "รหัสผ่านต้องประกอบไปด้วย a-z";
-      } else if (this.formValue.confirm_password.match(/[A-Z]/) === null) {
-        this.formError.confirm_password = "รหัสผ่านต้องประกอบไปด้วย A-Z";
-      } else if (this.formValue.confirm_password.match(/[0-9]/) === null) {
-        this.formError.confirm_password = "รหัสผ่านต้องประกอบไปด้วย 0-9";
-      } else if (this.formValue.confirm_password.match(/[!@#$%^&*]/) === null) {
         this.formError.confirm_password =
-          "รหัสผ่านต้องประกอบไปด้วยอักขระพิเศษ (!@#$%^&*)";
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.confirm_password.match(/[A-Z]/) === null) {
+        this.formError.confirm_password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.confirm_password.match(/[0-9]/) === null) {
+        this.formError.confirm_password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (
+        this.formValue.confirm_password.match(/[!@#$%^&*_-]/) === null
+      ) {
+        this.formError.confirm_password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
       } else if (this.formValue.confirm_password.length < 8) {
-        this.formError.confirm_password = "รหัสผ่านต้องยาวมากกว่า 7 ตัวอักษร";
+        this.formError.confirm_password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
       } else if (this.formValue.confirm_password !== this.formValue.password) {
         this.formError.confirm_password = "รหัสผ่านไม่ตรงกัน";
       }
     },
     next() {
       this.validationPage1();
-
-      // if (
-      //   this.formValue.firstname.length > 0 &&
-      //   this.formValue.lastname.length > 0 &&
-      //   this.formValue.username.length > 0
-      // )
 
       //ถ้า username หรือ password มี error ให้จบฟังก์ชันทันที
       if (

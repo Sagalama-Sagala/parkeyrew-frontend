@@ -9,6 +9,7 @@
       placeholder="เบอร์โทร"
       v-model="formValue.phone"
       @input="updateForm('phone', $event.target.value)"
+      v-on:keypress="isAllowed($event)"
     />
     <p v-if="formError.phone !== ''" class="text-red-400 text-sm">
       {{ formError?.phone }}
@@ -20,6 +21,7 @@
       placeholder="รหัสผ่าน"
       v-model="formValue.password"
       @input="updateForm('password', $event.target.value)"
+      v-on:keypress="isAllowed($event)"
     />
     <p v-if="formError.password !== ''" class="text-red-400 text-sm">
       {{ formError?.password }}
@@ -31,6 +33,7 @@
       placeholder="ยืนยันรหัสผ่าน"
       v-model="formValue.confirm_password"
       @input="updateForm('confirm_password', $event.target.value)"
+      v-on:keypress="isAllowed($event)"
     />
     <p v-if="formError.confirm_password !== ''" class="text-red-400 text-sm">
       {{ formError?.confirm_password }}
@@ -45,6 +48,14 @@ export default {
   methods: {
     updateForm(label, data) {
       this.$emit("updateFormValue", { label, data });
+    },
+    isAllowed(e) {
+      let char = String.fromCharCode(e.keyCode); // Get the character
+      if (/^[A-Za-z0-9!@#$%^&*_-]+$/.test(char)) {
+        return true; // Match with regex
+      } else {
+        e.preventDefault(); // If not match, don't add to input text
+      }
     },
   },
 };

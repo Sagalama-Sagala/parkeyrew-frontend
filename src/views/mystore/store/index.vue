@@ -47,13 +47,7 @@
           <div class="hover:cursor-pointer" @click="openFollower">
             <b>{{ profile?.follower?.length }} ผู้ติดตาม</b>
           </div>
-          <Dialog
-            v-if="followerDialog"
-            @close="closeFollower"
-            title="ผู้ติดตาม"
-          >
-            TEST Following Dialog
-          </Dialog>
+          <Dialog v-if="followerDialog" @close="closeFollower" title="ผู้ติดตาม" />
           |
           <div class="hover:cursor-pointer" @click="openFollowing">
             <b>{{ profile?.following?.length }} กำลังติดตาม</b>

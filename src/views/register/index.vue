@@ -168,9 +168,9 @@ export default {
         this.formError.password = "รหัสผ่านต้องประกอบไปด้วย A-Z";
       } else if (this.formValue.password.match(/[0-9]/) === null) {
         this.formError.password = "รหัสผ่านต้องประกอบไปด้วย 0-9";
-      } else if (this.formValue.password.match(/[!@#$%^&*]/) === null) {
+      } else if (this.formValue.password.match(/[!@#$%^&*_-]/) === null) {
         this.formError.password =
-          "รหัสผ่านต้องประกอบไปด้วยอักขระพิเศษ (!@#$%^&*)";
+          "รหัสผ่านต้องประกอบไปด้วยอักขระพิเศษ (!@#$%^&*_-)";
       } else if (this.formValue.password.length < 8) {
         this.formError.password = "รหัสผ่านต้องยาวมากกว่า 7 ตัวอักษร";
       }
@@ -184,9 +184,11 @@ export default {
         this.formError.confirm_password = "รหัสผ่านต้องประกอบไปด้วย A-Z";
       } else if (this.formValue.confirm_password.match(/[0-9]/) === null) {
         this.formError.confirm_password = "รหัสผ่านต้องประกอบไปด้วย 0-9";
-      } else if (this.formValue.confirm_password.match(/[!@#$%^&*]/) === null) {
+      } else if (
+        this.formValue.confirm_password.match(/[!@#$%^&*_-]/) === null
+      ) {
         this.formError.confirm_password =
-          "รหัสผ่านต้องประกอบไปด้วยอักขระพิเศษ (!@#$%^&*)";
+          "รหัสผ่านต้องประกอบไปด้วยอักขระพิเศษ (!@#$%^&*_-)";
       } else if (this.formValue.confirm_password.length < 8) {
         this.formError.confirm_password = "รหัสผ่านต้องยาวมากกว่า 7 ตัวอักษร";
       } else if (this.formValue.confirm_password !== this.formValue.password) {

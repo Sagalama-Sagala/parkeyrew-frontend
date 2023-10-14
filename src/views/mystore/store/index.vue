@@ -171,108 +171,6 @@ export default {
       shareIcon,
       profileURL:
         "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
-      username: "HARIBO Goldbears",
-      reviewStar: 4,
-      follower: 29,
-      following: 9,
-      description:
-        "สวัสดีครับ ท่านสมาชิกชมรมคนชอบ🐻 วันพระวันเจ้าไม่เว้นกันเลยอยากจะดูแต่🐻 ไม่เข้าใจจริงๆเลยทั้งเด็กทั้งผู้ใหญ่ตะโกนหาสรรหาแต่🐻 เป็นอะไรกัน! เฮ้ยย ",
-      products: [
-        {
-          id: "a0000001",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.45,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 0, label: "no-brand" },
-          ],
-        },
-        {
-          id: "a0000002",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-        {
-          id: "a0000001",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.45,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 0, label: "no-brand" },
-          ],
-        },
-        {
-          id: "a0000001",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.45,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 0, label: "no-brand" },
-          ],
-        },
-        {
-          id: "a0000002",
-          recommended: true,
-          title: "ขยะ",
-          price: 300,
-          productImage:
-            "https://i.kym-cdn.com/photos/images/newsfeed/002/652/421/280.jpg",
-          rating: 4.55,
-          sellerImage:
-            "https://i0.wp.com/leaguealertsofficial.com/wp-content/uploads/2020/04/shaq.png",
-          liked: true,
-          tags: [
-            { id: 0, label: "สีขาว" },
-            { id: 1, label: "เล็ก" },
-            { id: 2, label: "50%" },
-            { id: 2, label: "เล็กมาก" },
-            { id: 2, label: "ถูกเกิน" },
-            { id: 2, label: "ลดได้อีกๆ" },
-          ],
-        },
-      ],
     };
   },
   methods: {
@@ -312,11 +210,7 @@ export default {
         remain: value.remain,
       };
       axios
-        .post("product/create-product", newData, {
-          headers: {
-            Authorization: "Bearer " + `${localStorage.getItem("token")}`,
-          },
-        })
+        .post("product/create-product", newData)
         .then((response) => {
           console.log(response.data);
           resetData();

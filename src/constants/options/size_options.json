@@ -1,0 +1,11 @@
+{
+  "SIZE": [
+    { "id": "ไม่มีไซส์", "label": "ไม่มีไซส์" },
+    { "id": "S", "label": "S" },
+    { "id": "M", "label": "M" },
+    { "id": "L", "label": "L" },
+    { "id": "XL", "label": "XL" },
+    { "id": "XXL", "label": "XXL" },
+    { "id": "Oversize", "label": "Oversize" }
+  ]
+}

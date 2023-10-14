@@ -75,13 +75,15 @@
         class="flex md:flex-row flex-col gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 pb-6"
       >
         <div
-          class="bg-tertiary flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+          class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+          :class="page === 'store' ? 'bg-tertiary' : 'bg-secondary'"
           @click="routeTomyStore()"
         >
           <h1><b>ร้านค้า</b></h1>
         </div>
         <div
-          class="bg-secondary flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+          class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+          :class="page === 'review' ? 'bg-tertiary' : 'bg-secondary'"
           @click="routeToReview()"
         >
           <h1><b>รีวิว</b></h1>
@@ -143,7 +145,7 @@
         page: "store",
         isModalOpen:false,
         followerDialog: false,
-      followingDialog: false,
+        followingDialog: false,
       }
     },
     methods : {

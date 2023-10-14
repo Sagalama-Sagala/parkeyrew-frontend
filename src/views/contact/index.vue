@@ -25,20 +25,20 @@
         </transition>        
         
       
-        <button class="absolute top-0 left-0 z-30 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none"
+        <button class="absolute top-0 left-0 z-10 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none"
                 @click=prevSlide      
         >
           <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 dark:bg-gray-300 group-hover:bg-white/50 dark:group-hover:bg-gray-500  ">
             <img :src="prev" class="w-4 h-4"/>
           </span>
         </button>
-        <div  class="absolute z-20 flex justify-center  space-x-2 items-end h-full p-4 w-full ">
+        <div  class="absolute z-10 flex justify-center  space-x-2 items-end h-full p-4 w-full ">
           <button v-for="i in 9" type="button" class="w-3 h-3 rounded-full " 
             :class="i-1 === currentStep ? 'bg-yellow-400' : 'bg-gray-300'" 
             @click="pushStep(i-1)">
           </button>
         </div>
-        <button  class="absolute top-0 right-0 z-30 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none"
+        <button  class="absolute top-0 right-0 z-10 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none"
                 @click=nextSlide 
         >
           <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 dark:bg-gray-300 group-hover:bg-white/50 dark:group-hover:bg-gray-500 ">

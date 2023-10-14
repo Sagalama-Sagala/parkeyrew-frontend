@@ -216,6 +216,7 @@ export default {
         console.log(response);
         infoProducts.value = response.data;
         isUserProduct.value = response.data.isUserProduct;
+        console.log(isUserProduct.value)
         console.log(infoProducts.value);
       })
       .catch((err) => {
@@ -258,7 +259,6 @@ export default {
     greet(sellerNAme) {
       console.log(`you click ${sellerNAme}`);
     },
-    handleLikeClick() {},
     formatDate,
     handleModal() {
       this.isModalOpen = !this.isModalOpen;

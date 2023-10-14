@@ -60,14 +60,17 @@
                     <input
                       class="border-[1px] border-black md:w-[20rem] w-[10rem] rounded px-2"
                       v-model="infoProducts.name"
+                      placeholder="ชื่อสินค้า"
                     />
                   </div>
                   <div class="flex flex-col md:flex-row">
                     <h1 class="md:w-[8rem]">คำอธิบายสินค้า</h1>
-                    <textarea
-                      class="border-[1px] border-black md:w-[20rem] w-[10rem] rounded px-2"
-                      v-model="infoProducts.description"
-                    ></textarea>
+                      <textarea
+                        class="border-[1px] border-black md:w-[20rem] w-[10rem] rounded px-2"
+                        v-model="infoProducts.description"
+                        placeholder="ชื่อสินค้า"
+                      >
+                      </textarea>
                   </div>
                 </div>
               </div>
@@ -76,10 +79,11 @@
             <div>
               <h1 class="text-xl">หมวดหมู่</h1>
               <div class="flex justify-center">
-                <div class="flex md:w-[24rem] items-center my-5">
+                <div class="flex md:w-[24rem] justify-center my-5 flex-col">
                   <select
                     class="border-[1px] border-black w-[10rem] rounded px-1"
                     v-model="infoProducts.category"
+                    :class="infoProducts.category === '0' ? 'text-gray-400' : ''"
                   >
                     <option disabled selected value="0">เลือกหมวดหมู่</option>
                     <option
@@ -91,6 +95,7 @@
                     </option>
                   </select>
                 </div>
+                
               </div>
             </div>
 
@@ -98,11 +103,12 @@
               <h1 class="text-xl">รายละเอียด</h1>
               <div class="flex md:justify-center md:flex-row flex-col gap-0">
                 <div class="md:w-[12rem]">
-                  <div class="flex items-center my-5 justify-center">
+                  <div class="flex item-center my-5 justify-center">
                     <h1 class="w-[4rem]">แบรนด์</h1>
                     <select
                       class="border-[1px] border-black w-[6rem] rounded px-1"
                       v-model="infoProducts.brand"
+                      :class="infoProducts.brand === '0' ? 'text-gray-400' : ''"
                     >
                       <option disabled selected value="0">เลือกแบรนด์</option>
                       <option
@@ -114,11 +120,13 @@
                       </option>
                     </select>
                   </div>
+                  
                   <div class="flex items-center my-5 justify-center">
                     <h1 class="w-[4rem]">สี</h1>
                     <select
                       class="border-[1px] border-black w-[6rem] rounded px-1"
                       v-model="infoProducts.color"
+                      :class="infoProducts.color === '0' ? 'text-gray-400' : ''"
                     >
                       <option disabled selected value="0">เลือกสี</option>
                       <option
@@ -169,8 +177,9 @@
                   <div class="flex items-center my-5 justify-center">
                     <h1 class="w-[4rem]">ไซต์</h1>
                     <select
-                      class="border-[1px] border-black w-[6rem] rounded px-1"
+                      class="border-[1px] border-black w-[6rem] rounded px-1 "
                       v-model="infoProducts.size"
+                      :class="infoProducts.size === '0' ? 'text-gray-400' : ''"
                     >
                       <option disabled selected value="0">เลือกไซต์</option>
                       <option
@@ -194,8 +203,9 @@
                   <select
                     class="border-[1px] border-black w-[6rem] rounded px-1"
                     v-model="infoProducts.sendFrom"
+                    :class="infoProducts.sendFrom === '0' ? 'text-gray-400' : ''"
                   >
-                    <option disabled selected value="0">เลือกจังหวัด</option>
+                    <option disabled selected value="0" >เลือกจังหวัด</option>
                     <option
                       v-for="option in thaiProvinces.RECORDS"
                       :key="option.name_th"
@@ -215,10 +225,15 @@
                 </div>
               </div>
             </div>
-
+            <div class="flex flex-col items-center justify-center">
+                <label class="text-red-400 text-sm" v-for="text in warnings" :key="text">
+                {{ text }}
+                </label>
+              </div>
             <div class="flex gap-6 h-[2.5rem] md:justify-end justify-center">
+              
               <button
-                @click="handleToggleModal"
+                @click="handleClose"
                 class="text-[#969696] hover:text-black duration-100"
               >
                 ยกเลิก
@@ -276,7 +291,9 @@ export default {
       this.$emit("toggleModal");
     },
     handleOk() {
-      this.$emit("handleOk", this.infoProducts, this.handleReset);
+      if (this.validateData()) {
+        this.$emit("handleOk", this.infoProducts, this.handleReset);
+      }
     },
     handleReset() {
       this.infoProducts.brand = "0";
@@ -285,8 +302,8 @@ export default {
       this.infoProducts.sendFrom = "0";
       this.infoProducts.size = "0";
       this.infoProducts.price = 0;
-      this.infoProducts.description = "0";
-      this.infoProducts.name = "0";
+      this.infoProducts.description = "";
+      this.infoProducts.name = "";
       this.infoProducts.remain = 0;
       this.infoProducts.deliveryFee = 0;
       this.infoProducts.color = "0";
@@ -299,15 +316,95 @@ export default {
         this.infoProducts.remain -= 1;
       }
     },
+    handleClose() {
+      this.handleToggleModal();
+      this.handleReset();
+    },
+    validateData() {
+      let isValid = true;
+      const warnings = [];
+      //NAME
+      if (!this.infoProducts.name) {
+        warnings.push("Please enter the product name.");
+        isValid = false;
+      }
+      //Description
+      if (!this.infoProducts.description) {
+        warnings.push("Please enter the product description.");
+        isValid = false;
+      }
+      //Category
+      if (this.infoProducts.category === "0") {
+        warnings.push("Please select a category.");
+        isValid = false;
+      }
+      //Brand
+      if (this.infoProducts.brand === "0") {
+        warnings.push("Please select a brand.");
+        isValid = false;
+      }
+      //Color
+      if (this.infoProducts.color === "0") {
+        warnings.push("Please select a color.");
+        isValid = false;
+      }
+      //Condition
+      if (this.infoProducts.condition === 0) {
+        warnings.push("Please enter the product condition.");
+        isValid = false;
+      }
+      else if (this.infoProducts.condition < 51) {
+        warnings.push("Please enter the product condition more than 51%.");
+        isValid = false;
+      }
+      else if (this.infoProducts.condition > 100) {
+        warnings.push("Please enter the product condition less than 100%.");
+        isValid = false;
+      }
+      //Price
+      if (this.infoProducts.price === undefined || this.infoProducts.price === null || this.infoProducts.price  === '' ) {
+        warnings.push("Please enter the product price.");
+        isValid = false;
+      }
+      else if (this.infoProducts.price < 0) {
+        warnings.push("Please enter the product price more than 0 baht.");
+        isValid = false;
+      }
+      //Remain
+      if (this.infoProducts.remain === 0) {
+        warnings.push("Please enter the product remain.");
+        isValid = false;
+      }
+      //Size
+      if (this.infoProducts.size === "0") {
+        warnings.push("Please select a size.");
+        isValid = false;
+      }
+      //SendFrom
+      if (this.infoProducts.sendFrom === "0") {
+        warnings.push("Please select a province.");
+        isValid = false;
+      }
+      //DeliveryFee
+      if (this.infoProducts.deliveryFee === undefined || this.infoProducts.deliveryFee === null || this.infoProducts.deliveryFee === '' ) {
+        warnings.push("Please enter the delivery fee.");
+        isValid = false;
+      }
+      this.warnings = warnings;
+      if (!isValid) {
+        console.log("Data validation failed: ", this.warnings);
+      }
+      return isValid;
+    },
   },
   setup(props) {
     const infoProducts = reactive({
-      brand: "",
-      category: "",
-      color: "",
+      brand: "0",
+      category: "0",
+      color: "0",
       condition: 0,
-      sendFrom: "",
-      size: "",
+      sendFrom: "0",
+      size: "0",
       price: 0,
       description: "",
       name: "",
@@ -340,12 +437,20 @@ export default {
       brandOptions,
       colorOptions,
       sizeOptions,
+      warnings: [],
     };
   },
 };
 </script>
 
 <style scoped>
+
+option {
+  color: black;
+}
+option[disabled] {
+  display: none;
+}
 .scrollable-container::-webkit-scrollbar {
   width: 12px;
 }

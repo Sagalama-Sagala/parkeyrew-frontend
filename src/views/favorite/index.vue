@@ -2,7 +2,7 @@
   <div class="bg-primary min-h-screen min-w-full pt-16">
     <div class="flex flex-wrap p-10 gap-5 md:justify-start justify-center">
       <ProductCard
-        v-for="(item, index) in products.wishList"
+        v-for="(item, index) in productStore.wishList?.wishList"
         :id="item._id"
         :key="item.title"
         :is-recommended="item.recommended"
@@ -12,7 +12,7 @@
         :rating="item.owner.reviewStar"
         :seller-image="item.sellerImage"
         :seller-name="item.owner.username"
-        :liked="item.liked"
+        :liked="true"
         :color="item.color"
         :size="item.size"
         :brand="item.brand"
@@ -26,22 +26,16 @@
 import ProductCard from "@/components/ProductCard/index.vue";
 import { ref } from "vue";
 import axios from "axios";
+import { useProductStore } from "@/store/product.store.js";
 
 export default {
   setup() {
     const products = ref({});
+    const productStore = useProductStore();
 
-    axios
-      .get("/user/get-user-wishlist")
-      .then((response) => {
-        console.log(response.data);
-        products.value = response.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    productStore.fetchWishList();
 
-    return { products };
+    return { products, productStore };
   },
   components: {
     ProductCard,

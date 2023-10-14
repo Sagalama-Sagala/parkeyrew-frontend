@@ -5,10 +5,10 @@
     @click="handleClickOutside"
   >
     <div class="w-full h-full flex justify-center items-center">
-      <div
-        class="w-[40rem] md:h-[40rem] h-[30rem] bg-white py-2 rounded-xl flex flex-col justify-center items-center overflow-y-scroll overflow-x-hidden scrollable-container mx-10"
+      <div 
+        class="w-[40rem] md:h-[40rem] h-[30rem] bg-white py-2 rounded-xl flex flex-col  items-center mx-10  overflow-auto scrollable-container  "
       >
-        <div class="md:mt-[8rem] mt-[30rem] flex flex-col md:items-start">
+        <div class="flex flex-col md:items-start">
           <div class="md:mt-[0rem] mt-[1rem]">
             <div>
               <h1 class="text-xl my-5">รูปภาพสินค้า</h1>

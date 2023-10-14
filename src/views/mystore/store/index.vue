@@ -104,7 +104,7 @@
           class="flex md:flex-row md:flex-wrap flex-col w-full gap-5 justify-start md:pl-[5.2rem]"
         >
           <ProductCard
-            v-for="(item, index) in profile.products"
+            v-for="(item, index) in profile.products?"
             :id="item._id"
             :key="item.name"
             :is-recommended="item.recommended"

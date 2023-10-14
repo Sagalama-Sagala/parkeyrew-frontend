@@ -90,28 +90,28 @@
         </div>
       </div>
     </div>
-        <Store v-if="page === 'store'" @toggleModal="handleToggle"/>
-        <Review v-else/>
-        <PopupForm
-            :isModalOpen="this.isModalOpen"
-            @toggleModal="handleToggle"
-            @handleOk="handleOk"
-        />
-    </div>
-  </template>
-  
-  <script >
-  import Review from "@/components/Mystore/Review/index.vue";
-  import Store from "@/components/Mystore/Store/index.vue";
-  import Dialog from "@/components/Mystore/Dialog/index.vue";
-  import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
-  import Rating from "@/components/Rating/index.vue";
-  import {editIcon, shareIcon } from "@/assets/mystore";
-  import { ref } from "vue";
-  import axios from 'axios';
-  
-  export default{
-    setup() {
+    <Store v-if="page === 'store'" @toggleModal="handleToggle" />
+    <Review v-else />
+    <PopupForm
+      :isModalOpen="this.isModalOpen"
+      @toggleModal="handleToggle"
+      @handleOk="handleOk"
+    />
+  </div>
+</template>
+
+<script>
+import Review from "@/components/Mystore/Review/index.vue";
+import Store from "@/components/Mystore/Store/index.vue";
+import Dialog from "@/components/Mystore/Dialog/index.vue";
+import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
+import Rating from "@/components/Rating/index.vue";
+import { editIcon, shareIcon } from "@/assets/mystore";
+import { ref } from "vue";
+import axios from "axios";
+
+export default {
+  setup() {
     const profile = ref({});
     axios
       .get("/user/get-user-page-by-id")
@@ -125,88 +125,85 @@
 
     return { profile };
   },
-    components: {
-      Rating,
-      PopupForm,
-      Dialog,
-      Store,
-      Review,
+  components: {
+    Rating,
+    PopupForm,
+    Dialog,
+    Store,
+    Review,
+  },
+  data() {
+    return {
+      editIcon,
+      shareIcon,
+      profileURL:
+        "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
+      username: "HARIBO Goldbears",
+      reviewStar: 4,
+      follower: 29,
+      following: 9,
+      description:
+        "สวัสดีครับ ท่านสมาชิกชมรมคนชอบ🐻 วันพระวันเจ้าไม่เว้นกันเลยอยากจะดูแต่🐻 ไม่เข้าใจจริงๆเลยทั้งเด็กทั้งผู้ใหญ่ตะโกนหาสรรหาแต่🐻 เป็นอะไรกัน! เฮ้ยย ",
+      page: "store",
+      isModalOpen: false,
+      followerDialog: false,
+      followingDialog: false,
+    };
+  },
+  methods: {
+    routeTomyStore() {
+      this.page = "store";
     },
-    data(){
-      return{
-        editIcon,
-        shareIcon,
-        profileURL: "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
-        username: "HARIBO Goldbears",
-        reviewStar: 4,
-        follower: 29,
-        following: 9,
-        description: "สวัสดีครับ ท่านสมาชิกชมรมคนชอบ🐻 วันพระวันเจ้าไม่เว้นกันเลยอยากจะดูแต่🐻 ไม่เข้าใจจริงๆเลยทั้งเด็กทั้งผู้ใหญ่ตะโกนหาสรรหาแต่🐻 เป็นอะไรกัน! เฮ้ยย ",
-        page: "store",
-        isModalOpen:false,
-        followerDialog: false,
-        followingDialog: false,
-      }
+    routeToReview() {
+      this.page = "review";
     },
-    methods : {
-      routeTomyStore(){
-        this.page = "store"
-      },
-      routeToReview(){
-        this.page = "review"
-      },
-      openFollower(){
+    openFollower() {
       this.followerDialog = true;
     },
-    closeFollower(){
+    closeFollower() {
       this.followerDialog = false;
     },
-    openFollowing(){
+    openFollowing() {
       this.followingDialog = true;
     },
-    closeFollowing(){
+    closeFollowing() {
       this.followingDialog = false;
     },
-      handleToggle()
-    {
+    handleToggle() {
       this.isModalOpen = !this.isModalOpen;
     },
-    handleOk(value,resetData)
-    {
-        const newData =
-      {
-          "name": value.name,
-          "price": value.price,
-          "deliveryFee": value.deliveryFee,
-          "description": value.description,
-          "brand": value.brand,
-          "color": value.color,
-          "size": value.size,
-          "category": value.category,
-          "condition": value.condition,
-          "sendFrom": value.sendFrom,
-          "remain": value.remain,
-        }
-        axios.post('product/create-product', newData, {
-        headers: { Authorization : "Bearer " + `${localStorage.getItem('token')}`,  }
+    handleOk(value, resetData) {
+      const newData = {
+        name: value.name,
+        price: value.price,
+        deliveryFee: value.deliveryFee,
+        description: value.description,
+        brand: value.brand,
+        color: value.color,
+        size: value.size,
+        category: value.category,
+        condition: value.condition,
+        sendFrom: value.sendFrom,
+        remain: value.remain,
+      };
+      axios
+        .post("product/create-product", newData, {
+          headers: {
+            Authorization: "Bearer " + `${localStorage.getItem("token")}`,
+          },
         })
-      .then((response) => {
-        console.log(response.data);
-        resetData();
-        this.isModalOpen = false;
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-        err.response.data.message.forEach(item=>
-        {
-          alert(item)
-        }
-        )
-      });
-      
-      
-    }
-    }
-  }
-  </script>
-  
+        .then((response) => {
+          console.log(response.data);
+          resetData();
+          this.isModalOpen = false;
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          err.response.data.message.forEach((item) => {
+            alert(item);
+          });
+        });
+    },
+  },
+};
+</script>

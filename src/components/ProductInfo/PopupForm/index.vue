@@ -5,8 +5,8 @@
     @click="handleClickOutside"
   >
     <div class="w-full h-full flex justify-center items-center">
-      <div 
-        class="w-[40rem] md:h-[40rem] h-[30rem] bg-white py-2 rounded-xl flex flex-col  items-center mx-10  overflow-auto scrollable-container  "
+      <div
+        class="w-[40rem] md:h-[40rem] h-[30rem] bg-white py-2 rounded-xl flex flex-col items-center mx-10 overflow-auto scrollable-container"
       >
         <div class="flex flex-col md:items-start">
           <div class="md:mt-[0rem] mt-[1rem]">
@@ -65,12 +65,12 @@
                   </div>
                   <div class="flex flex-col md:flex-row">
                     <h1 class="md:w-[8rem]">คำอธิบายสินค้า</h1>
-                      <textarea
-                        class="border-[1px] border-black md:w-[20rem] w-[10rem] rounded px-2"
-                        v-model="infoProducts.description"
-                        placeholder="ชื่อสินค้า"
-                      >
-                      </textarea>
+                    <textarea
+                      class="border-[1px] border-black md:w-[20rem] w-[10rem] rounded px-2"
+                      v-model="infoProducts.description"
+                      placeholder="ชื่อสินค้า"
+                    >
+                    </textarea>
                   </div>
                 </div>
               </div>
@@ -83,7 +83,9 @@
                   <select
                     class="border-[1px] border-black w-[10rem] rounded px-1"
                     v-model="infoProducts.category"
-                    :class="infoProducts.category === '0' ? 'text-gray-400' : ''"
+                    :class="
+                      infoProducts.category === '0' ? 'text-gray-400' : ''
+                    "
                   >
                     <option disabled selected value="0">เลือกหมวดหมู่</option>
                     <option
@@ -95,7 +97,6 @@
                     </option>
                   </select>
                 </div>
-                
               </div>
             </div>
 
@@ -120,7 +121,7 @@
                       </option>
                     </select>
                   </div>
-                  
+
                   <div class="flex items-center my-5 justify-center">
                     <h1 class="w-[4rem]">สี</h1>
                     <select
@@ -177,7 +178,7 @@
                   <div class="flex items-center my-5 justify-center">
                     <h1 class="w-[4rem]">ไซต์</h1>
                     <select
-                      class="border-[1px] border-black w-[6rem] rounded px-1 "
+                      class="border-[1px] border-black w-[6rem] rounded px-1"
                       v-model="infoProducts.size"
                       :class="infoProducts.size === '0' ? 'text-gray-400' : ''"
                     >
@@ -203,9 +204,11 @@
                   <select
                     class="border-[1px] border-black w-[6rem] rounded px-1"
                     v-model="infoProducts.sendFrom"
-                    :class="infoProducts.sendFrom === '0' ? 'text-gray-400' : ''"
+                    :class="
+                      infoProducts.sendFrom === '0' ? 'text-gray-400' : ''
+                    "
                   >
-                    <option disabled selected value="0" >เลือกจังหวัด</option>
+                    <option disabled selected value="0">เลือกจังหวัด</option>
                     <option
                       v-for="option in thaiProvinces.RECORDS"
                       :key="option.name_th"
@@ -226,12 +229,15 @@
               </div>
             </div>
             <div class="flex flex-col items-center justify-center">
-                <label class="text-red-400 text-sm" v-for="text in warnings" :key="text">
+              <label
+                class="text-red-400 text-sm"
+                v-for="text in warnings"
+                :key="text"
+              >
                 {{ text }}
-                </label>
-              </div>
+              </label>
+            </div>
             <div class="flex gap-6 h-[2.5rem] md:justify-end justify-center">
-              
               <button
                 @click="handleClose"
                 class="text-[#969696] hover:text-black duration-100"
@@ -353,21 +359,22 @@ export default {
       if (this.infoProducts.condition === 0) {
         warnings.push("Please enter the product condition.");
         isValid = false;
-      }
-      else if (this.infoProducts.condition < 51) {
+      } else if (this.infoProducts.condition < 51) {
         warnings.push("Please enter the product condition more than 51%.");
         isValid = false;
-      }
-      else if (this.infoProducts.condition > 100) {
+      } else if (this.infoProducts.condition > 100) {
         warnings.push("Please enter the product condition less than 100%.");
         isValid = false;
       }
       //Price
-      if (this.infoProducts.price === undefined || this.infoProducts.price === null || this.infoProducts.price  === '' ) {
+      if (
+        this.infoProducts.price === undefined ||
+        this.infoProducts.price === null ||
+        this.infoProducts.price === ""
+      ) {
         warnings.push("Please enter the product price.");
         isValid = false;
-      }
-      else if (this.infoProducts.price < 0) {
+      } else if (this.infoProducts.price < 0) {
         warnings.push("Please enter the product price more than 0 baht.");
         isValid = false;
       }
@@ -387,7 +394,11 @@ export default {
         isValid = false;
       }
       //DeliveryFee
-      if (this.infoProducts.deliveryFee === undefined || this.infoProducts.deliveryFee === null || this.infoProducts.deliveryFee === '' ) {
+      if (
+        this.infoProducts.deliveryFee === undefined ||
+        this.infoProducts.deliveryFee === null ||
+        this.infoProducts.deliveryFee === ""
+      ) {
         warnings.push("Please enter the delivery fee.");
         isValid = false;
       }
@@ -445,7 +456,6 @@ export default {
 </script>
 
 <style scoped>
-
 option {
   color: black;
 }

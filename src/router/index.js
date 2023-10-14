@@ -26,9 +26,20 @@ const routes = [
       },
       {
         path: "mystore",
-        name: "MyStore",
-        component: () => import("@/views/mystore/index.vue"),
+        component: () => import("@/layouts/mystore/index.vue"),
         meta: { auth: true },
+        children: [
+          {
+            path: "",
+            name: "MyStoreProducts",
+            component: () => import("@/views/mystore/store/index.vue"),
+          },
+          {
+            path: "review",
+            name: "MyStoreReview",
+            component: () => import("@/views/mystore/review/index.vue"),
+          },
+        ],
       },
       {
         path: "favorite",

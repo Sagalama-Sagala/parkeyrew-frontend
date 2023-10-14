@@ -30,12 +30,11 @@ import { useProductStore } from "@/store/product.store.js";
 
 export default {
   setup() {
-    const products = ref({});
     const productStore = useProductStore();
 
     productStore.fetchWishList();
 
-    return { products, productStore };
+    return { productStore };
   },
   components: {
     ProductCard,

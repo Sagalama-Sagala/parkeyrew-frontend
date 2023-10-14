@@ -56,6 +56,7 @@
 import { view } from "@/assets/profile";
 import Defaultrecord from "@/components/StepsEditRecord/Default/index.vue";
 import Edit from "@/components/StepsEditRecord/Edit/index.vue";
+import { useProfileStore } from "@/store/profile.store";
 import axios from "axios";
 
 export default {
@@ -77,9 +78,10 @@ export default {
             this.pageState = 0;
         },
     },
-    async mounted() {
-        const res = await axios.get("user");
-        console.log(res.data);
+    mounted() {
+        // const res = await axios.get("user");
+        // console.log(res.data);
+        
     },
 };
 </script>

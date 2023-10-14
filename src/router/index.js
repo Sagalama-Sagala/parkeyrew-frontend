@@ -104,7 +104,7 @@ const routes = [
         path: "product/:id",
         name: "ProductInfo",
         component: () => import("@/views/product/index.vue"),
-        meta: { auth: false },
+        meta: { auth: true },
       },
       {
         path: "filter/:id",

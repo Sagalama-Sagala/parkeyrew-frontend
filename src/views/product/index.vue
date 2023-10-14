@@ -203,6 +203,7 @@ export default {
     axios
       .get(`/product/get-info-product-page/${productId}`)
       .then((response) => {
+        console.log(response);
         infoProducts.value = response.data;
       })
       .catch((err) => {

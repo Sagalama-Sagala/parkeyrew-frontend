@@ -14,7 +14,7 @@
       >
         <h2 class="text-center text-lg font-semibold mb-4">เข้าสู่ระบบ</h2>
 
-        <div class="flex flex-col gap-4 input-group input-group-lg">
+        <div class="flex flex-col gap-3 input-group input-group-lg">
           <input
             type="text"
             name="username"
@@ -23,7 +23,9 @@
             v-model="formValue.username"
             v-on:keypress="isAllowed($event)"
           />
-          <p class="text-red-400 text-sm">{{ formError.username }}</p>
+          <p v-if="formError.username !== ''" class="text-red-400 text-sm">
+            {{ formError.username }}
+          </p>
           <div class="relative">
             <input
               :type="inputTypeIcon"
@@ -32,7 +34,12 @@
               v-model="formValue.password"
               v-on:keypress="isAllowed($event)"
             />
-            <p class="mt-3 text-red-400 text-sm">{{ formError.password }}</p>
+            <p
+              v-if="formError.password !== ''"
+              class="mt-3 text-red-400 text-sm"
+            >
+              {{ formError.password }}
+            </p>
             <button class="input-group-text" @click.prevent="toggleInputIcon">
               <img
                 :src="inputTypeIcon === 'password' ? eye : eyeOff"
@@ -105,9 +112,8 @@ export default {
         this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย A-Z";
       } else if (this.formValue.username.match(/[0-9]/) === null) {
         this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย 0-9";
-      } else if (this.formValue.username.match(/[!@#$%^&*]/) === null) {
-        this.formError.username =
-          "ชื่อผู้ใช้งานต้องประกอบไปด้วยอักขระพิเศษ (!@#$%^&*)";
+      } else if (this.formValue.username.match(/[_]/) === null) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย'_'";
       } else if (this.formValue.username.length < 8) {
         this.formError.username = "ชื่อผู้ใช้งานต้องยาวมากกว่า 7 ตัวอักษร";
       }
@@ -127,11 +133,6 @@ export default {
       } else if (this.formValue.password.length < 8) {
         this.formError.password = "รหัสผ่านต้องยาวมากกว่า 7 ตัวอักษร";
       }
-
-      //validation สำหรับ password
-      if (this.formValue.password === "") {
-        this.formError.password = "กรุณากรอกรหัสผ่าน";
-      }
     },
     submitForm() {
       //เรียกใช้งานเกี่ยวกับฟังก์ชัน validate
@@ -143,18 +144,19 @@ export default {
       }
 
       axios
-        .post("/auth/login", this.formValue.value)
+        .post("/auth/login", this.formValue)
         .then((response) => {
           setLocal("token", response.data.access_token);
-          router.push("/");
+          this.$router.push("/");
         })
+
         .catch((err) => {
           console.log(err);
         });
     },
     isAllowed(e) {
       let char = String.fromCharCode(e.keyCode); // Get the character
-      if (/^[A-Za-z0-9!@#$%^&*]+$/.test(char)) {
+      if (/^[A-Za-z0-9!@#$%^&*_]+$/.test(char)) {
         return true; // Match with regex
       } else {
         e.preventDefault(); // If not match, don't add to input text

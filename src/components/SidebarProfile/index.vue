@@ -1,6 +1,5 @@
 <template>
     <div class="bg-gray-200 md:pt-[120px] pt-[66px] md:block">
-        <p class="flex justify-center">{{ profileStore.focusPage }}</p>
         <div
             class="m-2 text-sm md:text-xl ml-0 md:ml-80 pl-4 md:pl-0 md:flex inline-flex items-center z-0 cursor-pointer"
             @click="toggleSidebar"
@@ -34,7 +33,11 @@
                 class="h-full md:pl-16 pl-8 overflow-y-auto md:text-2xl bg-gray-200 md:pt-24 pt-20"
             >
                 <ul class="space-y-2 font-medium text-gray-400">
-                    <li v-for="(e, index) in navs" class="md:pr-0 pr-10">
+                    <li
+                        v-for="(e, index) in navs"
+                        class="md:pr-0 pr-10"
+                        :key="index"
+                    >
                         <div
                             @click="
                                 e.childs.length !== 0
@@ -121,7 +124,6 @@ export default {
     },
     methods: {
         handleMenu(item) {
-            // this.focusPage = item.page;
             this.profileStore.focusPage = item.page;
             this.$router.push(item.page);
             this.toggleSidebar();
@@ -136,7 +138,6 @@ export default {
         return {
             chevronLeft,
             chevronRight,
-            // focusPage: "record", //default
             account,
             cart,
             cart2,

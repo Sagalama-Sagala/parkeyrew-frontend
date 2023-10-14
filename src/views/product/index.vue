@@ -49,7 +49,7 @@
               class="flex md:flex-col md:justify-center justify-between items-center"
             >
               <div class="flex gap-2">
-                <img v-if="!owner"
+                <img v-if="!isUserProduct"
                   :src="heart"
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center p-1 hover:bg-secondary md:w-14 w-10"
                 />
@@ -206,11 +206,13 @@ export default {
     const router = useRouter();
     const productId = route.params.id;
     const chatStore = useChatStore();
-    const owner = true;
+    const isUserProduct = ref(false);
     axios
       .get(`/product/get-info-product-page/${productId}`)
       .then((response) => {
         infoProducts.value = response.data;
+        isUserProduct.value = response.data.isUserProduct;
+        console.log(infoProducts.value)
       })
       .catch((err) => {
         console.log(err);
@@ -228,7 +230,7 @@ export default {
       });
     };
 
-    return { infoProducts, connectChatRoom, owner,productId};
+    return { infoProducts, connectChatRoom, isUserProduct,productId};
   },
   components: {
     ProductCard,
@@ -249,8 +251,7 @@ export default {
     handleModal() {
       this.isModalOpen = !this.isModalOpen;
     },
-    handleOk(value,resetData) {
-      
+    handleOk(value,resetData) {     
       const newData =
       {
           "productId": this.productId,
@@ -279,9 +280,9 @@ export default {
       .catch((err) => {
         console.log(err.response.data.message);
         err.response.data.message.forEach(item=>
-        {
-          alert(item)
-        }
+          {
+            alert(item)
+          }
         )
       });
 

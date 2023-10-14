@@ -307,6 +307,7 @@ export default {
       this.infoProducts.remain = 0;
       this.infoProducts.deliveryFee = 0;
       this.infoProducts.color = "0";
+      this.warnings = [];
     },
     handleIncrese() {
       this.infoProducts.remain += 1;

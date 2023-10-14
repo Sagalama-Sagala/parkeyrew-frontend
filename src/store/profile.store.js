@@ -4,6 +4,7 @@ import axios from "axios";
 export const useProfileStore = defineStore("profile", {
     state: () => ({
         focusPage: "record",
+        profile: null,
     }),
     actions: {
         async fetchMyProfile() {
@@ -18,7 +19,7 @@ export const useProfileStore = defineStore("profile", {
                     },
                 });
                 console.log(res.data);
-                // this.profile = res.data;
+                this.profile = res.data;
             } catch (error) {
                 console.log(error);
             }

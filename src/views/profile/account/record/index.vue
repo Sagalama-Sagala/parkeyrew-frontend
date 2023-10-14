@@ -60,6 +60,12 @@ import { useProfileStore } from "@/store/profile.store";
 import axios from "axios";
 
 export default {
+    setup() {
+        const profileStore = useProfileStore();
+        return {
+            profileStore,
+        };
+    },
     components: {
         Defaultrecord,
         Edit,
@@ -68,6 +74,7 @@ export default {
         return {
             view,
             pageState: 0,
+            profile: "",
         };
     },
     methods: {
@@ -79,9 +86,9 @@ export default {
         },
     },
     mounted() {
+        this.profileStore.fetchMyProfile();
         // const res = await axios.get("user");
         // console.log(res.data);
-        
     },
 };
 </script>

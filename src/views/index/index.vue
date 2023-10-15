@@ -110,6 +110,7 @@ export default {
   },
   methods: {
     handleSearch() {
+      if(this.searchInput === null || this.searchInput === "") return;
       this.$router.push(`/search?keyword=${this.searchInput}`);
     },
     handleFilterType(type) {

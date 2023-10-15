@@ -9,6 +9,8 @@
             <input
               type="text"
               class="bg-transparent border-[1px] border-white h-10 rounded-xl w-full pr-9 pl-3 text-white focus:outline-none"
+              v-model="searchInput"
+              @keyup.enter="handleSearch"
             />
             <span
               class="absolute right-3 top-3 h-full cursor-pointer"
@@ -364,18 +366,40 @@ export default {
       this.isFilterBarToggle.value = !this.isFilterBarToggle.value
       console.log(this.isFilterBarToggle.value);
     },
+    handleSearch() {
+      if(this.searchInput === null || this.searchInput === "") return;
+      this.$router.push(`/search?keyword=${this.searchInput}`);
+      axios
+        .get("/product")
+        .then((response) => {
+          this.products = response.data.filter((item) => {
+            const name = item.name.toLowerCase();
+            const description = item.description.toLowerCase();
+            const searchKeyword = this.searchInput.toLowerCase();
+            return name.includes(searchKeyword) || description.includes(searchKeyword);
+          });
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+    },
 
   },
   setup(){
     const products = ref([]);
     const route = useRoute();
-    const category = route.params.id;
     const keyword = route.query.keyword || "";
+    
     axios
       .get("/product")
       .then((response) => {
         products.value = response.data.filter((item) => {
-          return item.name.includes(keyword);
+          const name = item.name.toLowerCase();
+          const description = item.description.toLowerCase();
+          const searchKeyword = keyword.toLowerCase();
+          return name.includes(searchKeyword) || description.includes(searchKeyword);
         });
         console.log(response.data);
       })
@@ -447,5 +471,6 @@ export default {
     updateOptions(this.urlVariable.size, this.sizeOptions);
     updateOptions(this.urlVariable.color, this.colorOptions);
   },
+  
 };
 </script>

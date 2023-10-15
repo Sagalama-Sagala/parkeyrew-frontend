@@ -4,7 +4,7 @@
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
     @fetch-my-store="fetchMyStore()"
-  />
+    />
   <div class="flex flex-col">
     <div
       class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
@@ -98,6 +98,7 @@
       </div>
     </div>
   </div>
+  </div>  
 </template>
 
 <script>

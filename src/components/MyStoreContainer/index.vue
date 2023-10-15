@@ -1,4 +1,9 @@
 <template>
+  <PopupForm
+    :isModalOpen="this.myStoreStore.isPopupFormModal"
+    @toggleModal="handleToggle"
+    @handleOk="handleOk"
+  />
   <div class="flex flex-col">
     <div
       class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
@@ -146,7 +151,7 @@ export default {
       this.followingDialog = false;
     },
     handleToggle() {
-      this.isModalOpen = !this.isModalOpen;
+      this.myStoreStore.togglePopupForm();
     },
     handleOk(value, resetData) {
       const newData = {

@@ -1,6 +1,9 @@
 <template>
-  <div class="fixed inset-0 flex items-center justify-center">
-    <div class="fixed w-screen h-screen bg-black bg-opacity-50 z-40"></div>
+  <div class="fixed inset-0 flex items-center justify-center z-50">
+    <div
+      class="fixed w-screen h-screen bg-black bg-opacity-50 z-40 cursor-pointer"
+      @click="closeDialog"
+    ></div>
     <div class="modal-dialog bg-secondary rounded-3xl shadow-lg w-[40rem] z-50">
       <div class="modal-header p-4 rounded-t-lg justify-center flex">
         <h3 class="text-lg font-semibold">{{ title }}</h3>

@@ -1,46 +1,35 @@
 <template>
-  <div class="z-[-100]">
+  <div class="bg-secondary text-black flex flex-col flex-1 h-full items-center">
     <div
-      class="bg-secondary text-black flex flex-col flex-1 h-full items-center"
+      @click="handleToggle"
+      class="text-primary border-primary active:text-secondary active:bg-primary flex items-center justify-center w-40 h-8 mt-5 text-lg border-2 rounded-md hover:cursor-pointer"
     >
+      <h1>+ ลงขายสินค้า</h1>
+    </div>
+    <div class="bg-secondary flex-1 flex flex-col w-full pt-6 overflow-y-auto">
       <div
-        @click="handleToggle"
-        class="text-primary border-primary active:text-secondary active:bg-primary flex items-center justify-center w-40 h-8 mt-5 text-lg border-2 rounded-md hover:cursor-pointer"
+        class="flex md:flex-row md:flex-wrap flex-col w-full gap-5 justify-start md:pl-[5.2rem]"
       >
-        <h1>+ ลงขายสินค้า</h1>
-      </div>
-      <div
-        class="bg-secondary flex-1 flex flex-col w-full pt-6 overflow-y-auto"
-      >
-        <div
-          class="flex md:flex-row md:flex-wrap flex-col w-full gap-5 justify-start md:pl-[5.2rem]"
-        >
-          <ProductCard
-            v-for="(item, index) in myStoreStore.mystore.products"
-            :id="item._id"
-            :key="item.title"
-            :is-recommended="item.recommended"
-            :item-name="item.name"
-            :item-price="item.price"
-            :item-image="item.productImage"
-            :rating="item.owner.reviewStar"
-            :seller-image="item.sellerImage"
-            :seller-name="item.owner.username"
-            :liked="item.liked"
-            :color="item.color"
-            :size="item.size"
-            :brand="item.brand"
-            :condition="item.condition"
-          />
-        </div>
+        <ProductCard
+          v-for="(item, index) in myStoreStore.mystore.products"
+          :id="item._id"
+          :key="item.title"
+          :is-recommended="item.recommended"
+          :item-name="item.name"
+          :item-price="item.price"
+          :item-image="item.productImage"
+          :rating="item.owner.reviewStar"
+          :seller-image="item.sellerImage"
+          :seller-name="item.owner.username"
+          :liked="item.liked"
+          :color="item.color"
+          :size="item.size"
+          :brand="item.brand"
+          :condition="item.condition"
+        />
       </div>
     </div>
   </div>
-  <PopupForm
-    :isModalOpen="this.isModalOpen"
-    @toggleModal="handleToggle"
-    @handleOk="handleOk"
-  />
 </template>
 
 <script>
@@ -93,7 +82,7 @@ export default {
       this.followingDialog = false;
     },
     handleToggle() {
-      this.isModalOpen = !this.isModalOpen;
+      this.myStoreStore.togglePopupForm();
       console.log("toggle");
     },
     handleOk(value, resetData) {

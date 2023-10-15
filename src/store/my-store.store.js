@@ -4,6 +4,7 @@ import axios from "axios";
 export const useMyStoreStore = defineStore("mystore", {
   state: () => ({
     mystore: null,
+    isPopupFormModal: false,
   }),
   actions: {
     async fetchMyStore() {
@@ -15,6 +16,9 @@ export const useMyStoreStore = defineStore("mystore", {
         .catch((err) => {
           console.log(err);
         });
+    },
+    togglePopupForm() {
+      this.isPopupFormModal = !this.isPopupFormModal;
     },
   },
   persist: true,

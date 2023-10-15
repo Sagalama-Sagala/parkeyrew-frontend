@@ -44,7 +44,7 @@
         สินค้าล่าสุดที่ถูกลงขาย
       </h2>
       <div
-        class="flex flex-wrap gap-x-2 gap-y-2 md:justify-start justify-center"
+        class="grid md:[grid-template-columns:repeat(auto-fill,_minmax(18rem,3fr))] gap-7 md:justify-start justify-center"
       >
         <ProductCard
           v-for="(item, index) in products"

@@ -22,7 +22,7 @@
                 <b>{{ otherStoreStore.otherStore.username }}</b>
               </div>
               <div class="md:pt-0 pt-3">
-                <Rating  />
+                <Rating :rating="otherStoreStore.otherStore?.reviewStar"  />
               </div>
             </div>
             <div class="flex flex-col">
@@ -43,7 +43,7 @@
                 <b>{{ otherStoreStore.otherStore?.follower.length }} ผู้ติดตาม</b>
               </div>
               <Dialog
-                v-if="followerDialog"
+                v-if="followerDialog" 
                 @close="closeFollower"
                 title="ผู้ติดตาม"
               >

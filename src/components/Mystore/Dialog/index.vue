@@ -12,14 +12,14 @@
         <div v-if="title === 'ผู้ติดตาม'">
           <div
             class="flex flex-row items-center gap-5 border-b-2 border-[#727272] pt-2 pb-1"
-            v-for="(item, index) in myStoreStore.mystore.follower"
+            v-for="(item, index) in myStoreStore.mystore.follower" :key="index"
           >
             <img
               alt="follower profile"
               :src="item.profileURL"
               class="w-[5.5rem] h-[5.5rem] rounded-full md:block hidden"
             />
-            <b class="w-[55%]">{{ item.username }}</b>
+            <b class="w-[55%]">{{ index }}</b>
             <div
               class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
             >
@@ -30,7 +30,7 @@
         <div v-else>
           <div
             class="flex flex-row items-center gap-5 border-b-2 border-[#727272] pt-2 pb-1"
-            v-for="(item, index) in myStoreStore.mystore.following"
+            v-for="(item, index) in myStoreStore.mystore.following" :key="index"
           >
             <img
               alt="follower profile"
@@ -64,6 +64,12 @@
 <script>
 import { useMyStoreStore } from "@/store/my-store.store.js";
 export default {
+  props: {
+    title: {
+      type: String,
+      default: "Title",
+    },
+  },
   setup() {
     const myStoreStore = useMyStoreStore();
     return { myStoreStore };

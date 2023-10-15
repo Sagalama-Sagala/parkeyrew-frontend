@@ -49,24 +49,24 @@
         <div
           class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]"
         >
-          <div class="hover:cursor-pointer" @click="openFollower">
+            <div class="hover:cursor-pointer" @click="openFollower">
             <b>{{ myStoreStore.mystore.follower.length }} ผู้ติดตาม</b>
-          </div>
-          <Dialog
-            v-if="followerDialog"
-            @close="closeFollower"
-            title="ผู้ติดตาม"
-          >
-          </Dialog>
+            </div>
+            <Dialog
+              v-if="followerDialog"
+              @close="closeFollower"
+              title="ผู้ติดตาม"
+            >
+            </Dialog>
           |
-          <div class="hover:cursor-pointer" @click="openFollowing">
-            <b>{{ myStoreStore.mystore.following.length }} กำลังติดตาม</b>
-          </div>
-          <Dialog
+            <div class="hover:cursor-pointer" @click="openFollowing">
+              <b>{{ myStoreStore.mystore.following.length }} กำลังติดตาม</b>
+            </div>
+            <Dialog
             v-if="followingDialog"
             @close="closeFollowing"
             title="กำลังติดตาม"
-          />
+            />
         </div>
         <div
           class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12"

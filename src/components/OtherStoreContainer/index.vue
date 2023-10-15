@@ -63,7 +63,7 @@
                   :isMyStore="false"
                 />
                 <h1 v-if="!isFollow" class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer" @click="handleFollow">ติดตาม +</h1>
-                <h1 v-else class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-primary hover:text-white duration-100 text-sm cursor-pointer" @click="handleFollow">ยกเลิกติดตาม +</h1>
+                <h1 v-else class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-primary hover:text-white duration-100 text-sm cursor-pointer" @click="handleUnfollow">ยกเลิกติดตาม +</h1>
             </div>
           </div>
           <div
@@ -154,33 +154,33 @@
       },
       handleFollow()
       {
-        // axios.put('follow-user-by-id', {
-        //   id: this.$route.params.id,
-        // }).then
-        // (
-        //   (response) => {
-        //     console.log(response.data);
-        //     this.isFollow = true;
-        //   },
-        //   (error) => {
-        //     console.log(error);
-        //   }
-        // );
+        axios.post('/user/follow-user-by-id', {
+          userId: this.$route.params.id,
+        }).then
+        (
+          (response) => {
+            console.log(response.data);
+            this.isFollow = true;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       },
       handleUnfollow()
       {
-        // axios.put('unfollow-user-by-id', {
-        //   id: this.$route.params.id,
-        // }).then
-        // (
-        //   (response) => {
-        //     console.log(response.data);
-        //     this.isFollow = false;
-        //   },
-        //   (error) => {
-        //     console.log(error);
-        //   }
-        // );
+        axios.post('/user/unfollow-user-by-id', {
+          userId: this.$route.params.id,
+        }).then
+        (
+          (response) => {
+            console.log(response.data);
+            this.isFollow = false;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       }
     },
   };

@@ -17,7 +17,7 @@
             <img
               alt="follower profile"
               :src="item.profileURL"
-              class="w-[5.5rem] h-[5.5rem] rounded-full md:block hidden"
+              class="w-[5.5rem] h-[5.5rem] rounded-full md:block hidden border-[2px] border-black"
             />
             <b class="w-[55%]">{{ index }}</b>
             <div
@@ -35,7 +35,7 @@
             <img
               alt="follower profile"
               :src="item.profileURL"
-              class="w-[5.5rem] h-[5.5rem] rounded-full md:block hidden"
+              class="w-[5.5rem] h-[5.5rem] rounded-full md:block hidden border-[2px] border-black"
             />
             <b class="w-[55%]">{{ item.username }}</b>
             <div

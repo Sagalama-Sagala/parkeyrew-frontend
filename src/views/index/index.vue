@@ -10,6 +10,7 @@
               type="text"
               class="bg-transparent border-[1px] border-white h-10 rounded-xl w-full pr-9 pl-3 text-white focus:outline-none"
               v-model="searchInput"
+              @keyup.enter="handleSearch"
             />
             <span
               class="absolute right-3 top-3 h-full cursor-pointer"
@@ -109,7 +110,7 @@ export default {
   },
   methods: {
     handleSearch() {
-      console.log("Search... ", this.searchInput);
+      this.$router.push(`/search?keyword=${this.searchInput}`);
     },
     handleFilterType(type) {
       this.$router.push(`/filter/${type}`);

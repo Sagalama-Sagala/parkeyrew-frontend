@@ -8,7 +8,7 @@
     </div>
     <div class="bg-secondary flex-1 flex flex-col w-full pt-6 overflow-y-auto">
       <div
-        class="flex md:flex-row md:flex-wrap flex-col w-full gap-5 justify-start md:pl-[5.2rem]"
+        class="grid md:[grid-template-columns:repeat(auto-fill,_minmax(17rem,3fr))] gap-7  justify-center items-center w-full px-10 mb-10"
       >
         <ProductCard
           v-for="(item, index) in myStoreStore.mystore.products"

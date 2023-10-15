@@ -56,6 +56,7 @@
               v-if="followerDialog"
               @close="closeFollower"
               title="ผู้ติดตาม"
+              :isMyStore="true"
             >
             </Dialog>
           |
@@ -66,6 +67,7 @@
             v-if="followingDialog"
             @close="closeFollowing"
             title="กำลังติดตาม"
+            :isMyStore="true"
             />
         </div>
         <div

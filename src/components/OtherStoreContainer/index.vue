@@ -46,6 +46,7 @@
                 v-if="followerDialog" 
                 @close="closeFollower"
                 title="ผู้ติดตาม"
+                :isMyStore="false"
               >
               
               </Dialog>
@@ -59,6 +60,7 @@
                   v-if="followingDialog"
                   @close="closeFollowing"
                   title="กำลังติดตาม"
+                  :isMyStore="false"
                 />
                 <h1 v-if="!isFollow" class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer" @click="handleFollow">ติดตาม +</h1>
                 <h1 v-else class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-primary hover:text-white duration-100 text-sm cursor-pointer" @click="handleFollow">ยกเลิกติดตาม +</h1>

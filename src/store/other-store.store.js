@@ -7,15 +7,15 @@ export const useOtherStoreStore = defineStore("otherstore", {
     isPopupFormModal: false,
   }),
   actions: {
-    async fetchOtherStore() {
-      // axios
-      //   .get("/user/get-user-page-by-id")
-      //   .then((response) => {
-      //     this.mystore = response.data;
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+    async fetchOtherStore(id) {
+      axios
+        .get(`/user/get-shop-page-by-id/${id}`)
+        .then((response) => {
+          this.otherStore = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     togglePopupForm() {
       this.isPopupFormModal = !this.isPopupFormModal;

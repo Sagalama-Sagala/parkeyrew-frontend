@@ -132,6 +132,7 @@ export default {
   methods: {
     handleSellerClick() {
       this.$emit("sellerClick");
+      this.$router.push(`/store/6519f1ce81e0955f1105a798`);
     },
     isRecommended(rating) {
       if (rating > 3) {

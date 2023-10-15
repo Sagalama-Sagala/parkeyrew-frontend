@@ -42,7 +42,7 @@ const routes = [
         ],
       },
       {
-        path: "store",
+        path: "store/:id",
         component: () => import("../layouts/otherstore/index.vue"),
         meta: { auth: false },
         children: [

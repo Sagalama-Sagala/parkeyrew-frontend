@@ -19,7 +19,7 @@
             </div>
             <div class="flex flex-col justify-center w-[12rem] md:pt-0 pt-4">
               <div>
-                <b>{{  }}</b>
+                <b>{{ otherStoreStore.otherStore.username }}</b>
               </div>
               <div class="md:pt-0 pt-3">
                 <Rating  />
@@ -39,7 +39,7 @@
             class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]"
           >
             <div class="hover:cursor-pointer" @click="openFollower">
-              <b>{{  }} ผู้ติดตาม</b>
+              <b>{{ otherStoreStore.otherStore?.follower.length }} ผู้ติดตาม</b>
             </div>
             <Dialog
               v-if="followerDialog"
@@ -49,7 +49,7 @@
             </Dialog>
             |
             <div class="hover:cursor-pointer" @click="openFollowing">
-              <b>{{  }} กำลังติดตาม</b>
+              <b>{{ otherStoreStore.otherStore?.following.length }} กำลังติดตาม</b>
             </div>
             <Dialog
               v-if="followingDialog"
@@ -61,7 +61,7 @@
             class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12"
           >
             <b>คำอธิบาย</b>
-            <div>{{  }}</div>
+            <div>{{ otherStoreStore.otherStore?.description }}</div>
           </div>
         </div>
         <div
@@ -94,12 +94,15 @@
   import { ref } from "vue";
   import axios from "axios";
   import { useOtherStoreStore } from "@/store/other-store.store.js";
+  import { useRoute, useRouter } from "vue-router";
 
   export default {
     setup() {
+    const route = useRoute();
+    const id = route.params.id;
     const otherStoreStore = useOtherStoreStore();
-    otherStoreStore.fetchOtherStore();
-    return { otherStoreStore };
+    otherStoreStore.fetchOtherStore(id);
+    return { otherStoreStore};
     },
     components: {
       Rating,
@@ -121,14 +124,11 @@
     methods: {
       routeToMyStore() {
         this.page = "store";
-        this.$router.push("/store");
+        this.$router.push(`/store/${this.$route.params.id}`);
       },
       routeToReview() {
         this.page = "review";
-        this.$router.push("/store/review");
-      },
-      handleEditProfile() {
-        this.$router.push("/profile/record");
+        this.$router.push(`/store/${this.$route.params.id}/review`);
       },
       openFollower() {
         this.followerDialog = true;

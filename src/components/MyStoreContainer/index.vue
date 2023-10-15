@@ -1,10 +1,10 @@
 <template>
-  <PopupForm
+  <div class="flex flex-col">
+    <PopupForm
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
     @handleOk="handleOk"
-  />
-  <div class="flex flex-col">
+    />
     <div
       class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
     >
@@ -177,9 +177,11 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data);
-          resetData();
-          this.isModalOpen = false;
+          this.$router.push(`product/${response.data._id}`);
+          this.myStoreStore.isPopupFormModal = false;
+          // console.log(response.data);
+          // resetData();
+          // 
         })
         .catch((err) => {
           console.log(err.response.data.message);

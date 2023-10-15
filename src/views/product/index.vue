@@ -52,7 +52,7 @@
                 <img
                   v-if="!isUserProduct"
                   :src="isLiked ? heartFilled : heart"
-                  class="border-[2px] border-grey rounded-xl flex justify-center items-center p-1 hover:bg-secondary md:w-14 w-10 cursor-pointer border-red-300"
+                  class="border-[2px] border-grey rounded-xl flex justify-center items-center p-1 hover:bg-secondary md:w-14 w-10 cursor-pointer border-red-300 duration-100"
                   :class="isLiked ? 'bg-red-200' : 'bg-white'"
                   @click="handleLike()"
                 />

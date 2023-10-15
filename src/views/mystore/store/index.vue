@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-secondary text-black flex flex-col flex-1 h-full items-center">
+  <div class="bg-secondary text-black flex flex-col flex-1 items-center">
     <div
       @click="handleToggle"
       class="text-primary border-primary active:text-secondary active:bg-primary flex items-center justify-center w-40 h-8 mt-5 text-lg border-2 rounded-md hover:cursor-pointer"
@@ -56,7 +56,6 @@ export default {
   },
   data() {
     return {
-      isModalOpen: false,
       followerDialog: false,
       followingDialog: false,
       editIcon,
@@ -84,40 +83,6 @@ export default {
     handleToggle() {
       this.myStoreStore.togglePopupForm();
       console.log("toggle");
-    },
-    handleOk(value, resetData) {
-      const newData = {
-        name: value.name,
-        price: value.price,
-        deliveryFee: value.deliveryFee,
-        description: value.description,
-        brand: value.brand,
-        color: value.color,
-        size: value.size,
-        category: value.category,
-        condition: value.condition,
-        sendFrom: value.sendFrom,
-        remain: value.remain,
-      };
-      axios
-        .post("product/create-product", newData, {
-          headers: {
-            Authorization: "Bearer " + `${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          resetData();
-          this.isModalOpen = false;
-        })
-        .catch((err) => {
-          console.log(err.response.data.message);
-          err.response.data.message.forEach((item) => {
-            alert(item);
-          });
-        });
-
-      //console.log(infoProducts)
     },
   },
 };

@@ -3,6 +3,8 @@ import MyStoreContainer from "@/components/MyStoreContainer/index.vue";
 </script>
 
 <template>
-  <my-store-container />
-  <router-view />
+  <div class=" h-screen bg-secondary">
+    <my-store-container />
+    <router-view />
+  </div>
 </template>

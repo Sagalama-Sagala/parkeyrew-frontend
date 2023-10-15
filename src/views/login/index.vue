@@ -14,18 +14,13 @@
       >
         <h2 class="text-center text-lg font-semibold mb-4">เข้าสู่ระบบ</h2>
 
-        <form
-          action=""
-          @submit.prevent="submitForm"
-          class="flex flex-col gap-4 input-group input-group-lg"
-        >
+        <div class="flex flex-col gap-3 input-group input-group-lg">
           <input
             type="text"
             name="username"
             class="focus:outline-none mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
             placeholder="ชื่อผู้ใช้"
             v-model="formValue.username"
-            required
           />
           <div class="relative">
             <input
@@ -33,8 +28,10 @@
               class="focus:outline-none form-control mt-1 block w-full px-2 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-slate-400 font-normal"
               placeholder="รหัสผ่าน"
               v-model="formValue.password"
-              required
             />
+            <p v-if="isInvalid" class="mt-3 text-red-400 text-sm">
+              ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง
+            </p>
             <button class="input-group-text" @click.prevent="toggleInputIcon">
               <img
                 :src="inputTypeIcon === 'password' ? eye : eyeOff"
@@ -43,6 +40,7 @@
             </button>
 
             <button
+              @click="submitForm"
               type="submit"
               class="mt-1 block w-full px-3 py-1 bg-tertiary font-normal rounded-md hover:scale-105 duration-300"
             >
@@ -58,7 +56,7 @@
               สมัครใหม่
             </button>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   </section>
@@ -73,22 +71,8 @@ import { useRouter } from "vue-router";
 export default {
   setup() {
     const router = useRouter();
-    const formValue = ref({
-      username: "",
-      password: "",
-    });
-    const submitForm = () => {
-      axios
-        .post("/auth/login", formValue.value)
-        .then((response) => {
-          setLocal("token", response.data.access_token);
-          router.push("/");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    return { submitForm, formValue };
+    const isInvalid = ref(false);
+    return { isInvalid };
   },
   data() {
     return {
@@ -97,9 +81,27 @@ export default {
       logo2,
       eye,
       eyeOff,
+      formValue: {
+        username: "",
+        password: "",
+      },
     };
   },
   methods: {
+    submitForm() {
+      axios
+        .post("/auth/login", this.formValue)
+        .then((response) => {
+          setLocal("token", response.data.access_token);
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          console.log(this.isInvalid);
+          this.isInvalid = true;
+          console.log(this.isInvalid);
+          console.log(err);
+        });
+    },
     toggleInputIcon() {
       this.inputTypeIcon =
         this.inputTypeIcon === "password" ? "text" : "password";

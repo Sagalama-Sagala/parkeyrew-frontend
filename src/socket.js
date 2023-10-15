@@ -8,7 +8,7 @@ export const state = reactive({
   barEvents: [],
 });
 
-const URL = "http://localhost:3000";
+const URL = import.meta.env.VITE_APP_SOCKET;
 
 export const socket = io(URL, {
   extraHeaders: {

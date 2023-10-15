@@ -26,18 +26,35 @@ const routes = [
       },
       {
         path: "mystore",
+        component: () => import("@/layouts/mystore/index.vue"),
+        meta: { auth: true },
         children: [
           {
-            path: "store",
-            name: "Store",
+            path: "",
+            name: "MyStoreProducts",
             component: () => import("@/views/mystore/store/index.vue"),
-            meta: { auth: true },
           },
           {
             path: "review",
-            name: "Review",
+            name: "MyStoreReview",
             component: () => import("@/views/mystore/review/index.vue"),
-            meta: { auth: true },
+          },
+        ],
+      },
+      {
+        path: "store/:id",
+        component: () => import("../layouts/otherstore/index.vue"),
+        meta: { auth: false },
+        children: [
+          {
+            path: "",
+            name: "StoreProducts",
+            component: () => import("@/views/otherstore/store/index.vue"),
+          },
+          {
+            path: "review",
+            name: "StoreReview",
+            component: () => import("@/views/otherstore/review/index.vue"),
           },
         ],
       },
@@ -104,7 +121,7 @@ const routes = [
         path: "product/:id",
         name: "ProductInfo",
         component: () => import("@/views/product/index.vue"),
-        meta: { auth: false },
+        meta: { auth: true },
       },
       {
         path: "filter/:id",

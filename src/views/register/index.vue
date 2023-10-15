@@ -17,6 +17,7 @@
           <component
             v-bind:is="steps[currentStep].component"
             :formValue="formValue"
+            :formError="formError"
             @update-form-value="handleForm"
           />
         </div>
@@ -81,6 +82,15 @@ export default {
       confirm_password: "",
     });
 
+    const formError = ref({
+      firstname: "",
+      lastname: "",
+      username: "",
+      phone: "",
+      password: "",
+      confirm_password: "",
+    });
+
     const handleForm = (payload) => {
       formValue.value = {
         ...formValue.value,
@@ -88,32 +98,122 @@ export default {
       };
     };
 
-    const submitForm = () => {
-      axios
-        .post("user/register", {
-          firstname: formValue.value.firstname,
-          lastname: formValue.value.lastname,
-          username: formValue.value.username,
-          password: formValue.value.password,
-          phone: formValue.value.phone,
-        })
-        .then((response) => {
-          router.push("/login");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-
-    return { formValue, handleForm, submitForm };
+    return { formValue, handleForm, formError };
   },
-  emits: ["updateFormValue"],
+  // emits: ["updateFormValue"],
   components: {
     Info,
     Password,
   },
   methods: {
+    validationPage1() {
+      //รีเซ็ต username and password
+      this.formError.firstname = "";
+      this.formError.lastname = "";
+      this.formError.username = "";
+
+      //validation สำหรับ firstname
+      if (this.formValue.firstname === "") {
+        this.formError.firstname = "กรุณากรอกชื่อ";
+      } else if (this.formValue.firstname.match(/[a-z]/) === null) {
+        this.formError.firstname = "ชื่อผู้ใช้ต้องประกอบไปด้วย a-z";
+      } else if (this.formValue.firstname.length > 30) {
+        this.formError.firstname = "ชื่อต้องมีความยาวไม่มากกว่า 30 ตัวอักษร";
+      }
+
+      //validation สำหรับ lastname
+      if (this.formValue.lastname === "") {
+        this.formError.lastname = "กรุณากรอกนามสกุล";
+      } else if (this.formValue.lastname.match(/[a-z]/) === null) {
+        this.formError.lastname = "นามสกุลต้องประกอบไปด้วย a-z";
+      } else if (this.formValue.lastname.length > 30) {
+        this.formError.lastname = "นามสกุลต้องมีความยาวไม่มากกว่า 30 ตัวอักษร";
+      }
+
+      //validation สำหรับ username
+      if (this.formValue.username === "") {
+        this.formError.username = "กรุณากรอกชื่อผู้ใช้";
+      } else if (this.formValue.username.match(/[a-z]/) === null) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย a-z";
+      } else if (this.formValue.username.match(/[A-Z]/) === null) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย A-Z";
+      } else if (this.formValue.username.match(/[0-9]/) === null) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย 0-9";
+      } else if (this.formValue.username.match(/[_]/) === null) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย'_'";
+      } else if (this.formValue.username.length < 8) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องยาวมากกว่า 7 ตัวอักษร";
+      }
+    },
+    validationPage2() {
+      //รีเซ็ต phone password and confirm_password
+      this.formError.phone = "";
+      this.formError.password = "";
+      this.formError.confirm_password = "";
+
+      //validation สำหรับ phone
+      if (this.formValue.phone.match(/[0-9]/) === null) {
+        this.formError.phone = "กรุณากรอกเบอร์โทร 10 หลัก";
+      } else if (this.formValue.phone.length != 10) {
+        this.formError.phone = "กรุณากรอกเบอร์โทร 10 หลัก";
+      }
+
+      //validation สำหรับ password
+      if (this.formValue.password === "") {
+        this.formError.password = "กรุณากรอกรหัสผ่าน";
+      } else if (this.formValue.password.match(/[a-z]/) === null) {
+        this.formError.password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.password.match(/[A-Z]/) === null) {
+        this.formError.password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.password.match(/[0-9]/) === null) {
+        this.formError.password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.password.match(/[!@#$%^&*_-]/) === null) {
+        this.formError.password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.password.length < 8) {
+        this.formError.password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      }
+
+      //validation สำหรับ confirm_password
+      if (this.formValue.confirm_password === "") {
+        this.formError.confirm_password = "กรุณากรอกรหัสผ่าน";
+      } else if (this.formValue.confirm_password.match(/[a-z]/) === null) {
+        this.formError.confirm_password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.confirm_password.match(/[A-Z]/) === null) {
+        this.formError.confirm_password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.confirm_password.match(/[0-9]/) === null) {
+        this.formError.confirm_password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (
+        this.formValue.confirm_password.match(/[!@#$%^&*_-]/) === null
+      ) {
+        this.formError.confirm_password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.confirm_password.length < 8) {
+        this.formError.confirm_password =
+          "รหัสผ่านจะต้องประกอบไปด้วยตัวอักขระพิเศษ ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข มีความยาว 8 ตัวขึ้นไป";
+      } else if (this.formValue.confirm_password !== this.formValue.password) {
+        this.formError.confirm_password = "รหัสผ่านไม่ตรงกัน";
+      }
+    },
     next() {
+      this.validationPage1();
+
+      //ถ้า username หรือ password มี error ให้จบฟังก์ชันทันที
+      if (
+        this.formError.firstname !== "" ||
+        this.formError.lastname !== "" ||
+        this.formError.username !== ""
+      ) {
+        return;
+      }
+
       this.currentStep += 1;
     },
     prev() {
@@ -133,6 +233,34 @@ export default {
     },
     submitRegister() {
       console.log(JSON.stringify(this.formValue, null, 2));
+    },
+    submitForm() {
+      //เรียกใช้งานเกี่ยวกับฟังก์ชัน validate
+      this.validationPage2();
+
+      //ถ้า username หรือ password มี error ให้จบฟังก์ชันทันที
+      if (
+        this.formError.phone !== "" ||
+        this.formError.password !== "" ||
+        this.formError.confirm_password !== ""
+      ) {
+        return;
+      }
+      axios
+        .post("/user/register", {
+          firstname: this.formValue.firstname,
+          lastname: this.formValue.lastname,
+          username: this.formValue.username,
+          password: this.formValue.password,
+          phone: this.formValue.phone,
+        })
+        .then((response) => {
+          this.$router.push("/login");
+        })
+        .catch((err) => {
+          console.log(import.meta.env.VITE_APP_API);
+          console.log(err);
+        });
     },
   },
   data() {

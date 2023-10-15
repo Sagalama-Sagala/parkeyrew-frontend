@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-primary w-full justify-center flex text-white pt-20 h-screen"> 
-    <div class="pl-48  w-[50%]">
-      <p class="pt-20 text-3xl font-medium">ช่องทางติดต่อ</p>
+  <div class="bg-primary w-full md:justify-center  md:flex text-white md:pt-16 pt-5 md:h-screen h-full"> 
+    <div class="md:pl-48 pl-10 md:pr-0 pr-10 md:w-[50%] w-full">
+      <p class="pt-20 md:text-3xl text-xl font-medium">ช่องทางติดต่อ</p>
       <p class="mt-2 ">
-        <p class="text-2xl font-light">บอกเราว่าคุณพบเจอปัญหา</p>
-        <p class="text-2xl font-light">หรือต้องการอะไร :) </p>
+        <p class="md:text-2xl text-lg font-light">บอกเราว่าคุณพบเจอปัญหา</p>
+        <p class="md:text-2xl text-lg font-light">หรือต้องการอะไร :) </p>
       </p>
       <div class="p-2 mt-6 rounded-2xl border-orange-50 border-2 w-fit flex items-center">
         <svg width="50" height="" viewBox="0 0 84 66" fill="none" xmlns="http://www.w3.org/2000/svg"> <rect x="0.5" y="0.214966" width="83" height="65.57" rx="16" fill="#FFF9F9"/><g clip-path="url(#clip0_883_3072)">
@@ -15,31 +15,48 @@
           <path d="M7.14209 21.0972L14.4293 26.5348L22.9867 32.9196V12.4274L18.5499 9.11713C13.8441 5.60963 7.14209 8.94373 7.14209 14.7915V21.097V21.0972Z" fill="#C5221F"/></g><defs>
           <clipPath id="clip0_883_3072"><rect width="69.72" height="52.29" fill="white" transform="translate(7.13989 7.68494)"/></clipPath></defs>
         </svg>
-        <p class="mx-2">phamuesong@gmail.com</p>
+        <p class="mx-2 text-base ">phamuesong@gmail.com</p>
       </div>
-      <p class="mt-6 text-2xl font-medium">ทีมผู้พัฒนา  💻</p>
-
-      <div class="relative mt-4 flex justify-center">
-        <transition name="fade" mode="out-in">
-          <img :key="currentImage" :src=jark alt="Image" class="w-[325px] h-64 object-cover rounded-lg" />
-          
-        </transition>
-        <button class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none">
+      <p class="mt-6 md:text-2xl text-base font-medium">ทีมผู้พัฒนา  💻</p>
+      
+      <div class=" relative mt-4 flex md:justify-center" >
+        <transition name="" mode="out-in">
+          <img :src="members[currentIndex].src" alt="Image" class="w-[325px]  h-56 object-cover rounded-2xl " :key="currentIndex" />
+        </transition>        
+        
+      
+        <button class="absolute top-0 left-0 z-10 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none"
+                @click=prevSlide      
+        >
           <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 dark:bg-gray-300 group-hover:bg-white/50 dark:group-hover:bg-gray-500  ">
             <img :src="prev" class="w-4 h-4"/>
-
           </span>
         </button>
-        <button  class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none">
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 dark:bg-gray-300 group-hover:bg-white/50 dark:group-hover:bg-gray-500 ">
-              <img :src="next" class="w-4 h-4"/>
-            </span>
+        <div  class="absolute z-10 flex justify-center  space-x-2 items-end h-full p-4 w-full ">
+          <button v-for="i in 9" type="button" class="w-3 h-3 rounded-full " 
+            :class="i-1 === currentStep ? 'bg-yellow-400' : 'bg-gray-300'" 
+            @click="pushStep(i-1)">
+          </button>
+        </div>
+        <button  class="absolute top-0 right-0 z-10 flex items-center justify-center h-full md:px-4 cursor-pointer group focus:outline-none"
+                @click=nextSlide 
+        >
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 dark:bg-gray-300 group-hover:bg-white/50 dark:group-hover:bg-gray-500 ">
+            <img :src="next" class="w-4 h-4"/>
+          </span>
         </button>
       </div>
+      <p class="justify-center flex w-full mt-2">{{members[currentIndex].name}}</p> 
+      <p class="justify-center text-xs flex w-full ">{{members[currentIndex].dis}}</p> 
+      
+      
+      
+
+
     </div>
 
-    <div class="flex justify-start pl-10 w-[50%] text-black text-center pt-20  ">
-      <div class="bg-white w-[70%] h-[500px] p-6 rounded-2xl shadow-[30.0px_30.0px_0.0px_rgba(0,0,0,0.18)]">
+    <div class="flex justify-start pl-10 md:w-[50%] w-full text-black text-center md:pt-20 pt-10  ">
+      <div class="bg-white md:w-[70%] w-[86%] md:mb-0 mb-20 h-[500px] p-6 rounded-2xl shadow-[30.0px_30.0px_0.0px_rgba(0,0,0,0.18)]">
         <p class="text-2xl "> ส่งอีเมลถึงเรา</p>
         <form ref="form" @submit.prevent="sendEmail" action="" class="mt-2">
           <input
@@ -76,6 +93,11 @@
             >
               ส่งอีเมล
           </button>
+          
+          <div v-if="showAlert" class="mt-4" :class="showAlert === 'Email sent successfully!' ? 'text-green-600' : 'text-red-600'">
+            {{ showAlert  }}
+          </div>
+          
         </form>
       </div>
     </div>
@@ -89,37 +111,118 @@
 
 
 <script >
-import {jark,next,prev} from "@/assets/contact";
+import {naning,mayji,jap,hon,boss,bambie,chompu,cd,card,jark,next,prev,circleBlack,circleGray} from "@/assets/contact";
 
 export default {
   data() {
       return {
-        jark,
         next,
         prev,
-        currentImage: 0,
+        showAlert: '',
+        clearMessage: '',
+        members: [
+                {
+                    name: "แบมบี้ ไผสิมางามเกิน",
+                    src: bambie,
+                    dis: "phamuesong back-end team",
+                },
+                {
+                    name: "ผมแจ๊ป ยอดนักบิด",
+                    src: jap,
+                    dis: "phamuesong back-end team",
+                },
+                {
+                    name: "นะนิ้ง เองจ้าา",
+                    src: naning,
+                    dis: "phamuesong front-end team",
+                },
+                {
+                    name: "ชมพู่ คอนเกรตเกลือ",
+                    src: chompu,
+                    dis: "phamuesong front-end team",
+                },
+                {
+                    name: "ซีดี ดีวีดี",
+                    src: cd,
+                    dis: "phamuesong front-end team"
+                },
+                {
+                    name: "มอจ้อ ท้อชิบ",
+                    src: mayji,
+                    dis: "phamuesong front-end/UXUI team",
+                },
+                {
+                    name: "วอนนาเพลย์ การ์ด ",
+                    src: card,
+                    dis: "phamuesong front-end team"
+                },
+                {
+                    name: "ฮอนด้า ยามาฮ่าอิซูซุ",
+                    src: hon,
+                    dis: "phamuesong devops team",
+                },
+                {
+                    name: "บอส ตะเอ๋ตะเอง",
+                    src: boss,
+                    dis: "phamuesong full stack team",
+                },
+            ],
+        currentIndex: 0,
         currentStep: 0,
       };
     },
     
     methods: {
-      nextImage() {
-        this.currentImage = (this.currentImage + 1) % this.images.length;
-      },
-      prevImage() {
-        this.currentImage = (this.currentImage - 1 + this.images.length) % this.images.length;
-      },
-      pushStep(step) {
-      this.currentStep = step;
-      },
+      
       sendEmail() {
       emailjs.sendForm('service_x4d0cem', 'template_nuj1nau', this.$refs.form, 'MGXaQzcdX9_gSx5lO')
         .then((result) => {
             console.log('SUCCESS!', result.text);
+            setTimeout(() => {
+            this.showAlert = "Email sent successfully!";
+            this.errorMessage = '';
+          }, 2000);
         }, (error) => {
             console.log('FAILED...', error.text);
+            setTimeout(() => {
+            this.showAlert = "Email Error!";
+            this.clearMessage = ''; 
+          }, 2000);
         });
-    }
+      },
+      goToSlide(index) {
+        this.currentIndex = index;
+      },
+      prevSlide() {
+        if (this.currentIndex == 0){
+          this.currentIndex = this.members.length - 1;
+        }else {
+          this.currentIndex = this.currentIndex - 1;
+        }
+        if (this.currentStep == 0){
+          this.currentStep = this.members.length - 1;
+        }else {
+          this.currentStep = this.currentStep - 1;
+        }
+        console.log(this.currentStep)
+      },
+      nextSlide() {
+        if (this.currentIndex == this.members.length - 1){
+          this.currentIndex = 0;
+        }else {
+          this.currentIndex = this.currentIndex + 1;
+        }
+        if (this.currentStep  == this.members.length - 1){
+          this.currentStep  = 0;
+        }else {
+          this.currentStep  = this.currentStep + 1;
+        }
+        console.log(this.currentStep)
+      },
+      pushStep(step) {
+        this.currentStep = step;
+        this.currentIndex = step;
+      },
 
     },
     mounted() {
@@ -132,7 +235,7 @@ export default {
     script2.type = 'text/javascript';
     script2.innerHTML = `
       (function(){
-        emailjs.init("YOUR_PUBLIC_KEY");
+        emailjs.init("MGXaQzcdX9_gSx5lO");
       })();
     `;
     document.body.appendChild(script2);

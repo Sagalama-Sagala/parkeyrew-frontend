@@ -3,8 +3,9 @@
     <PopupForm
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
-    @handleOk="handleOk"
-    />
+    @fetch-my-store="fetchMyStore()"
+  />
+  <div class="flex flex-col">
     <div
       class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
     >
@@ -132,6 +133,9 @@ export default {
     };
   },
   methods: {
+    fetchMyStore() {
+      this.myStoreStore.fetchMyStore();
+    },
     routeToMyStore() {
       this.page = "store";
       this.$router.push("/mystore");
@@ -157,40 +161,6 @@ export default {
     },
     handleToggle() {
       this.myStoreStore.togglePopupForm();
-    },
-    handleOk(value, resetData) {
-      const newData = {
-        name: value.name,
-        price: value.price,
-        deliveryFee: value.deliveryFee,
-        description: value.description,
-        brand: value.brand,
-        color: value.color,
-        size: value.size,
-        category: value.category,
-        condition: value.condition,
-        sendFrom: value.sendFrom,
-        remain: value.remain,
-      };
-      axios
-        .post("product/create-product", newData, {
-          headers: {
-            Authorization: "Bearer " + `${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          this.$router.push(`product/${response.data._id}`);
-          this.myStoreStore.isPopupFormModal = false;
-          // console.log(response.data);
-          // resetData();
-          // 
-        })
-        .catch((err) => {
-          console.log(err.response.data.message);
-          err.response.data.message.forEach((item) => {
-            alert(item);
-          });
-        });
     },
   },
 };

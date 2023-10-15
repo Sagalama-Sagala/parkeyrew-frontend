@@ -268,23 +268,30 @@ import {
   colorOptions,
   sizeOptions,
 } from "@/constants";
-import { useMyStoreStore } from "@/store/my-store.store.js";
+import axios from "axios";
 export default {
-  setup() {
-    const myStoreStore = useMyStoreStore();
-    myStoreStore.fetchMyStore();
-    return { myStoreStore };
-  },
   name: "PopupForm",
   props: {
     isModalOpen: {
       type: Boolean,
       default: false,
     },
-    productData: {
-      type: Object,
-      default: () => {},
-    },
+  },
+  setup(props) {
+    const infoProducts = reactive({
+      brand: "0",
+      category: "0",
+      color: "0",
+      condition: 0,
+      sendFrom: "0",
+      size: "0",
+      price: 0,
+      description: "",
+      name: "",
+      remain: 0,
+      deliveryFee: 0,
+    });
+    return { infoProducts };
   },
   methods: {
     onFileChange(e) {
@@ -303,9 +310,17 @@ export default {
       this.$emit("toggleModal");
     },
     handleOk() {
-      if (this.validateData()) {
-        this.$emit("handleOk", this.infoProducts, this.handleReset);
-      }
+      axios
+        .post("/product/create-product", this.infoProducts)
+        .then((response) => {
+          this.$emit("fetchMyStore");
+          this.handleReset();
+          this.handleToggleModal();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(this.infoProducts);
     },
     handleReset() {
       this.infoProducts.brand = "0";
@@ -333,118 +348,6 @@ export default {
       this.handleToggleModal();
       this.handleReset();
     },
-    validateData() {
-      let isValid = true;
-      const warnings = [];
-      //NAME
-      if (!this.infoProducts.name) {
-        warnings.push("Please enter the product name.");
-        isValid = false;
-      }
-      //Description
-      if (!this.infoProducts.description) {
-        warnings.push("Please enter the product description.");
-        isValid = false;
-      }
-      //Category
-      if (this.infoProducts.category === "0") {
-        warnings.push("Please select a category.");
-        isValid = false;
-      }
-      //Brand
-      if (this.infoProducts.brand === "0") {
-        warnings.push("Please select a brand.");
-        isValid = false;
-      }
-      //Color
-      if (this.infoProducts.color === "0") {
-        warnings.push("Please select a color.");
-        isValid = false;
-      }
-      //Condition
-      if (this.infoProducts.condition === 0) {
-        warnings.push("Please enter the product condition.");
-        isValid = false;
-      } else if (this.infoProducts.condition < 51) {
-        warnings.push("Please enter the product condition more than 51%.");
-        isValid = false;
-      } else if (this.infoProducts.condition > 100) {
-        warnings.push("Please enter the product condition less than 100%.");
-        isValid = false;
-      }
-      //Price
-      if (
-        this.infoProducts.price === undefined ||
-        this.infoProducts.price === null ||
-        this.infoProducts.price === ""
-      ) {
-        warnings.push("Please enter the product price.");
-        isValid = false;
-      } else if (this.infoProducts.price < 0) {
-        warnings.push("Please enter the product price more than 0 baht.");
-        isValid = false;
-      }
-      //Remain
-      if (this.infoProducts.remain === 0) {
-        warnings.push("Please enter the product remain.");
-        isValid = false;
-      }
-      //Size
-      if (this.infoProducts.size === "0") {
-        warnings.push("Please select a size.");
-        isValid = false;
-      }
-      //SendFrom
-      if (this.infoProducts.sendFrom === "0") {
-        warnings.push("Please select a province.");
-        isValid = false;
-      }
-      //DeliveryFee
-      if (
-        this.infoProducts.deliveryFee === undefined ||
-        this.infoProducts.deliveryFee === null ||
-        this.infoProducts.deliveryFee === ""
-      ) {
-        warnings.push("Please enter the delivery fee.");
-        isValid = false;
-      }
-      this.warnings = warnings;
-      if (!isValid) {
-        console.log("Data validation failed: ", this.warnings);
-      }
-      return isValid;
-    },
-  },
-  setup(props) {
-    const infoProducts = reactive({
-      brand: "0",
-      category: "0",
-      color: "0",
-      condition: 0,
-      sendFrom: "0",
-      size: "0",
-      price: 0,
-      description: "",
-      name: "",
-      remain: 0,
-      deliveryFee: 0,
-    });
-    watchEffect(() => {
-      if (props.productData) {
-        infoProducts.brand = props.productData.brand;
-        infoProducts.category = props.productData.category;
-        infoProducts.condition = props.productData.condition;
-        infoProducts.sendFrom = props.productData.sendFrom;
-        infoProducts.size = props.productData.size;
-        infoProducts.price = props.productData.price;
-        infoProducts.description = props.productData.description;
-        infoProducts.name = props.productData.name;
-        infoProducts.remain = props.productData.remain;
-        infoProducts.deliveryFee = props.productData.deliveryFee;
-        infoProducts.color = props.productData.color;
-      }
-    });
-    return { infoProducts };
   },
   data() {
     return {

@@ -2,7 +2,7 @@
   <PopupForm
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
-    @handleOk="handleOk"
+    @fetch-my-store="fetchMyStore()"
   />
   <div class="flex flex-col">
     <div
@@ -130,6 +130,9 @@ export default {
     };
   },
   methods: {
+    fetchMyStore() {
+      this.myStoreStore.fetchMyStore();
+    },
     routeToMyStore() {
       this.page = "store";
       this.$router.push("/mystore");
@@ -155,38 +158,6 @@ export default {
     },
     handleToggle() {
       this.myStoreStore.togglePopupForm();
-    },
-    handleOk(value, resetData) {
-      const newData = {
-        name: value.name,
-        price: value.price,
-        deliveryFee: value.deliveryFee,
-        description: value.description,
-        brand: value.brand,
-        color: value.color,
-        size: value.size,
-        category: value.category,
-        condition: value.condition,
-        sendFrom: value.sendFrom,
-        remain: value.remain,
-      };
-      axios
-        .post("product/create-product", newData, {
-          headers: {
-            Authorization: "Bearer " + `${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          resetData();
-          this.isModalOpen = false;
-        })
-        .catch((err) => {
-          console.log(err.response.data.message);
-          err.response.data.message.forEach((item) => {
-            alert(item);
-          });
-        });
     },
   },
 };

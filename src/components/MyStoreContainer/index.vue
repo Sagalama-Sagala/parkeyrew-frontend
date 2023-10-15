@@ -162,43 +162,6 @@ export default {
     handleToggle() {
       this.myStoreStore.togglePopupForm();
     },
-<<<<<<< HEAD
-=======
-    handleOk(value, resetData) {
-      const newData = {
-        name: value.name,
-        price: value.price,
-        deliveryFee: value.deliveryFee,
-        description: value.description,
-        brand: value.brand,
-        color: value.color,
-        size: value.size,
-        category: value.category,
-        condition: value.condition,
-        sendFrom: value.sendFrom,
-        remain: value.remain,
-      };
-      axios
-        .post("product/create-product", newData, {
-          headers: {
-            Authorization: "Bearer " + `${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          this.$router.push(`product/${response.data._id}`);
-          this.myStoreStore.isPopupFormModal = false;
-          // console.log(response.data);
-          // resetData();
-          // 
-        })
-        .catch((err) => {
-          console.log(err.response.data.message);
-          err.response.data.message.forEach((item) => {
-            alert(item);
-          });
-        });
-    },
->>>>>>> 57e6fcae10a8fbf4477240acd9ed68d715b68081
   },
 };
 </script>

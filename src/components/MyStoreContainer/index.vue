@@ -30,7 +30,7 @@
             </div>
           </div>
           <div class="flex flex-col">
-            <div>
+            <div @click="handleEditProfile">
               <img
                 class="w-[3rem] rounded-2xl mb-2 hover:cursor-pointer md:block hidden"
                 :src="editIcon"
@@ -137,6 +137,9 @@ export default {
     routeToReview() {
       this.page = "review";
       this.$router.push("/mystore/review");
+    },
+    handleEditProfile() {
+      this.$router.push("/profile/record");
     },
     openFollower() {
       this.followerDialog = true;

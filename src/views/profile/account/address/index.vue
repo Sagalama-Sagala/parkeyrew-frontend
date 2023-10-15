@@ -25,21 +25,25 @@
                 type="text"
                 class="focus:outline-none mt-6 block w-full px-2 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
                 placeholder="ชื่อจริง-นามสกุล"
+                v-model="name"
             />
             <input
                 type="text"
                 class="focus:outline-none mt-4 block w-full px-2 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
                 placeholder="หมายเลขโทรศัพท์"
+                v-model="phone"
             />
             <input
                 type="text"
                 class="focus:outline-none mt-4 block w-full px-2 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
                 placeholder="จังหวัด, เขต, อำเภอ, รหัสไปรษณีย์"
+                v-model="address"
             />
             <textarea
                 type="text"
                 class="focus:outline-none block w-full h-[100px] mt-4 px-2 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
                 placeholder="บ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล"
+                v-model="addressDescription"
             />
             <div class="flex mt-8">
                 <input type="checkbox" v-model="checked" />
@@ -55,7 +59,7 @@
                 </button>
                 <button
                     class="border-[0.05rem] border-black px-4 py-2 mx-1 rounded-lg md:hover:shadow-md"
-                    @click="saveNewAddr"
+                    @click="createNewAddr"
                 >
                     ยืนยัน
                 </button>
@@ -65,14 +69,14 @@
 
     <div class="border-b-[0.08rem] border-black mr-12 my-8 w-full"></div>
     <div
-        v-for="(adr, index) in address"
+        v-for="(adr, index) in profileStore.addr"
         class="w-full font-bold flex items-center justify-start my-2 md:px-8"
         :key="index"
     >
         <!-- desktop scale -->
         <div class="w-full my-4 pl-4 hidden md:block">
             <div class="flex justify-around mr-8">
-                <p class="md:text-xl">{{ adr.name }}</p>
+                <p class="md:text-xl">{{ adr.firstname }}</p>
                 <p class="md:text-xl">{{ adr.lastname }}</p>
                 <div
                     class="w-[10px] border-r-[0.08rem] h-[24px] border-black"
@@ -81,10 +85,10 @@
             </div>
             <div class="w-full font-normal">
                 <p class="break-words mt-2">
-                    {{ adr.add }}
+                    {{ adr.address + " " + adr.addressDescription }}
                 </p>
             </div>
-            <div v-if="adr.priority === 1" class="justify-start">
+            <div v-if="index === 0" class="justify-start">
                 <button
                     class="border-[0.05rem] rounded-lg px-2 border-primary text-white p-[3px] mt-2 bg-blue-600 font-light text-xs"
                 >
@@ -96,7 +100,7 @@
         <!-- mobile scale -->
         <div class="w-full my-4 pl-4 md:hidden" @click="editAddr">
             <div class="flex justify-around mr-8">
-                <p class="">{{ adr.name }}</p>
+                <p class="">{{ adr.firstname }}</p>
                 <p class="">{{ adr.lastname }}</p>
                 <div
                     class="w-[10px] border-r-[0.08rem] h-[24px] border-black"
@@ -105,10 +109,10 @@
             </div>
             <div class="w-full font-normal">
                 <p class="break-words mt-2">
-                    {{ adr.add }}
+                    {{ adr.address + " " + adr.addressDescription }}
                 </p>
             </div>
-            <div v-if="adr.priority === 1" class="justify-start">
+            <div v-if="index === 0" class="justify-start">
                 <button
                     class="border-[0.05rem] rounded-lg px-2 border-primary text-white p-[3px] mt-2 bg-blue-600 font-light text-xs"
                 >
@@ -128,16 +132,13 @@
                     แก้ไข
                 </button>
                 <button
-                    v-if="adr.priority !== 1"
+                    v-if="index !== 0"
                     class="border-b-[0.05rem] px-2 pt-2 border-black md:mx-2"
                 >
                     ลบ
                 </button>
             </div>
-            <div
-                v-if="adr.priority !== 1"
-                class="flex justify-center mt-4 items-end"
-            >
+            <div v-if="index !== 0" class="flex justify-center mt-4 items-end">
                 <button
                     class="border-[0.05rem] rounded-md px-2 border-black text-black font-normal"
                 >
@@ -150,29 +151,40 @@
 
 <script>
 import { ref } from "vue";
+import { useProfileStore } from "@/store/profile.store.js";
+import axios from "axios";
 
 export default {
+    setup() {
+        const profileStore = useProfileStore();
+        profileStore.fetchMyAddress();
+        return { profileStore };
+    },
     data() {
         return {
             checked: ref(false),
             showPopup: false,
-            address: [
-                {
-                    name: "ณัชชา",
-                    lastname: "สวยสะอาด",
-                    phone: "0949193350",
-                    add: "A3 - 409 อาคาร AJ park 701 ซอยฉลองกรุง 1 ถนนฉลองกรุง แขวง ลาดกระบัง เขตลาดกระบัง 10520",
-                    priority: 1,
-                },
-                {
-                    name: "ณัชชา",
-                    lastname: "สวยสะอาด",
-                    phone: "0949193350",
-                    add: "247 หมู่ 7 บ้านโน้น ตำบลนี้ อำเถอนู้น จังหวัดนั้นนั้น 33000",
-                    priority: 0,
-                },
-            ],
+            firstname: "",
+            lastname: "",
+            address: "",
+            addressDescription: "",
+            phone: "",
+            isMainAddress: null,
         };
+    },
+    computed: {
+        name: {
+            set(value) {
+                const splited = value.split(" ");
+                this.firstname = splited[0];
+                if (splited.length > 1) {
+                    this.lastname = splited[1];
+                }
+            },
+            get() {
+                return `${this.firstname} ${this.lastname}`.trim();
+            },
+        },
     },
     methods: {
         togglePopup() {
@@ -181,8 +193,31 @@ export default {
         editAddr() {
             console.log("click on phone");
         },
-        saveNewAddr() {
-            console.log("fetch send addr");
+        async createNewAddr() {
+            try {
+                const res = await axios({
+                    url: "/address/create-address",
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                    data: {
+                        firstname: this.firstname,
+                        lastname: this.lastname,
+                        address: this.address,
+                        addressDescription: this.addressDescription,
+                        phone: this.phone,
+                        isMainAddress: true,
+                    },
+                });
+                console.log(res.data);
+                this.showPopup = !this.showPopup;
+                this.profileStore.fetchMyAddress();
+            } catch (error) {
+                console.log(error);
+            }
         },
     },
 };

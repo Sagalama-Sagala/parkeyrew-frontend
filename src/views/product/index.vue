@@ -51,8 +51,9 @@
               <div class="flex gap-2">
                 <img
                   v-if="!isUserProduct"
-                  :src="heart"
-                  class="border-[2px] border-grey rounded-xl flex justify-center items-center p-1 hover:bg-secondary md:w-14 w-10 cursor-pointer"
+                  :src="isLiked ? heartFilled : heart"
+                  class="border-[2px] border-grey rounded-xl flex justify-center items-center p-1 hover:bg-secondary md:w-14 w-10 cursor-pointer border-red-300 duration-100"
+                  :class="isLiked ? 'bg-red-200' : 'bg-white'"
                   @click="handleLike()"
                 />
                 <img
@@ -117,7 +118,7 @@
                 class="hover:bg-secondary hover:cursor-pointer w-[4rem] h-[4rem] rounded-full object-cover border-4"
               />
               <div>
-                <h1 class="hover:underline hover:cursor-pointer">
+                <h1 class="hover:underline hover:cursor-pointer" @click="handleGotoStore">
                   {{ infoProducts?.product?.owner?.username }}
                 </h1>
                 <Rating
@@ -146,7 +147,7 @@
             </div>
           </div>
           <div class="flex flex-1 justify-end items-end">
-            <h1 class="hover:underline hover:cursor-pointer">
+            <h1 class="hover:underline hover:cursor-pointer" @click="handleGotoStore">
               ดูร้านค้าผู้ชายคนนี้ >
             </h1>
           </div>
@@ -199,11 +200,12 @@ import Rating from "@/components/Rating/index.vue";
 import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
-import { shareArrow, heart, chat, call, editIcon } from "@/assets/product";
+import { shareArrow, heart, chat, call, editIcon, heartFilled } from "@/assets/product";
 import { recommend } from "@/assets/product_card";
 
 export default {
   setup() {
+    const isLiked = ref(false)
     const infoProducts = ref([]);
     const route = useRoute();
     const router = useRouter();
@@ -213,11 +215,16 @@ export default {
     axios
       .get(`/product/get-info-product-page/${productId}`)
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         infoProducts.value = response.data;
         isUserProduct.value = response.data.isUserProduct;
-        console.log(isUserProduct.value);
-        console.log(infoProducts.value);
+
+        //ใส่ไว้ก่อนนะ รอbackend
+        axios.get('/user/get-user-wishlist').then((response) => {
+          console.log('test', response.data.wishList)
+          isLiked.value = response.data.wishList.some((item) => item._id === productId)
+        })
+
       })
       .catch((err) => {
         console.log(err);
@@ -235,7 +242,7 @@ export default {
       });
     };
 
-    return { infoProducts, connectChatRoom, isUserProduct, productId };
+    return { infoProducts, connectChatRoom, isUserProduct, productId , isLiked };
   },
   components: {
     ProductCard,
@@ -248,6 +255,7 @@ export default {
         .put(`/user/add-user-wishlist/${this.$route.params.id}`)
         .then((response) => {
           console.log(response);
+          this.isLiked = !this.isLiked;
         })
         .catch((err) => {
           console.log(err);
@@ -298,11 +306,16 @@ export default {
           });
         });
     },
+    handleGotoStore()
+    {
+      this.$router.push(`/store/${this.infoProducts.product.owner._id}`)
+    },
   },
   data() {
     return {
       shareArrow,
       heart,
+      heartFilled,
       recommend,
       chat,
       call,

@@ -70,6 +70,7 @@ import {
 
 import Rating from "../../components/Rating/index.vue";
 import axios from "axios";
+import { useMyStoreStore } from "@/store/my-store.store.js";
 
 export default {
   components: {
@@ -128,10 +129,23 @@ export default {
       type: Number,
       default: 50,
     },
+    ownerId: {
+      type: String,
+      default: null,
+    },
   },
   methods: {
     handleSellerClick() {
       this.$emit("sellerClick");
+
+      //รอBackend แก้ขัดไปก่อน
+      if(this.sellerName == this.myStoreStore.mystore.username){
+        this.$router.push("/mystore");
+      }
+      else
+      {
+        this.$router.push(`/store/${this.ownerId}`);
+      }
     },
     isRecommended(rating) {
       if (rating > 3) {
@@ -146,7 +160,11 @@ export default {
       this.$router.push(`/product/${this.id}`);
     },
   },
-  setup() {},
+  setup() {
+    const myStoreStore = useMyStoreStore();
+    return { myStoreStore };
+    
+  },
   data() {
     return {
       recommend,

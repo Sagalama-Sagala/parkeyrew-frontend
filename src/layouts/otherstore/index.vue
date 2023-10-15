@@ -1,10 +1,10 @@
 <script setup>
-import MyStoreContainer from "@/components/MyStoreContainer/index.vue";
+import OtherStoreContainer from "@/components/OtherStoreContainer/index.vue";
 </script>
 
 <template>
   <div class=" h-screen bg-secondary">
-    <my-store-container />
+    <other-store-container />
     <router-view />
   </div>
 </template>

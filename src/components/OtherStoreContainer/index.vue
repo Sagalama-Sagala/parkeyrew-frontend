@@ -38,24 +38,31 @@
           <div
             class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]"
           >
-            <div class="hover:cursor-pointer" @click="openFollower">
-              <b>{{ otherStoreStore.otherStore?.follower.length }} ผู้ติดตาม</b>
-            </div>
-            <Dialog
-              v-if="followerDialog"
-              @close="closeFollower"
-              title="ผู้ติดตาม"
-            >
-            </Dialog>
+          <div class="flex w-[50%] justify-end">
+              <div class="hover:cursor-pointer" @click="openFollower">
+                <b>{{ otherStoreStore.otherStore?.follower.length }} ผู้ติดตาม</b>
+              </div>
+              <Dialog
+                v-if="followerDialog"
+                @close="closeFollower"
+                title="ผู้ติดตาม"
+              >
+              
+              </Dialog>
+          </div>
             |
-            <div class="hover:cursor-pointer" @click="openFollowing">
-              <b>{{ otherStoreStore.otherStore?.following.length }} กำลังติดตาม</b>
+              <div class="flex items-center w-[50%] justify-between ">
+                <div class="hover:cursor-pointer" @click="openFollowing">
+                  <b>{{ otherStoreStore.otherStore?.following.length }} กำลังติดตาม</b>
+                </div>
+                <Dialog
+                  v-if="followingDialog"
+                  @close="closeFollowing"
+                  title="กำลังติดตาม"
+                />
+                <h1 v-if="!isFollow" class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer" @click="handleFollow">ติดตาม +</h1>
+                <h1 v-else class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-primary hover:text-white duration-100 text-sm cursor-pointer" @click="handleFollow">ยกเลิกติดตาม +</h1>
             </div>
-            <Dialog
-              v-if="followingDialog"
-              @close="closeFollowing"
-              title="กำลังติดตาม"
-            />
           </div>
           <div
             class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12"
@@ -100,9 +107,10 @@
     setup() {
     const route = useRoute();
     const id = route.params.id;
+    const isFollow = ref(false);
     const otherStoreStore = useOtherStoreStore();
     otherStoreStore.fetchOtherStore(id);
-    return { otherStoreStore};
+    return { otherStoreStore,isFollow};
     },
     components: {
       Rating,
@@ -142,6 +150,36 @@
       closeFollowing() {
         this.followingDialog = false;
       },
+      handleFollow()
+      {
+        // axios.put('follow-user-by-id', {
+        //   id: this.$route.params.id,
+        // }).then
+        // (
+        //   (response) => {
+        //     console.log(response.data);
+        //     this.isFollow = true;
+        //   },
+        //   (error) => {
+        //     console.log(error);
+        //   }
+        // );
+      },
+      handleUnfollow()
+      {
+        // axios.put('unfollow-user-by-id', {
+        //   id: this.$route.params.id,
+        // }).then
+        // (
+        //   (response) => {
+        //     console.log(response.data);
+        //     this.isFollow = false;
+        //   },
+        //   (error) => {
+        //     console.log(error);
+        //   }
+        // );
+      }
     },
   };
   </script>

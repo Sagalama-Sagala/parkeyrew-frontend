@@ -45,11 +45,7 @@
                 placeholder="บ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล"
                 v-model="addressDescription"
             />
-            <div class="flex mt-8">
-                <input type="checkbox" v-model="checked" />
-                <div class="ml-1">เลือกเป็นที่อยู่ตั้งต้น</div>
-                <!-- true false -->
-            </div>
+
             <div class="mt-8 justify-end flex">
                 <button
                     class="px-4 py-2 mx-1 rounded-lg md:hover:bg-gray-100"
@@ -70,7 +66,7 @@
     <div class="border-b-[0.08rem] border-black mr-12 my-8 w-full"></div>
     <div
         v-for="(adr, index) in profileStore.addr"
-        class="w-full font-bold flex items-center justify-start my-2 md:px-8"
+        class="w-full font-bold flex items-center justify-start my-2 md:px-16 py-4 shadow"
         :key="index"
     >
         <!-- desktop scale -->
@@ -141,6 +137,7 @@
             <div v-if="index !== 0" class="flex justify-center mt-4 items-end">
                 <button
                     class="border-[0.05rem] rounded-md px-2 border-black text-black font-normal"
+                    @click="setMainAddr(index)"
                 >
                     ตั้งเป็นค่าเริ่มต้น
                 </button>
@@ -192,6 +189,26 @@ export default {
         },
         editAddr() {
             console.log("click on phone");
+        },
+        async setMainAddr(index) {
+            try {
+                const res = await axios({
+                    url: "/user/set-main-address",
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                    data: {
+                        addressId: this.profileStore.addr[index]._id,
+                    },
+                });
+                this.profileStore.fetchMyAddress();
+                console.log(res.data);
+            } catch (error) {
+                console.log(error);
+            }
         },
         async createNewAddr() {
             try {

@@ -130,6 +130,7 @@
                 <button
                     v-if="index !== 0"
                     class="border-b-[0.05rem] px-2 pt-2 border-black md:mx-2"
+                    @click="deleteAddr(index)"
                 >
                     ลบ
                 </button>
@@ -210,6 +211,24 @@ export default {
                 console.log(error);
             }
         },
+        async deleteAddr(index) {
+            try {
+                const res = await axios({
+                    url: `/address/delete-address/${this.profileStore.addr[index]._id}`,
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                });
+                this.profileStore.fetchMyAddress();
+                console.log(res.data);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async createNewAddr() {
             try {
                 const res = await axios({

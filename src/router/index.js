@@ -42,6 +42,23 @@ const routes = [
         ],
       },
       {
+        path: "store",
+        component: () => import("../layouts/otherstore/index.vue"),
+        meta: { auth: false },
+        children: [
+          {
+            path: "/",
+            name: "StoreProducts",
+            component: () => import("@/views/otherstore/store/index.vue"),
+          },
+          {
+            path: "review",
+            name: "StoreReview",
+            component: () => import("@/views/otherstore/review/index.vue"),
+          },
+        ],
+      },
+      {
         path: "favorite",
         name: "Favorite",
         component: () => import("@/views/favorite/index.vue"),

@@ -1,10 +1,6 @@
 <template>
     <div class="flex flex-col">
-      <PopupForm
-      :isModalOpen="this.myStoreStore.isPopupFormModal"
-      @toggleModal="handleToggle"
-      @handleOk="handleOk"
-      />
+
       <div
         class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
       >
@@ -23,20 +19,13 @@
             </div>
             <div class="flex flex-col justify-center w-[12rem] md:pt-0 pt-4">
               <div>
-                <b>{{ myStoreStore.mystore.username }}</b>
+                <b>{{  }}</b>
               </div>
               <div class="md:pt-0 pt-3">
-                <Rating :rating="myStoreStore.mystore.reviewStar" />
+                <Rating  />
               </div>
             </div>
             <div class="flex flex-col">
-              <div @click="handleEditProfile">
-                <img
-                  class="w-[3rem] rounded-2xl mb-2 hover:cursor-pointer md:block hidden"
-                  :src="editIcon"
-                  alt="edit profile icon"
-                />
-              </div>
               <div>
                 <img
                   class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden"
@@ -50,7 +39,7 @@
             class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]"
           >
             <div class="hover:cursor-pointer" @click="openFollower">
-              <b>{{ myStoreStore.mystore.follower.length }} ผู้ติดตาม</b>
+              <b>{{  }} ผู้ติดตาม</b>
             </div>
             <Dialog
               v-if="followerDialog"
@@ -60,7 +49,7 @@
             </Dialog>
             |
             <div class="hover:cursor-pointer" @click="openFollowing">
-              <b>{{ myStoreStore.mystore.following.length }} กำลังติดตาม</b>
+              <b>{{  }} กำลังติดตาม</b>
             </div>
             <Dialog
               v-if="followingDialog"
@@ -72,7 +61,7 @@
             class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12"
           >
             <b>คำอธิบาย</b>
-            <div>{{ myStoreStore.mystore.description }}</div>
+            <div>{{  }}</div>
           </div>
         </div>
         <div
@@ -104,13 +93,13 @@
   import { editIcon, shareIcon } from "@/assets/mystore";
   import { ref } from "vue";
   import axios from "axios";
-  import { useMyStoreStore } from "@/store/my-store.store.js";
-  
+  import { useOtherStoreStore } from "@/store/other-store.store.js";
+
   export default {
     setup() {
-      const myStoreStore = useMyStoreStore();
-      myStoreStore.fetchMyStore();
-      return { myStoreStore };
+    const otherStoreStore = useOtherStoreStore();
+    otherStoreStore.fetchOtherStore();
+    return { otherStoreStore };
     },
     components: {
       Rating,
@@ -132,11 +121,11 @@
     methods: {
       routeToMyStore() {
         this.page = "store";
-        this.$router.push("/mystore");
+        this.$router.push("/store");
       },
       routeToReview() {
         this.page = "review";
-        this.$router.push("/mystore/review");
+        this.$router.push("/store/review");
       },
       handleEditProfile() {
         this.$router.push("/profile/record");
@@ -152,43 +141,6 @@
       },
       closeFollowing() {
         this.followingDialog = false;
-      },
-      handleToggle() {
-        this.myStoreStore.togglePopupForm();
-      },
-      handleOk(value, resetData) {
-        const newData = {
-          name: value.name,
-          price: value.price,
-          deliveryFee: value.deliveryFee,
-          description: value.description,
-          brand: value.brand,
-          color: value.color,
-          size: value.size,
-          category: value.category,
-          condition: value.condition,
-          sendFrom: value.sendFrom,
-          remain: value.remain,
-        };
-        axios
-          .post("product/create-product", newData, {
-            headers: {
-              Authorization: "Bearer " + `${localStorage.getItem("token")}`,
-            },
-          })
-          .then((response) => {
-            this.$router.push(`product/${response.data._id}`);
-            this.myStoreStore.isPopupFormModal = false;
-            // console.log(response.data);
-            // resetData();
-            // 
-          })
-          .catch((err) => {
-            console.log(err.response.data.message);
-            err.response.data.message.forEach((item) => {
-              alert(item);
-            });
-          });
       },
     },
   };

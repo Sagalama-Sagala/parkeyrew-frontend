@@ -100,12 +100,13 @@
   import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
   import Rating from "@/components/Rating/index.vue";
   import { editIcon, shareIcon } from "@/assets/mystore";
-  import { ref } from "vue";
+  import { ref, onBeforeUnmount } from "vue";
   import axios from "axios";
   import { useOtherStoreStore } from "@/store/other-store.store.js";
   import { useRoute, useRouter } from "vue-router";
 
   export default {
+
     setup() {
     const route = useRoute();
     const id = route.params.id;
@@ -183,6 +184,7 @@
         );
       }
     },
+    
   };
   </script>
   

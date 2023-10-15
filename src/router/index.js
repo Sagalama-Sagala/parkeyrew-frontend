@@ -47,7 +47,7 @@ const routes = [
         meta: { auth: false },
         children: [
           {
-            path: "/",
+            path: "",
             name: "StoreProducts",
             component: () => import("@/views/otherstore/store/index.vue"),
           },

@@ -118,7 +118,7 @@
                 class="hover:bg-secondary hover:cursor-pointer w-[4rem] h-[4rem] rounded-full object-cover border-4"
               />
               <div>
-                <h1 class="hover:underline hover:cursor-pointer">
+                <h1 class="hover:underline hover:cursor-pointer" @click="handleGotoStore">
                   {{ infoProducts?.product?.owner?.username }}
                 </h1>
                 <Rating
@@ -147,7 +147,7 @@
             </div>
           </div>
           <div class="flex flex-1 justify-end items-end">
-            <h1 class="hover:underline hover:cursor-pointer">
+            <h1 class="hover:underline hover:cursor-pointer" @click="handleGotoStore">
               ดูร้านค้าผู้ชายคนนี้ >
             </h1>
           </div>
@@ -305,6 +305,10 @@ export default {
             alert(item);
           });
         });
+    },
+    handleGotoStore()
+    {
+      this.$router.push(`/store/${this.infoProducts.product.owner._id}`)
     },
   },
   data() {

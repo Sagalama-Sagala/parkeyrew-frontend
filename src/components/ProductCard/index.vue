@@ -128,11 +128,15 @@ export default {
       type: Number,
       default: 50,
     },
+    ownerId: {
+      type: String,
+      default: null,
+    },
   },
   methods: {
     handleSellerClick() {
       this.$emit("sellerClick");
-      this.$router.push(`/store/6519f1ce81e0955f1105a798`);
+      this.$router.push(`/store/${this.ownerId}`);
     },
     isRecommended(rating) {
       if (rating > 3) {

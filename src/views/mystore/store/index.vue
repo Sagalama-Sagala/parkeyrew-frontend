@@ -26,6 +26,7 @@
           :size="item.size"
           :brand="item.brand"
           :condition="item.condition"
+          :owner-id="item.owner._id"
         />
       </div>
     </div>

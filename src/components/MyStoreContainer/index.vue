@@ -84,7 +84,7 @@
       >
         <div
           class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
-          :class="page === 'store' ? 'bg-tertiary' : 'bg-secondary'"
+          :class="page === 'mystore' ? 'bg-tertiary' : 'bg-secondary'"
           @click="routeToMyStore()"
         >
           <h1><b>ร้านค้า</b></h1>
@@ -110,13 +110,15 @@ import { ref } from "vue";
 import axios from "axios";
 import { useMyStoreStore } from "@/store/my-store.store.js";
 import Loading from "@/components/Loading/index.vue";
+import { useRoute } from "vue-router";
 
 export default {
   setup() {
     const myStoreStore = useMyStoreStore();
+    const route = useRoute();
+    const page = ref(route.path.split("/").pop());
     myStoreStore.fetchMyStore();
-    console.log("myStoreStore", myStoreStore.mystore);
-    return { myStoreStore };
+    return { myStoreStore, page};
   },
   components: {
     Rating,
@@ -130,7 +132,6 @@ export default {
       shareIcon,
       profileURL:
         "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
-      page: "store",
       isModalOpen: false,
       followerDialog: false,
       followingDialog: false,
@@ -141,11 +142,9 @@ export default {
       this.myStoreStore.fetchMyStore();
     },
     routeToMyStore() {
-      this.page = "store";
       this.$router.push("/mystore");
     },
     routeToReview() {
-      this.page = "review";
       this.$router.push("/mystore/review");
     },
     handleEditProfile() {

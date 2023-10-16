@@ -11,11 +11,11 @@
               type="text"
               class="bg-transparent border-[1px] border-white h-10 rounded-xl w-full pr-9 pl-3 text-white focus:outline-none"
               v-model="searchInput"
-              @keyup.enter="handleSearch"
+              @keyup.enter="handleSearch(searchInput)"
             />
             <span
               class="absolute right-3 top-3 h-full cursor-pointer"
-              @click="handleSearch"
+              @click="handleSearch(searchInput)"
             >
               <img :src="search" alt="search" class="w-4" />
             </span>
@@ -246,7 +246,7 @@
             class=" ml-5 flex-wrap  duration-75"
             :class="isConditionDropdown ? 'h-[0px] overflow-hidden' : 'h-[2rem]'"
             >
-              <DoubleRangeSlider :min-Range="conditionSlider.minRange" :max-Range="conditionSlider.maxRange" :unit="conditionSlider.unit"  v-model:m1="conditionSlider.value1" v-model:m2="conditionSlider.value2"/>
+              <DoubleRangeSlider :min-Range="conditionSlider.minRange" :max-Range="conditionSlider.maxRange" :unit="conditionSlider.unit"  v-model:m1="conditionSlider.value1" v-model:m2="conditionSlider.value2" @onChange1="handleConditionSliderChange(conditionSlider.value1,conditionSlider.value2)" @onChange2="handleConditionSliderChange(conditionSlider.value1,conditionSlider.value2)"/>
             </div>
           </div>
           <div class="w-[20rem] flex flex-col gap-3 "
@@ -260,7 +260,7 @@
             class=" ml-5 flex-wrap   duration-75"
             :class="isPriceDropdown ? 'h-[0rem] overflow-hidden' : 'h-[2rem]'"
             >
-              <DoubleRangeSlider :min-Range="priceSlider.minRange" :max-Range="priceSlider.maxRange" :unit="priceSlider.unit" :step="priceSlider.step"  v-model:m1="priceSlider.value1" v-model:m2="priceSlider.value2"/>
+              <DoubleRangeSlider :min-Range="priceSlider.minRange" :max-Range="priceSlider.maxRange" :unit="priceSlider.unit" :step="priceSlider.step"  v-model:m1="priceSlider.value1" v-model:m2="priceSlider.value2" @onChange1="handlePriceSliderChange(priceSlider.value1,priceSlider.value2)" @onChange2="handlePriceSliderChange(priceSlider.value1,priceSlider.value2)"/>
               
             </div>
           </div>
@@ -294,9 +294,9 @@
 </template>
 
 <script>
-import { ref,reactive,watch } from "vue";
+import { ref,reactive,watch,onMounted } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import DoubleRangeSlider from '@/components/Filter/DoubleRangeSlider/index.vue'
@@ -323,10 +323,10 @@ export default {
       this.$router.push(`/`);
     },
     storeVariableToUrl(object) {
-      const keyword = this.$route.query.keyword || "pls";
+      const keyword = this.$route.query.keyword || "";
       const queryObject = {
-        ...object,
         keyword: keyword,
+        ...object,
       };
       this.$router.push({
         path: "/search",
@@ -369,66 +369,113 @@ export default {
         this.storeVariableToUrl(this.urlVariable);
       }
     },
+    handlePriceSliderChange(value1,value2) {
+      this.urlVariable.price = `${value1}-${value2}`;
+      this.storeVariableToUrl(this.urlVariable);
+    },
+    handleConditionSliderChange(value1,value2) {
+      this.urlVariable.condition = `${value1}-${value2}`;
+      this.storeVariableToUrl(this.urlVariable);
+    },
+
     toggleFilterBar()
     {
       this.isFilterBarToggle.value = !this.isFilterBarToggle.value
       console.log(this.isFilterBarToggle.value);
-    },
-    handleSearch() {
-      if(this.searchInput === null || this.searchInput === "") return;
-      this.$router.push(`/search?keyword=${this.searchInput}`);
-      axios
-        .get("/product")
-        .then((response) => {
-          this.products = response.data.filter((item) => {
-            const name = item.name.toLowerCase();
-            const description = item.description.toLowerCase();
-            const searchKeyword = this.searchInput.toLowerCase();
-            return name.includes(searchKeyword) || description.includes(searchKeyword);
-          });
-          console.log(response.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-        
-    },
-
+    }
   },
   setup() {
   const products = ref([]);
   const originalProducts = ref([]);
   const route = useRoute();
+  const router = useRouter();
   const keyword = route.query.keyword || "";
   const isLoading = ref(true);
   const urlVariable = reactive({
-    brand: route.query.brand ? JSON.parse(route.query.brand) : [],
-    size: route.query.size ? JSON.parse(route.query.size) : [],
-    color: route.query.color ? JSON.parse(route.query.color) : [],
+        brand: route.query.brand || [],
+        size: route.query.size || [],
+        color: route.query.color || [],
+        condition: route.query.condition || [],
+        price: route.query.price || [],
   });
+  const sizeOptions = ref([
+        { id: "S", label: "S" ,isCheck: false },
+        { id: "M", label: "M" ,isCheck: false},
+        { id: "L", label: "L" ,isCheck: false},
+        { id: "XL", label: "XL" ,isCheck: false},
+        { id: "XXL", label: "XXL" ,isCheck: false},
+        { id: "Oversize", label: "Oversize" ,isCheck: false},
+      ]);
+  const brandOptions = ref([
+        { id: 0, label: "ไม่มีแบรนด์", isCheck: false },
+        { id: 1, label: "มีแบรนด์", isCheck: false },
+      ]);
+  const colorOptions = ref([
+        { id: 0, label: "ขาว", isCheck: false },
+        { id: 1, label: "ดำ", isCheck: false },
+        { id: 2, label: "ม่วง", isCheck: false },
+        { id: 3, label: "ฟ้า", isCheck: false },
+        { id: 4, label: "น้ำเงิน", isCheck: false },
+        { id: 5, label: "เขียว", isCheck: false },
+        { id: 6, label: "ชมพู", isCheck: false },
+        { id: 7, label: "เหลือง", isCheck: false },
+        { id: 8, label: "ส้ม", isCheck: false },
+        { id: 9, label: "แดง", isCheck: false },
+        { id: 10, label: "เทา", isCheck: false },
+        { id: 11, label: "น้ำตาล", isCheck: false },
+      ]);
+  const conditionSlider = reactive({
+      minRange: 0,
+      maxRange: 100,
+      unit: "%",
+      value1: 0,
+      value2: 100,
+  });
+  const priceSlider = reactive({
+        minRange: 0,
+        maxRange: 10000,
+        unit: "฿",
+        step: 100,
+        value1: 0,
+        value2: 10000,
+    });
+   
 
-
-    const handleFilter = () => {
-      products.value = originalProducts.value.filter((product) => {
-        let isBrandValid = true;
-        let isSizeValid = true;
-        let isColorValid = true;
-
-        if (urlVariable.brand.length > 0) {
-          isBrandValid = urlVariable.brand.includes(product.brand);
-        }
-
-        if (urlVariable.size.length > 0) {
-          isSizeValid = urlVariable.size.includes(product.size);
-        }
-
-        if (urlVariable.color.length > 0) {
-          isColorValid = urlVariable.color.includes(product.color);
-        }
-
-        return isBrandValid && isSizeValid && isColorValid;
-      });
+    const updateUIFromUrl = () => {
+      if (urlVariable.brand.length) {
+        brandOptions.value.forEach((option) => {
+          if (urlVariable.brand.includes(option.label)) {
+            option.isCheck = true;
+          }
+        });
+      }
+      if (urlVariable.size.length) {
+        sizeOptions.value.forEach((option) => {
+          if (urlVariable.size.includes(option.label)) {
+            option.isCheck = true;
+          }
+        });
+      }
+      if (urlVariable.color.length) {
+        colorOptions.value.forEach((option) => {
+          if (urlVariable.color.includes(option.label)) {
+            option.isCheck = true;
+          }
+        });
+      }
+          if (!Array.isArray(urlVariable.price)) {
+        const priceValues = urlVariable.price.split("-");
+        priceSlider.value1 = parseInt(priceValues[0]);
+        priceSlider.value2 = parseInt(priceValues[1]);
+      }
+      if (!Array.isArray(urlVariable.condition)) {
+        const conditionValues = urlVariable.condition.split("-");
+        conditionSlider.value1 = parseInt(conditionValues[0]);
+        conditionSlider.value2 = parseInt(conditionValues[1]);
+      }
     };
+
+  
 
     axios
       .get("/product")
@@ -448,15 +495,77 @@ export default {
         isLoading.value = false;
       });
 
-    watch(
-      () => urlVariable,
-      () => {
-        handleFilter();
-      },
-      { deep: true }
-    );
+    const handleSearch=(keyword) => {
+      isLoading.value = true;
+      if(keyword === null || keyword === "") return;
+      router.push(`/search?keyword=${keyword}`);
+      axios
+        .get("/product")
+        .then((response) => {
+          originalProducts.value = response.data.filter((item) => {
+            const name = item.name.toLowerCase();
+            const description = item.description.toLowerCase();
+            const searchKeyword = keyword.toLowerCase();
+            return name.includes(searchKeyword) || description.includes(searchKeyword);
+          });
+          products.value = [...originalProducts.value];
+          isLoading.value = false;
+        })
+        .catch((err) => {
+          console.log(err);
+          isLoading.value = false;
+        });
+        
+    };
 
-    return { products, urlVariable, isLoading };
+    watch(
+      [urlVariable, originalProducts],
+      ([newUrlVariable, originalProducts], [oldUrlVariable, oldOriginalProducts]) => {
+        let filteredProducts = [...originalProducts];
+        
+        if (newUrlVariable.brand.length) {
+          filteredProducts = filteredProducts.filter(product =>
+            newUrlVariable.brand.includes(product.brand)
+          );
+        }
+
+        if (newUrlVariable.size.length) {
+          filteredProducts = filteredProducts.filter(product =>
+            newUrlVariable.size.includes(product.size)
+          );
+        }
+
+        if (newUrlVariable.color.length) {
+          filteredProducts = filteredProducts.filter(product =>
+            newUrlVariable.color.includes(product.color)
+          );
+        }
+
+        if(!Array.isArray(newUrlVariable.price))
+        {
+          const priceValues = newUrlVariable.price.split("-");
+          filteredProducts = filteredProducts.filter(product =>
+            product.price >= parseInt(priceValues[0]) && product.price <= parseInt(priceValues[1])
+          );
+        }
+
+        if(!Array.isArray(newUrlVariable.condition))
+        {
+          const conditionValues = newUrlVariable.condition.split("-");
+          filteredProducts = filteredProducts.filter(product =>
+            product.condition >= parseInt(conditionValues[0]) && product.condition <= parseInt(conditionValues[1])
+          );
+        }
+
+    products.value = filteredProducts;
+  },
+  { deep: true }
+);
+
+    onMounted(() => {
+      updateUIFromUrl();
+    });
+    return { products, isLoading, handleSearch ,urlVariable,colorOptions,sizeOptions,brandOptions ,conditionSlider,priceSlider};
   },
   data() {
     return {
@@ -473,54 +582,8 @@ export default {
       isColorDropdown: true,
       isConditionDropdown: true,
       isPriceDropdown: true,
-      priceSlider:ref({minRange:0, maxRange:5000, step:100,unit:"฿", value1:0,value2:5000}),
-      conditionSlider:{minRange:0, maxRange:100, step:1,unit:"%", value1:0,value2:100},
       originalProducts: [],
-      sizeOptions: [
-        { id: "S", label: "S" ,isCheck: false },
-        { id: "M", label: "M" ,isCheck: false},
-        { id: "L", label: "L" ,isCheck: false},
-        { id: "XL", label: "XL" ,isCheck: false},
-        { id: "XXL", label: "XXL" ,isCheck: false},
-        { id: "Oversize", label: "Oversize" ,isCheck: false},
-      ],
-      brandOptions: [
-        { id: 0, label: "ไม่มีแบรนด์", isCheck: false },
-        { id: 1, label: "มีแบรนด์", isCheck: false },
-      ],
-      colorOptions: [
-        { id: 0, label: "ขาว", isCheck: false },
-        { id: 1, label: "ดำ", isCheck: false },
-        { id: 2, label: "ม่วง", isCheck: false },
-        { id: 3, label: "ฟ้า", isCheck: false },
-        { id: 4, label: "น้ำเงิน", isCheck: false },
-        { id: 5, label: "เขียว", isCheck: false },
-        { id: 6, label: "ชมพู", isCheck: false },
-        { id: 7, label: "เหลือง", isCheck: false },
-        { id: 8, label: "ส้ม", isCheck: false },
-        { id: 9, label: "แดง", isCheck: false },
-        { id: 10, label: "เทา", isCheck: false },
-        { id: 11, label: "น้ำตาล", isCheck: false },
-      ],
-      urlVariable: {
-        brand: this.$route.query.brand || [],
-        size: this.$route.query.size || [],
-        color: this.$route.query.color || [],
-      },
-    };
+    }
   },
-  created() {
-    const updateOptions = (urlVariable, options) => {
-      if (Array.isArray(urlVariable)) {
-        options.forEach((option) => {
-          option.isCheck = urlVariable.includes(option.label);
-        });
-      }
-    };
-    updateOptions(this.urlVariable.brand, this.brandOptions);
-    updateOptions(this.urlVariable.size, this.sizeOptions);
-    updateOptions(this.urlVariable.color, this.colorOptions);
-  },
-  
 };
 </script>

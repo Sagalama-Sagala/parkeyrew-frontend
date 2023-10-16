@@ -1,6 +1,7 @@
+
 <template>
+  <Loading v-if="isLoading" />
   <div class="h-screen bg-secondary pt-16">
-    <Loading :isLoading="isLoading"/>
     <div class="relative">
       <img :src="cover" alt="cover" class="h-[166px] w-full object-cover" />
       <div class="absolute inset-0 flex items-center justify-center">

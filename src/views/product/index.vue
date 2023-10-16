@@ -101,11 +101,13 @@
                 <h1>หมวดหมู่</h1>
                 <h1>ลงขายเมื่อ</h1>
                 <h1>ส่งจาก</h1>
+                <h1>ราคาส่ง</h1>
               </div>
               <div class="md:font-normal font-light w-[6rem]">
                 <h1>{{ infoProducts?.product?.category }}</h1>
                 <h1>{{ formatDate(infoProducts?.product?.createdAt) }}</h1>
                 <h1>{{ infoProducts?.product?.sendFrom }}</h1>
+                <h1>{{ infoProducts?.product?.deliveryFee }}</h1>
               </div>
             </div>
           </div>
@@ -154,9 +156,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="flex justify-end">
-      <h1>ดูร้านอื่นของผู้ขาย></h1>
     </div>
     <div class="flex overflow-x-auto pb-10">
       <div class="flex gap-x-5 mx-auto">

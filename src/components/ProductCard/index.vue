@@ -25,7 +25,7 @@
           <div
             class="border-[1px] border-black rounded-md px-1 text-center text-sm w-full m-1 whitespace-nowrap"
           >
-            {{ item }}
+            {{ item }} {{ item == condition ? "%" : "" }}
           </div>
         </div>
       </div>

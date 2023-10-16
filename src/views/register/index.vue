@@ -133,17 +133,14 @@ export default {
       //validation สำหรับ username
       if (this.formValue.username === "") {
         this.formError.username = "กรุณากรอกชื่อผู้ใช้";
-      } else if (this.formValue.username.match(/[a-z]/) === null) {
-        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย a-z";
-      } else if (this.formValue.username.match(/[A-Z]/) === null) {
+      } else if (this.formValue.username.match(/[A-Za-z]/) === null) {
         this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย A-Z";
-      } else if (this.formValue.username.match(/[0-9]/) === null) {
-        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย 0-9";
-      } else if (this.formValue.username.match(/[_]/) === null) {
-        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย'_'";
-      } else if (this.formValue.username.length < 8) {
-        this.formError.username = "ชื่อผู้ใช้งานต้องยาวมากกว่า 7 ตัวอักษร";
       }
+      // else if (this.formValue.username.match(/[a-z]/) === null) {
+      //   this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย a-z";
+      // } else if (this.formValue.username.match(/[A-Z]/) === null) {
+      //   this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย A-Z";
+      // }
     },
     validationPage2() {
       //รีเซ็ต phone password and confirm_password

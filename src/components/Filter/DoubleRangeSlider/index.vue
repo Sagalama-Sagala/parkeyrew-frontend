@@ -2,12 +2,12 @@
     <div class="relative w-[100%]  md:text-[1.3rem]">
         <div class="slider-track"></div>
         <div class="relative mt-[15px]">
-            <input type="range" :min="minRange" :max="maxRange" :value="m1" id="slider-1" class="range" :step="step" @input="$emit('update:m1',parseInt($event.target.value))" @change="$emit('onChange1',parseInt($event.target.value))" />
+            <input type="range" :min="minRange" :max="maxRange" :value="m1" id="slider-1" class="range" :step="step" @input="$emit('update:m1',parseInt($event.target.value))" @change="handleOnchange1" />
             <span class="bubble1">test</span>
         </div>
 
         <div class="relative mt-[15px]">
-            <input type="range" :min="minRange" :max="maxRange" :value="m2" id="slider-2" class="range" :step="step" @input="$emit('update:m2',parseInt($event.target.value))" @change="$emit('onChange2',parseInt($event.target.value))"  />
+            <input type="range" :min="minRange" :max="maxRange" :value="m2" id="slider-2" class="range" :step="step" @input="$emit('update:m2',parseInt($event.target.value))" @change="handleOnchange2"  />
             <span class="bubble2">test</span>
         </div>
     </div>

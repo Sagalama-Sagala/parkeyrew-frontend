@@ -4,5 +4,5 @@ import DefaultBar from "@/components/Navbar/index.vue";
 
 <template>
   <default-bar />
-  <router-view />
+  <router-view  :key="$route.path"  />
 </template>

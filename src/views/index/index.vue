@@ -1,4 +1,5 @@
 <template>
+  <Loading :isLoading="isLoading"/>
   <div class="h-screen bg-secondary pt-16">
     <div class="relative">
       <img :src="cover" alt="cover" class="h-[166px] w-full object-cover" />
@@ -10,6 +11,7 @@
               type="text"
               class="bg-transparent border-[1px] border-white h-10 rounded-xl w-full pr-9 pl-3 text-white focus:outline-none"
               v-model="searchInput"
+              @keyup.enter="handleSearch"
             />
             <span
               class="absolute right-3 top-3 h-full cursor-pointer"
@@ -85,31 +87,37 @@ import {
   trousers,
 } from "@/assets/home";
 import ProductCard from "@/components/ProductCard/index.vue";
+import Loading from "@/components/Loading/index.vue";
+
 import { ref } from "vue";
 import axios from "axios";
+
 
 export default {
   setup() {
     const products = ref([]);
-
+    const isLoading = ref(true);
     axios
       .get("/product")
       .then((response) => {
         console.log(response.data);
         products.value = response.data;
+        isLoading.value = false;
       })
       .catch((err) => {
         console.log(err);
       });
 
-    return { products };
+    return { products ,isLoading};
   },
   components: {
     ProductCard,
+    Loading,
   },
   methods: {
     handleSearch() {
-      console.log("Search... ", this.searchInput);
+      if(this.searchInput === null || this.searchInput === "") return;
+      this.$router.push(`/search?keyword=${this.searchInput}`);
     },
     handleFilterType(type) {
       this.$router.push(`/filter/${type}`);

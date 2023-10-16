@@ -36,7 +36,7 @@
           >
             เลือกซื้อตามหมวดหมู่&nbsp;
           </h1>
-          <h1 class="text-primary">/&nbsp;{{ $route.params.id }}</h1>
+          <h1 class="text-primary">/&nbsp;{{ $route.query.keyword }}</h1>
         </div>
 
         <img :src="filter" class="w-10  rounded-lg md:hidden  " @click="toggleFilterBar" />
@@ -323,11 +323,13 @@ export default {
       this.$router.push(`/`);
     },
     storeVariableToUrl(object) {
+      const keyword = this.$route.query.keyword || "";
       const queryObject = {
+        keyword: keyword,
         ...object,
       };
       this.$router.push({
-        path: `/filter/${this.$route.params.id}`,
+        path: "/search",
         query: queryObject,
       });
     },
@@ -375,7 +377,6 @@ export default {
       this.urlVariable.condition = `${value1}-${value2}`;
       this.storeVariableToUrl(this.urlVariable);
     },
-
     toggleFilterBar()
     {
       this.isFilterBarToggle.value = !this.isFilterBarToggle.value
@@ -395,13 +396,14 @@ export default {
         default:
           break;
       }
-    },
+    }
   },
   setup() {
   const products = ref([]);
   const originalProducts = ref([]);
   const route = useRoute();
   const router = useRouter();
+  const keyword = route.query.keyword || "";
   const isLoading = ref(true);
   const urlVariable = reactive({
         brand: route.query.brand || [],
@@ -452,60 +454,64 @@ export default {
         value2: 10000,
     });
   const selectedValue = ref(1)
-  const handleSort = (id , product) =>
-  {
-    if (id === 1) {
-      products.value = product.sort((a, b) => b.owner.reviewStar - a.owner.reviewStar);
-    } else if (id === 2) {
-      products.value = product.sort((a, b) => a.price - b.price);
-    } else if (id === 3) {
-      products.value = product.sort((a, b) => b.price - a.price);
-    }
-  }
-  const updateUIFromUrl = () => {
-    if (urlVariable.brand.length) {
-      brandOptions.value.forEach((option) => {
-        if (urlVariable.brand.includes(option.label)) {
-          option.isCheck = true;
-        }
-      });
-    }
-    if (urlVariable.size.length) {
-      sizeOptions.value.forEach((option) => {
-        if (urlVariable.size.includes(option.label)) {
-          option.isCheck = true;
-        }
-      });
-    }
-    if (urlVariable.color.length) {
-      colorOptions.value.forEach((option) => {
-        if (urlVariable.color.includes(option.label)) {
-          option.isCheck = true;
-        }
-      });
-    }
-        if (!Array.isArray(urlVariable.price)) {
-      const priceValues = urlVariable.price.split("-");
-      priceSlider.value1 = parseInt(priceValues[0]);
-      priceSlider.value2 = parseInt(priceValues[1]);
-    }
-    if (!Array.isArray(urlVariable.condition)) {
-      const conditionValues = urlVariable.condition.split("-");
-      conditionSlider.value1 = parseInt(conditionValues[0]);
-      conditionSlider.value2 = parseInt(conditionValues[1]);
-    }
-  };
 
-  
+
+    const updateUIFromUrl = () => {
+      if (urlVariable.brand.length) {
+        brandOptions.value.forEach((option) => {
+          if (urlVariable.brand.includes(option.label)) {
+            option.isCheck = true;
+          }
+        });
+      }
+      if (urlVariable.size.length) {
+        sizeOptions.value.forEach((option) => {
+          if (urlVariable.size.includes(option.label)) {
+            option.isCheck = true;
+          }
+        });
+      }
+      if (urlVariable.color.length) {
+        colorOptions.value.forEach((option) => {
+          if (urlVariable.color.includes(option.label)) {
+            option.isCheck = true;
+          }
+        });
+      }
+          if (!Array.isArray(urlVariable.price)) {
+        const priceValues = urlVariable.price.split("-");
+        priceSlider.value1 = parseInt(priceValues[0]);
+        priceSlider.value2 = parseInt(priceValues[1]);
+      }
+      if (!Array.isArray(urlVariable.condition)) {
+        const conditionValues = urlVariable.condition.split("-");
+        conditionSlider.value1 = parseInt(conditionValues[0]);
+        conditionSlider.value2 = parseInt(conditionValues[1]);
+      }
+    };
+
+    const handleSort = (id , product) =>
+    {
+      if (id === 1) {
+        products.value = product.sort((a, b) => b.owner.reviewStar - a.owner.reviewStar);
+      } else if (id === 2) {
+        products.value = product.sort((a, b) => a.price - b.price);
+      } else if (id === 3) {
+        products.value = product.sort((a, b) => b.price - a.price);
+      }
+    }
+
 
     axios
       .get("/product")
       .then((response) => {
         originalProducts.value = response.data.filter((item) => {
-          return item.category === route.params.id;
+          const name = item.name.toLowerCase();
+          const description = item.description.toLowerCase();
+          const searchKeyword = keyword.toLowerCase();
+          return name.includes(searchKeyword) || description.includes(searchKeyword);
         });
-        products.value = [...originalProducts.value]; 
-        handleSort(selectedValue.value, products.value);
+        handleSort(selectedValue.value , products.value)
         console.log(response.data);
         isLoading.value = false;
       })
@@ -514,10 +520,28 @@ export default {
         isLoading.value = false;
       });
 
+
     const handleSearch=(keyword) => {
       isLoading.value = true;
       if(keyword === null || keyword === "") return;
       router.push(`/search?keyword=${keyword}`);
+      axios
+        .get("/product")
+        .then((response) => {
+          originalProducts.value = response.data.filter((item) => {
+            const name = item.name.toLowerCase();
+            const description = item.description.toLowerCase();
+            const searchKeyword = keyword.toLowerCase();
+            return name.includes(searchKeyword) || description.includes(searchKeyword);
+          });
+          products.value = [...originalProducts.value];
+          isLoading.value = false;
+        })
+        .catch((err) => {
+          console.log(err);
+          isLoading.value = false;
+        });
+        
     };
 
     watch(
@@ -559,8 +583,9 @@ export default {
           );
         }
 
+
     products.value = filteredProducts;
-    handleSort(selectedValue.value, products.value);
+    handleSort(selectedValue.value , products.value)
   },
   { deep: true }
 );
@@ -577,7 +602,7 @@ export default {
     onMounted(() => {
       updateUIFromUrl();
     });
-    return { products, isLoading, handleSearch ,urlVariable,colorOptions,sizeOptions,brandOptions ,conditionSlider,priceSlider,selectedValue};
+    return { products, isLoading, handleSearch ,urlVariable,colorOptions,sizeOptions,brandOptions ,conditionSlider,priceSlider , selectedValue};
   },
   data() {
     return {

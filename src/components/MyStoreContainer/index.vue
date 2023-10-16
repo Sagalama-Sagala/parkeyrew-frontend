@@ -1,10 +1,11 @@
 <template>
-  <div class="flex flex-col">
-    <PopupForm
+  <Loading :isLoading="myStoreStore.isLoading" />
+  <PopupForm
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
     @fetch-my-store="fetchMyStore()"
-  />
+    @handleOk = "handleOk"
+    />
   <div class="flex flex-col">
     <div
       class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
@@ -50,26 +51,26 @@
         <div
           class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]"
         >
-            <div class="hover:cursor-pointer" @click="openFollower">
+          <div class="hover:cursor-pointer" @click="openFollower">
             <b>{{ myStoreStore.mystore.follower.length }} ผู้ติดตาม</b>
-            </div>
-            <Dialog
-              v-if="followerDialog"
-              @close="closeFollower"
-              title="ผู้ติดตาม"
-              :isMyStore="true"
-            >
-            </Dialog>
+          </div>
+          <Dialog
+            v-if="followerDialog"
+            @close="closeFollower"
+            title="ผู้ติดตาม"
+            :isMyStore="true"
+          >
+          </Dialog>
           |
-            <div class="hover:cursor-pointer" @click="openFollowing">
-              <b>{{ myStoreStore.mystore.following.length }} กำลังติดตาม</b>
-            </div>
-            <Dialog
+          <div class="hover:cursor-pointer" @click="openFollowing">
+            <b>{{ myStoreStore.mystore.following.length }} กำลังติดตาม</b>
+          </div>
+          <Dialog
             v-if="followingDialog"
             @close="closeFollowing"
             title="กำลังติดตาม"
             :isMyStore="true"
-            />
+          />
         </div>
         <div
           class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12"
@@ -97,7 +98,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -108,17 +109,20 @@ import { editIcon, shareIcon } from "@/assets/mystore";
 import { ref } from "vue";
 import axios from "axios";
 import { useMyStoreStore } from "@/store/my-store.store.js";
+import Loading from "@/components/Loading/index.vue";
 
 export default {
   setup() {
     const myStoreStore = useMyStoreStore();
-    myStoreStore.fetchMyStore();
+    myStoreStore.fetchMyStore()
+    console.log('myStoreStore', myStoreStore.mystore)
     return { myStoreStore };
   },
   components: {
     Rating,
     PopupForm,
     Dialog,
+    Loading
   },
   data() {
     return {
@@ -161,6 +165,36 @@ export default {
     },
     handleToggle() {
       this.myStoreStore.togglePopupForm();
+    },
+    handleOk(value, resetData) {
+      this.myStoreStore.isLoading = true;
+      const newData = {
+        name: value.name,
+        price: value.price,
+        deliveryFee: value.deliveryFee,
+        description: value.description,
+        brand: value.brand,
+        color: value.color,
+        size: value.size,
+        category: value.category,
+        condition: value.condition,
+        sendFrom: value.sendFrom,
+        remain: value.remain,
+      };
+      axios
+        .post("product/create-product", newData)
+        .then((response) => {
+          this.$router.push(`product/${response.data._id}`);
+          this.myStoreStore.isPopupFormModal = false;
+          this.myStoreStore.isLoading = false;
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          err.response.data.message.forEach((item) => {
+            alert(item);
+            this.myStoreStore.isLoading = false;
+          });
+        });
     },
   },
 };

@@ -1,14 +1,14 @@
 <template>
+    <Loading :isLoading="otherStoreStore.isLoading"/>
     <div class="flex flex-col">
-
       <div
-        class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
+        class="bg-primary text-white flex flex-col px-20 md:items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
       >
         <div
-          class="bg-secondary text-black flex flex-col md:gap-6 gap-16 items-center justify-center md:w-[48rem] w-[16rem] md:h-[24rem] h-full mt-12 md:pb-0 pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
+          class="bg-secondary text-black flex flex-col md:gap-6 gap-16 items-center justify-center md:w-[48rem]  md:h-[24rem] h-full mt-12 md:pb-0 pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
         >
           <div
-            class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8"
+            class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8 md:mb-0 mb-20"
           >
             <div>
               <img
@@ -17,7 +17,9 @@
                 alt="profile picture"
               />
             </div>
-            <div class="flex flex-col justify-center w-[12rem] md:pt-0 pt-4">
+                <h1 v-if="!isFollow" class=" border-[1px] border-primary  px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer md:hidden" @click="handleFollow">ติดตาม +</h1>
+                <h1 v-else class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-primary hover:text-white duration-100 text-sm cursor-pointer md:hidden  " @click="handleUnfollow">ยกเลิกติดตาม +</h1>
+            <div class="flex flex-col justify-center w-[12rem] md:pt-0 pt-4  items-center">
               <div>
                 <b>{{ otherStoreStore.otherStore.username }}</b>
               </div>
@@ -36,7 +38,7 @@
             </div>
           </div>
           <div
-            class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]"
+            class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem]  md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-16"
           >
           <div class="flex w-[50%] justify-end">
               <div class="hover:cursor-pointer" @click="openFollower">
@@ -52,9 +54,9 @@
               </Dialog>
           </div>
             |
-              <div class="flex items-center w-[50%] justify-between ">
+              <div class="flex items-center w-[50%] justify-between flex-nowrap  ">
                 <div class="hover:cursor-pointer" @click="openFollowing">
-                  <b>{{ otherStoreStore.otherStore?.following.length }} กำลังติดตาม</b>
+                  <b class="whitespace-nowrap">{{ otherStoreStore.otherStore?.following.length }} กำลังติดตาม</b>
                 </div>
                 <Dialog
                   v-if="followingDialog"
@@ -62,8 +64,8 @@
                   title="กำลังติดตาม"
                   :isMyStore="false"
                 />
-                <h1 v-if="!isFollow" class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer" @click="handleFollow">ติดตาม +</h1>
-                <h1 v-else class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-primary hover:text-white duration-100 text-sm cursor-pointer" @click="handleUnfollow">ยกเลิกติดตาม +</h1>
+                <h1 v-if="!isFollow" class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer hidden md:block" @click="handleFollow">ติดตาม +</h1>
+                <h1 v-else class=" border-[1px] border-primary text-primary px-2 rounded-md hover:bg-primary hover:text-white duration-100 text-sm cursor-pointer hidden md:block" @click="handleUnfollow">ยกเลิกติดตาม +</h1>
             </div>
           </div>
           <div
@@ -99,13 +101,16 @@
   import Dialog from "@/components/Mystore/Dialog/index.vue";
   import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
   import Rating from "@/components/Rating/index.vue";
+  import Loading from "@/components/Loading/index.vue";
+
   import { editIcon, shareIcon } from "@/assets/mystore";
-  import { ref } from "vue";
+  import { ref, onBeforeUnmount } from "vue";
   import axios from "axios";
   import { useOtherStoreStore } from "@/store/other-store.store.js";
   import { useRoute, useRouter } from "vue-router";
 
   export default {
+
     setup() {
     const route = useRoute();
     const id = route.params.id;
@@ -118,6 +123,7 @@
       Rating,
       PopupForm,
       Dialog,
+      Loading
     },
     data() {
       return {
@@ -183,6 +189,7 @@
         );
       }
     },
+    
   };
   </script>
   

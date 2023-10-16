@@ -66,7 +66,7 @@
                 <img
                   :src="shareArrow"
                   class="border-[2px] border-grey rounded-xl flex justify-center items-center hover:bg-secondary md:w-14 w-10 p-2"
-                  @click="handleLikeClick()"
+                  @click="handleCopyLink"
                 />
               </div>
               <span>สินค้าคงเหลือ: {{ infoProducts?.product?.remain }}</span>
@@ -255,6 +255,14 @@ export default {
     Loading,
   },
   methods: {
+    handleCopyNumber() {
+      navigator.clipboard.writeText('0941231231');
+    },
+
+    handleCopyLink() {
+      navigator.clipboard.writeText(window.location.href);
+    },
+
     handleLike() {
       axios
         .put(`/user/add-user-wishlist/${this.$route.params.id}`)

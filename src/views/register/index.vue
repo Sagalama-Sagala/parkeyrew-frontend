@@ -133,14 +133,11 @@ export default {
       //validation สำหรับ username
       if (this.formValue.username === "") {
         this.formError.username = "กรุณากรอกชื่อผู้ใช้";
-      } else if (this.formValue.username.match(/[A-Za-z]/) === null) {
-        this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย A-Z";
+      } else if (this.formValue.username.length < 2) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องความยาว 2-20 ตัวอักษร";
+      } else if (this.formValue.username.length > 20) {
+        this.formError.username = "ชื่อผู้ใช้งานต้องความยาว 2-20 ตัวอักษร";
       }
-      // else if (this.formValue.username.match(/[a-z]/) === null) {
-      //   this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย a-z";
-      // } else if (this.formValue.username.match(/[A-Z]/) === null) {
-      //   this.formError.username = "ชื่อผู้ใช้งานต้องประกอบไปด้วย A-Z";
-      // }
     },
     validationPage2() {
       //รีเซ็ต phone password and confirm_password
@@ -255,6 +252,13 @@ export default {
           this.$router.push("/login");
         })
         .catch((err) => {
+          const data = err.response.data;
+          console.log(data);
+          if (data.statusCode === 400) {
+            // this.next.username = true;
+            alert(data.message);
+            // this.formError.username = "มีชื่อผู้ใช้งานนี้แล้ว";
+          }
           console.log(import.meta.env.VITE_APP_API);
           console.log(err);
         });

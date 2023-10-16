@@ -1,7 +1,7 @@
 <template>
-  <Loading :isLoading="myStoreStore.isLoading" />
+  <Loading :isLoading="this.myStoreStore?.isLoading" />
   <PopupForm
-    :isModalOpen="this.myStoreStore.isPopupFormModal"
+    :isModalOpen="this.myStoreStore?.isPopupFormModal"
     @toggleModal="handleToggle"
     @fetch-my-store="fetchMyStore()"
     @handleOk="handleOk"
@@ -18,17 +18,22 @@
         >
           <div>
             <img
-              class="h-[7rem] rounded-full mb-4"
-              :src="profileURL"
+              class="h-[7rem] w-[7rem] rounded-full mb-4"
+              :src="
+                !this.myStoreStore?.mystore?.profileImage ||
+                this.myStoreStore?.mystore?.profileImage === ''
+                  ? 'https://placehold.co/600x400'
+                  : this.myStoreStore?.mystore?.profileImage
+              "
               alt="profile picture"
             />
           </div>
           <div class="flex flex-col justify-center w-[12rem] md:pt-0 pt-4">
             <div>
-              <b>{{ myStoreStore.mystore.username }}</b>
+              <b>{{ this.myStoreStore?.mystore?.username }}</b>
             </div>
             <div class="md:pt-0 pt-3">
-              <Rating :rating="myStoreStore.mystore.reviewStar" />
+              <Rating :rating="this.myStoreStore?.mystore?.reviewStar" />
             </div>
           </div>
           <div class="flex flex-col">
@@ -52,7 +57,7 @@
           class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]"
         >
           <div class="hover:cursor-pointer" @click="openFollower">
-            <b>{{ myStoreStore.mystore.follower.length }} ผู้ติดตาม</b>
+            <b>{{ this.myStoreStore?.mystore?.follower?.length }} ผู้ติดตาม</b>
           </div>
           <Dialog
             v-if="followerDialog"
@@ -63,7 +68,12 @@
           </Dialog>
           |
           <div class="hover:cursor-pointer" @click="openFollowing">
-            <b>{{ myStoreStore.mystore.following.length }} กำลังติดตาม</b>
+            <b
+              >{{
+                this.myStoreStore?.mystore?.following?.length
+              }}
+              กำลังติดตาม</b
+            >
           </div>
           <Dialog
             v-if="followingDialog"
@@ -76,7 +86,7 @@
           class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12"
         >
           <b>คำอธิบาย</b>
-          <div>{{ myStoreStore.mystore.description }}</div>
+          <div>{{ this.myStoreStore?.mystore?.description }}</div>
         </div>
       </div>
       <div
@@ -118,7 +128,7 @@ export default {
     const route = useRoute();
     const page = ref(route.path.split("/").pop());
     myStoreStore.fetchMyStore();
-    return { myStoreStore, page};
+    return { myStoreStore, page };
   },
   components: {
     Rating,

@@ -181,6 +181,7 @@ export default {
             setTimeout(() => {
             this.showAlert = "Email sent successfully!";
             this.errorMessage = '';
+            this.resetForm();
           }, 2000);
         }, (error) => {
             console.log('FAILED...', error.text);
@@ -222,6 +223,9 @@ export default {
       pushStep(step) {
         this.currentStep = step;
         this.currentIndex = step;
+      },
+      resetForm() {
+        this.$refs.form.reset();
       },
 
     },

@@ -37,7 +37,7 @@
       placeholder="ชื่อผู้ใช้"
       v-model="formValue.username"
       @input="updateForm('username', $event.target.value)"
-      v-on:keypress="isAllowed($event)"
+      v-on:keypress="isAllowedUsername($event)"
     />
 
     <p v-if="formError.username !== ''" class="text-red-400 text-sm">
@@ -60,6 +60,14 @@ export default {
     isAllowed(e) {
       let char = String.fromCharCode(e.keyCode); // Get the character
       if (/^[A-Za-z0-9!@#$%^&*_-]+$/.test(char)) {
+        return true; // Match with regex
+      } else {
+        e.preventDefault(); // If not match, don't add to input text
+      }
+    },
+    isAllowedUsername(e) {
+      let char = String.fromCharCode(e.keyCode); // Get the character
+      if (/^[A-Za-z_-]+$/.test(char)) {
         return true; // Match with regex
       } else {
         e.preventDefault(); // If not match, don't add to input text

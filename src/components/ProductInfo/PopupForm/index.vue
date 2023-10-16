@@ -305,6 +305,9 @@ export default {
       this.$emit("toggleModal");
     },
     handleOk() {
+      if (!this.validateData()) {
+        return;
+      }
       axios
         .post("/product/create-product", this.infoProducts)
         .then((response) => {
@@ -313,10 +316,6 @@ export default {
           for (let i = 0; i < this.imageFileList.length; i++) {
             productImage.append(`image${i + 1}`, this.imageFileList[i]);
           }
-
-          // for (const pair of productImage.entries()) {
-          //   console.log(pair[0], pair[1]);
-          // }
           axios
             .put(`/product/add-product-image/${productId}`, productImage, {
               headers: {

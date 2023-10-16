@@ -269,6 +269,7 @@ import {
   sizeOptions,
 } from "@/constants";
 import { useMyStoreStore } from "@/store/my-store.store.js";
+import axios from "axios";
 export default {
   setup() {
     const myStoreStore = useMyStoreStore();

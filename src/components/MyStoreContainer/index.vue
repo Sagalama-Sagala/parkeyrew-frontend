@@ -4,12 +4,8 @@
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
     @fetch-my-store="fetchMyStore()"
-<<<<<<< HEAD
+    @handleOk="handleOk"
   />
-=======
-    @handleOk = "handleOk"
-    />
->>>>>>> 348ee37b872501dcc318586f6a030315a024d5fb
   <div class="flex flex-col">
     <div
       class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
@@ -102,11 +98,7 @@
         </div>
       </div>
     </div>
-<<<<<<< HEAD
   </div>
-=======
-  </div> 
->>>>>>> 348ee37b872501dcc318586f6a030315a024d5fb
 </template>
 
 <script>
@@ -122,15 +114,15 @@ import Loading from "@/components/Loading/index.vue";
 export default {
   setup() {
     const myStoreStore = useMyStoreStore();
-    myStoreStore.fetchMyStore()
-    console.log('myStoreStore', myStoreStore.mystore)
+    myStoreStore.fetchMyStore();
+    console.log("myStoreStore", myStoreStore.mystore);
     return { myStoreStore };
   },
   components: {
     Rating,
     PopupForm,
     Dialog,
-    Loading
+    Loading,
   },
   data() {
     return {

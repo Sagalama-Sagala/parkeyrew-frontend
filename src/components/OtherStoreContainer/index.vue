@@ -80,7 +80,7 @@
         >
           <div
             class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
-            :class="page === 'store' ? 'bg-tertiary' : 'bg-secondary'"
+            :class="page !== 'review' ? 'bg-tertiary' : 'bg-secondary'"
             @click="routeToMyStore()"
           >
             <h1><b>ร้านค้า</b></h1>
@@ -116,8 +116,10 @@
     const id = route.params.id;
     const isFollow = ref(false);
     const otherStoreStore = useOtherStoreStore();
+    const page = ref(route.path.split("/").pop());
+    console.log(page.value)
     otherStoreStore.fetchOtherStore(id);
-    return { otherStoreStore,isFollow};
+    return { otherStoreStore,isFollow , page};
     },
     components: {
       Rating,
@@ -131,7 +133,6 @@
         shareIcon,
         profileURL:
           "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
-        page: "store",
         isModalOpen: false,
         followerDialog: false,
         followingDialog: false,
@@ -139,11 +140,9 @@
     },
     methods: {
       routeToMyStore() {
-        this.page = "store";
         this.$router.push(`/store/${this.$route.params.id}`);
       },
       routeToReview() {
-        this.page = "review";
         this.$router.push(`/store/${this.$route.params.id}/review`);
       },
       openFollower() {

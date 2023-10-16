@@ -4,8 +4,8 @@
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
     @fetch-my-store="fetchMyStore()"
-    @handleOk = "handleOk"
-    />
+    @handleOk="handleOk"
+  />
   <div class="flex flex-col">
     <div
       class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
@@ -41,7 +41,7 @@
             </div>
             <div>
               <img
-                class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden"
+                class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden cursor-pointer"
                 :src="shareIcon"
                 alt="share icon"
               />
@@ -84,7 +84,7 @@
       >
         <div
           class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
-          :class="page === 'store' ? 'bg-tertiary' : 'bg-secondary'"
+          :class="page === 'mystore' ? 'bg-tertiary' : 'bg-secondary'"
           @click="routeToMyStore()"
         >
           <h1><b>ร้านค้า</b></h1>
@@ -98,7 +98,7 @@
         </div>
       </div>
     </div>
-  </div> 
+  </div>
 </template>
 
 <script>
@@ -110,19 +110,21 @@ import { ref } from "vue";
 import axios from "axios";
 import { useMyStoreStore } from "@/store/my-store.store.js";
 import Loading from "@/components/Loading/index.vue";
+import { useRoute } from "vue-router";
 
 export default {
   setup() {
     const myStoreStore = useMyStoreStore();
-    myStoreStore.fetchMyStore()
-    console.log('myStoreStore', myStoreStore.mystore)
-    return { myStoreStore };
+    const route = useRoute();
+    const page = ref(route.path.split("/").pop());
+    myStoreStore.fetchMyStore();
+    return { myStoreStore, page};
   },
   components: {
     Rating,
     PopupForm,
     Dialog,
-    Loading
+    Loading,
   },
   data() {
     return {
@@ -130,7 +132,6 @@ export default {
       shareIcon,
       profileURL:
         "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
-      page: "store",
       isModalOpen: false,
       followerDialog: false,
       followingDialog: false,
@@ -141,11 +142,9 @@ export default {
       this.myStoreStore.fetchMyStore();
     },
     routeToMyStore() {
-      this.page = "store";
       this.$router.push("/mystore");
     },
     routeToReview() {
-      this.page = "review";
       this.$router.push("/mystore/review");
     },
     handleEditProfile() {

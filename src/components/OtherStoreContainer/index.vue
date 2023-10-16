@@ -1,6 +1,6 @@
 <template>
+    <Loading :isLoading="otherStoreStore.isLoading"/>
     <div class="flex flex-col">
-
       <div
         class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
       >
@@ -99,6 +99,8 @@
   import Dialog from "@/components/Mystore/Dialog/index.vue";
   import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
   import Rating from "@/components/Rating/index.vue";
+  import Loading from "@/components/Loading/index.vue";
+
   import { editIcon, shareIcon } from "@/assets/mystore";
   import { ref, onBeforeUnmount } from "vue";
   import axios from "axios";
@@ -119,6 +121,7 @@
       Rating,
       PopupForm,
       Dialog,
+      Loading
     },
     data() {
       return {

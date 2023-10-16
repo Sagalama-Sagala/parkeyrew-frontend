@@ -1,8 +1,10 @@
 <template>
+  <Loading :isLoading="myStoreStore.isLoading" />
   <PopupForm
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
     @fetch-my-store="fetchMyStore()"
+    @handleOk = "handleOk"
     />
   <div class="flex flex-col">
     <div
@@ -96,8 +98,7 @@
         </div>
       </div>
     </div>
-  </div>
-  </div>  
+  </div> 
 </template>
 
 <script>
@@ -108,18 +109,20 @@ import { editIcon, shareIcon } from "@/assets/mystore";
 import { ref } from "vue";
 import axios from "axios";
 import { useMyStoreStore } from "@/store/my-store.store.js";
+import Loading from "@/components/Loading/index.vue";
 
 export default {
   setup() {
     const myStoreStore = useMyStoreStore();
-    myStoreStore.fetchMyStore();
-    console.log(myStoreStore.mystore);
+    myStoreStore.fetchMyStore()
+    console.log('myStoreStore', myStoreStore.mystore)
     return { myStoreStore };
   },
   components: {
     Rating,
     PopupForm,
     Dialog,
+    Loading
   },
   data() {
     return {
@@ -162,6 +165,36 @@ export default {
     },
     handleToggle() {
       this.myStoreStore.togglePopupForm();
+    },
+    handleOk(value, resetData) {
+      this.myStoreStore.isLoading = true;
+      const newData = {
+        name: value.name,
+        price: value.price,
+        deliveryFee: value.deliveryFee,
+        description: value.description,
+        brand: value.brand,
+        color: value.color,
+        size: value.size,
+        category: value.category,
+        condition: value.condition,
+        sendFrom: value.sendFrom,
+        remain: value.remain,
+      };
+      axios
+        .post("product/create-product", newData)
+        .then((response) => {
+          this.$router.push(`product/${response.data._id}`);
+          this.myStoreStore.isPopupFormModal = false;
+          this.myStoreStore.isLoading = false;
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          err.response.data.message.forEach((item) => {
+            alert(item);
+            this.myStoreStore.isLoading = false;
+          });
+        });
     },
   },
 };

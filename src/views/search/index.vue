@@ -1,4 +1,5 @@
 <template>
+  <Loading :isLoading="isLoading"/>
   <div class="bg-secondary min-h-screen flex flex-col overflow-hidden relative">
     <div class="relative pt-16">
       <img :src="cover" alt="cover" class="md:h-[166px] h-[130px] w-full object-cover" />
@@ -293,12 +294,13 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref,reactive,watch } from "vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import DoubleRangeSlider from '@/components/Filter/DoubleRangeSlider/index.vue'
+import Loading from "@/components/Loading/index.vue";
 
 import { chat, call } from "@/assets/product";
 import { heart } from "@/assets/product";
@@ -313,16 +315,22 @@ export default {
   components: {
     ProductCard,
     Rating,
-    DoubleRangeSlider
+    DoubleRangeSlider,
+    Loading,
   },
   methods: {
     handleMainClick() {
       this.$router.push(`/`);
     },
     storeVariableToUrl(object) {
-      this.$router.replace({
-        path: `/filter/${this.$route.params.id}`,
-        query: object,
+      const keyword = this.$route.query.keyword || "pls";
+      const queryObject = {
+        ...object,
+        keyword: keyword,
+      };
+      this.$router.push({
+        path: "/search",
+        query: queryObject,
       });
     },
 
@@ -387,27 +395,68 @@ export default {
     },
 
   },
-  setup(){
-    const products = ref([]);
-    const route = useRoute();
-    const keyword = route.query.keyword || "";
-    
+  setup() {
+  const products = ref([]);
+  const originalProducts = ref([]);
+  const route = useRoute();
+  const keyword = route.query.keyword || "";
+  const isLoading = ref(true);
+  const urlVariable = reactive({
+    brand: route.query.brand ? JSON.parse(route.query.brand) : [],
+    size: route.query.size ? JSON.parse(route.query.size) : [],
+    color: route.query.color ? JSON.parse(route.query.color) : [],
+  });
+
+
+    const handleFilter = () => {
+      products.value = originalProducts.value.filter((product) => {
+        let isBrandValid = true;
+        let isSizeValid = true;
+        let isColorValid = true;
+
+        if (urlVariable.brand.length > 0) {
+          isBrandValid = urlVariable.brand.includes(product.brand);
+        }
+
+        if (urlVariable.size.length > 0) {
+          isSizeValid = urlVariable.size.includes(product.size);
+        }
+
+        if (urlVariable.color.length > 0) {
+          isColorValid = urlVariable.color.includes(product.color);
+        }
+
+        return isBrandValid && isSizeValid && isColorValid;
+      });
+    };
+
     axios
       .get("/product")
       .then((response) => {
-        products.value = response.data.filter((item) => {
+        originalProducts.value = response.data.filter((item) => {
           const name = item.name.toLowerCase();
           const description = item.description.toLowerCase();
           const searchKeyword = keyword.toLowerCase();
           return name.includes(searchKeyword) || description.includes(searchKeyword);
         });
+        products.value = [...originalProducts.value]; 
         console.log(response.data);
+        isLoading.value = false;
       })
       .catch((err) => {
         console.log(err);
+        isLoading.value = false;
       });
 
-    return { products };
+    watch(
+      () => urlVariable,
+      () => {
+        handleFilter();
+      },
+      { deep: true }
+    );
+
+    return { products, urlVariable, isLoading };
   },
   data() {
     return {
@@ -426,6 +475,7 @@ export default {
       isPriceDropdown: true,
       priceSlider:ref({minRange:0, maxRange:5000, step:100,unit:"฿", value1:0,value2:5000}),
       conditionSlider:{minRange:0, maxRange:100, step:1,unit:"%", value1:0,value2:100},
+      originalProducts: [],
       sizeOptions: [
         { id: "S", label: "S" ,isCheck: false },
         { id: "M", label: "M" ,isCheck: false},
@@ -435,7 +485,7 @@ export default {
         { id: "Oversize", label: "Oversize" ,isCheck: false},
       ],
       brandOptions: [
-        { id: 0, label: "ไม่มี", isCheck: false },
+        { id: 0, label: "ไม่มีแบรนด์", isCheck: false },
         { id: 1, label: "มีแบรนด์", isCheck: false },
       ],
       colorOptions: [

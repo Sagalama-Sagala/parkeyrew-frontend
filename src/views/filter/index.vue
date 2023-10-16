@@ -47,11 +47,11 @@
             name="cars"
             id="cars"
             class="border-[1px] border-black text-[1.2rem] font-normal"
+            @change="handleSelect"
           >
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
+            <option value="1">แนะนำ</option>
+            <option value="2">ราคาต่ำไปสูง</option>
+            <option value="3">ราคาสูงไปต่ำ</option>
           </select>
         </div>
       </div>
@@ -380,7 +380,22 @@ export default {
     {
       this.isFilterBarToggle.value = !this.isFilterBarToggle.value
       console.log(this.isFilterBarToggle.value);
-    }
+    },
+    handleSelect(event) {
+      switch (event.target.value) {
+        case '1':
+          this.selectedValue = 1;
+          break;
+        case '2':
+          this.selectedValue = 2;
+          break;
+        case '3':
+          this.selectedValue = 3;
+          break;
+        default:
+          break;
+      }
+    },
   },
   setup() {
   const products = ref([]);
@@ -436,41 +451,50 @@ export default {
         value1: 0,
         value2: 10000,
     });
-   
-
-    const updateUIFromUrl = () => {
-      if (urlVariable.brand.length) {
-        brandOptions.value.forEach((option) => {
-          if (urlVariable.brand.includes(option.label)) {
-            option.isCheck = true;
-          }
-        });
-      }
-      if (urlVariable.size.length) {
-        sizeOptions.value.forEach((option) => {
-          if (urlVariable.size.includes(option.label)) {
-            option.isCheck = true;
-          }
-        });
-      }
-      if (urlVariable.color.length) {
-        colorOptions.value.forEach((option) => {
-          if (urlVariable.color.includes(option.label)) {
-            option.isCheck = true;
-          }
-        });
-      }
-          if (!Array.isArray(urlVariable.price)) {
-        const priceValues = urlVariable.price.split("-");
-        priceSlider.value1 = parseInt(priceValues[0]);
-        priceSlider.value2 = parseInt(priceValues[1]);
-      }
-      if (!Array.isArray(urlVariable.condition)) {
-        const conditionValues = urlVariable.condition.split("-");
-        conditionSlider.value1 = parseInt(conditionValues[0]);
-        conditionSlider.value2 = parseInt(conditionValues[1]);
-      }
-    };
+  const selectedValue = ref(1)
+  const handleSort = (id , product) =>
+  {
+    if (id === 1) {
+      products.value = product.sort((a, b) => b.owner.reviewStar - a.owner.reviewStar);
+    } else if (id === 2) {
+      products.value = product.sort((a, b) => a.price - b.price);
+    } else if (id === 3) {
+      products.value = product.sort((a, b) => b.price - a.price);
+    }
+  }
+  const updateUIFromUrl = () => {
+    if (urlVariable.brand.length) {
+      brandOptions.value.forEach((option) => {
+        if (urlVariable.brand.includes(option.label)) {
+          option.isCheck = true;
+        }
+      });
+    }
+    if (urlVariable.size.length) {
+      sizeOptions.value.forEach((option) => {
+        if (urlVariable.size.includes(option.label)) {
+          option.isCheck = true;
+        }
+      });
+    }
+    if (urlVariable.color.length) {
+      colorOptions.value.forEach((option) => {
+        if (urlVariable.color.includes(option.label)) {
+          option.isCheck = true;
+        }
+      });
+    }
+        if (!Array.isArray(urlVariable.price)) {
+      const priceValues = urlVariable.price.split("-");
+      priceSlider.value1 = parseInt(priceValues[0]);
+      priceSlider.value2 = parseInt(priceValues[1]);
+    }
+    if (!Array.isArray(urlVariable.condition)) {
+      const conditionValues = urlVariable.condition.split("-");
+      conditionSlider.value1 = parseInt(conditionValues[0]);
+      conditionSlider.value2 = parseInt(conditionValues[1]);
+    }
+  };
 
   
 
@@ -481,6 +505,7 @@ export default {
           return item.category === route.params.id;
         });
         products.value = [...originalProducts.value]; 
+        handleSort(selectedValue.value, products.value);
         console.log(response.data);
         isLoading.value = false;
       })
@@ -535,14 +560,24 @@ export default {
         }
 
     products.value = filteredProducts;
+    handleSort(selectedValue.value, products.value);
   },
   { deep: true }
 );
+    watch(
+      [selectedValue],
+      ([newSelectedValue], [oldSelectedValue]) => {
+        handleSort(newSelectedValue , products.value)
+        console.log(newSelectedValue)
+        console.log(products.value)
+      },
+      { deep: true }
+    );
 
     onMounted(() => {
       updateUIFromUrl();
     });
-    return { products, isLoading, handleSearch ,urlVariable,colorOptions,sizeOptions,brandOptions ,conditionSlider,priceSlider};
+    return { products, isLoading, handleSearch ,urlVariable,colorOptions,sizeOptions,brandOptions ,conditionSlider,priceSlider,selectedValue};
   },
   data() {
     return {

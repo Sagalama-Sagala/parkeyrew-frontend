@@ -16,35 +16,40 @@
         @click="togglePopup"
     ></div>
     <div
-        class="z-30 fixed top-[20%] h-[500px] px-5 py-5 m-4 bg-white rounded shadow-xl md:text-base text-sm w-5/6 md:w-1/2"
+        class="z-30 fixed top-[20%] h-[500px] md:py-5 md:pr-12 md:pl-12 ml-4 px-12 pt-8 bg-white rounded shadow-xl md:text-base text-sm md:w-1/2"
         :class="showPopup ? 'block' : 'hidden'"
     >
-        <div class="ml-12">
+        <div class="">
             <p class="text-lg md:text-2xl font-bold">ที่อยู่ใหม่</p>
             <input
                 type="text"
-                class="focus:outline-none mt-6 block w-full px-2 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
+                class="focus:outline-none mt-6 block w-full px-8 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
                 placeholder="ชื่อจริง-นามสกุล"
                 v-model="name"
             />
             <input
                 type="text"
-                class="focus:outline-none mt-4 block w-full px-2 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
+                class="focus:outline-none mt-4 block w-full px-8 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
                 placeholder="หมายเลขโทรศัพท์"
                 v-model="phone"
             />
             <input
                 type="text"
-                class="focus:outline-none mt-4 block w-full px-2 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
+                class="focus:outline-none mt-4 block w-full px-8 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
                 placeholder="จังหวัด, เขต, อำเภอ, รหัสไปรษณีย์"
                 v-model="address"
             />
             <textarea
                 type="text"
-                class="focus:outline-none block w-full h-[100px] mt-4 px-2 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
+                class="focus:outline-none block w-full h-[100px] mt-4 px-8 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
                 placeholder="บ้านเลขที่, ซอย, หมู่, ถนน, แขวง/ตำบล"
                 v-model="addressDescription"
             />
+            <div class="flex mt-8">
+                <input type="checkbox" v-model="checked" />
+                <div class="ml-1">เลือกเป็นที่อยู่ตั้งต้น</div>
+                <!-- true false -->
+            </div>
 
             <div class="mt-8 justify-end flex">
                 <button
@@ -184,6 +189,11 @@ export default {
             },
         },
     },
+    mounted() {
+        if (this.profileStore.addr.length === 0) {
+            this.checked = true;
+        }
+    },
     methods: {
         togglePopup() {
             this.showPopup = !this.showPopup;
@@ -245,12 +255,19 @@ export default {
                         address: this.address,
                         addressDescription: this.addressDescription,
                         phone: this.phone,
-                        isMainAddress: true,
+                        isMainAddress: this.checked,
                     },
                 });
                 console.log(res.data);
                 this.showPopup = !this.showPopup;
                 this.profileStore.fetchMyAddress();
+                this.firstname = "";
+                this.lastname = "";
+                this.address = "";
+                this.addressDescription = "";
+                this.phone = "";
+                this.isMainAddress = "";
+                this.checked = false;
             } catch (error) {
                 console.log(error);
             }

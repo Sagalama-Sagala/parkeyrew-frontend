@@ -147,16 +147,16 @@
         <!-- desktop scale -->
         <div class="w-full my-4 pl-4 hidden md:block">
             <div class="flex justify-around mr-8">
-                <p class="md:text-xl">{{ adr.firstname }}</p>
-                <p class="md:text-xl">{{ adr.lastname }}</p>
+                <p class="md:text-xl">{{ adr?.firstname }}</p>
+                <p class="md:text-xl">{{ adr?.lastname }}</p>
                 <div
                     class="w-[10px] border-r-[0.08rem] h-[24px] border-black"
                 ></div>
-                <p class="w-1/4 md:text-xl">{{ adr.phone }}</p>
+                <p class="w-1/4 md:text-xl">{{ adr?.phone }}</p>
             </div>
             <div class="w-full font-normal">
                 <p class="break-words mt-2">
-                    {{ adr.address + " " + adr.addressDescription }}
+                    {{ adr?.address + " " + adr?.addressDescription }}
                 </p>
             </div>
             <div v-if="index === 0" class="justify-start">
@@ -179,8 +179,8 @@
             "
         >
             <div class="flex justify-around mr-8">
-                <p class="">{{ adr.firstname }}</p>
-                <p class="">{{ adr.lastname }}</p>
+                <p class="">{{ adr?.firstname }}</p>
+                <p class="">{{ adr?.lastname }}</p>
                 <div
                     class="w-[10px] border-r-[0.08rem] h-[24px] border-black"
                 ></div>
@@ -188,7 +188,7 @@
             </div>
             <div class="w-full font-normal">
                 <p class="break-words mt-2">
-                    {{ adr.address + " " + adr.addressDescription }}
+                    {{ adr?.address + " " + adr?.addressDescription }}
                 </p>
             </div>
             <div v-if="index === 0" class="justify-start">

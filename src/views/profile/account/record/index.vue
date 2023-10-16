@@ -19,13 +19,26 @@
             <Edit />
         </div>
         <div class="w-1/2 flex flex-col items-center">
-            <img class="md:w-36 md:h-36 w-28 h-28 md:mt-8" :src="view" />
+            <img
+                class="md:w-36 md:h-36 w-28 h-28 md:mt-8"
+                :src="
+                    imagePreview || profileStore.profile?.profileImage || view
+                "
+            />
             <button
                 v-if="pageState === 1"
                 class="border-[0.05rem] border-black px-2 rounded-lg my-4"
+                @click="$refs.file.click()"
             >
                 เลือกรูป
             </button>
+            <input
+                type="file"
+                hidden
+                ref="file"
+                @change="uploadFile"
+                accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+            />
             <div v-if="pageState === 1" class="text-xs mb-2">
                 <p>ขนาดไฟล์: สูงสุด 1 MB</p>
                 <p>ไฟล์ที่รองรับ: .JPEG, .PNG</p>
@@ -76,14 +89,35 @@ export default {
             view,
             pageState: 0,
             profile: "",
+            image: null,
+            imagePreview: null,
         };
     },
     methods: {
+        uploadFile() {
+            this.image = this.$refs.file.files[0];
+            this.imagePreview = URL.createObjectURL(this.image);
+            console.log(this.image);
+        },
         edit() {
             this.pageState = 1;
         },
         save() {
-            console.log(this.profileStore.profile);
+            if (this.image) {
+                const formData = new FormData();
+                formData.append("image", this.image);
+                const headers = { "Content-Type": "multipart/form-data" };
+
+                axios
+                    .put("/user/edit-profile-image", formData, { headers })
+                    .then(() => {
+                        this.pageState = 0;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+            // console.log(this.profileStore.profile);
             axios
                 .put("/user/edit-user-info", this.profileStore.profile)
                 .then(() => {

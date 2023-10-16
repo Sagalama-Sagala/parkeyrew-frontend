@@ -247,7 +247,6 @@ export default {
       });
 
     const connectChatRoom = () => {
-      let roomId = "";
       socket.emit("connectRoom", {
         product: infoProducts.value.product,
         seller: infoProducts.value.product.owner,

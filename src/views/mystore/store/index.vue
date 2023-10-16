@@ -46,6 +46,7 @@ import { ref } from "vue";
 export default {
   setup() {
     const myStoreStore = useMyStoreStore();
+    myStoreStore.fetchMyStore();
     const isModalOpen = ref(false);
     return { myStoreStore, isModalOpen };
   },

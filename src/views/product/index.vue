@@ -8,7 +8,7 @@
           <div class="flex flex-wrap gap-2 bg-[#d5d5d5] rounded-xl">
             <div class="relative">
               <img
-                :src="ProductImage[selectedImageIndex]"
+                :src="infoProducts?.product?.productImage[selectedImageIndex]"
                 class="w-[40rem] md:h-[32rem] h-[23rem] object-contain"
               />
               <img :src="recommend" class="w-[4rem] absolute top-0 right-3" />
@@ -19,7 +19,7 @@
             class="flex justify-start gap-3 overflow-x-auto pb-3 overflow-y-visible"
           >
             <img
-              v-for="(imageUrl, index) in ProductImage"
+              v-for="(imageUrl, index) in infoProducts?.product?.productImage"
               :key="index"
               :src="imageUrl"
               class="h-[8rem] w-[11rem] border-grey rounded-xl border-[1px] aspect-[10.5/9] object-contain bg-[#d5d5d5]"
@@ -118,7 +118,10 @@
                 class="hover:bg-secondary hover:cursor-pointer w-[4rem] h-[4rem] rounded-full object-cover border-4"
               />
               <div>
-                <h1 class="hover:underline hover:cursor-pointer" @click="handleGotoStore">
+                <h1
+                  class="hover:underline hover:cursor-pointer"
+                  @click="handleGotoStore"
+                >
                   {{ infoProducts?.product?.owner?.username }}
                 </h1>
                 <Rating
@@ -147,7 +150,10 @@
             </div>
           </div>
           <div class="flex flex-1 justify-end items-end">
-            <h1 class="hover:underline hover:cursor-pointer" @click="handleGotoStore">
+            <h1
+              class="hover:underline hover:cursor-pointer"
+              @click="handleGotoStore"
+            >
               ดูร้านค้าผู้ชายคนนี้ >
             </h1>
           </div>
@@ -166,7 +172,7 @@
           :is-recommended="item.recommended"
           :item-name="item.name"
           :item-price="item.price"
-          :item-image="item.productImage"
+          :item-image="item.productImage[0]"
           :rating="item.owner.reviewStar"
           :seller-image="item.sellerImage"
           :seller-name="item.owner.username"
@@ -199,13 +205,19 @@ import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
 
-import { T1, T2, T3, T4 } from "@/assets/TestImage";
-import { shareArrow, heart, chat, call, editIcon, heartFilled } from "@/assets/product";
+import {
+  shareArrow,
+  heart,
+  chat,
+  call,
+  editIcon,
+  heartFilled,
+} from "@/assets/product";
 import { recommend } from "@/assets/product_card";
 
 export default {
   setup() {
-    const isLiked = ref(false)
+    const isLiked = ref(false);
     const infoProducts = ref([]);
     const route = useRoute();
     const router = useRouter();
@@ -220,11 +232,12 @@ export default {
         isUserProduct.value = response.data.isUserProduct;
 
         //ใส่ไว้ก่อนนะ รอbackend
-        axios.get('/user/get-user-wishlist').then((response) => {
-          console.log('test', response.data.wishList)
-          isLiked.value = response.data.wishList.some((item) => item._id === productId)
-        })
-
+        // axios.get("/user/get-user-wishlist").then((response) => {
+        //   console.log("test", response.data.wishList);
+        //   isLiked.value = response.data.wishList.some(
+        //     (item) => item._id === productId,
+        //   );
+        // });
       })
       .catch((err) => {
         console.log(err);
@@ -242,7 +255,7 @@ export default {
       });
     };
 
-    return { infoProducts, connectChatRoom, isUserProduct, productId , isLiked };
+    return { infoProducts, connectChatRoom, isUserProduct, productId, isLiked };
   },
   components: {
     ProductCard,
@@ -306,9 +319,8 @@ export default {
           });
         });
     },
-    handleGotoStore()
-    {
-      this.$router.push(`/store/${this.infoProducts.product.owner._id}`)
+    handleGotoStore() {
+      this.$router.push(`/store/${this.infoProducts.product.owner._id}`);
     },
   },
   data() {
@@ -321,7 +333,6 @@ export default {
       call,
       editIcon,
       selectedImageIndex: 0,
-      ProductImage: [T1, T2, T3, T4, call, chat, heart],
       isModalOpen: false,
     };
   },

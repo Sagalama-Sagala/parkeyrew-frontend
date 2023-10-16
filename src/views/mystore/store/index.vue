@@ -8,7 +8,7 @@
     </div>
     <div class="bg-secondary flex-1 flex flex-col w-full pt-6 overflow-y-auto">
       <div
-        class="grid md:[grid-template-columns:repeat(auto-fill,_minmax(17rem,3fr))] gap-7  justify-center items-center w-full px-10 mb-10"
+        class="grid md:[grid-template-columns:repeat(auto-fill,_minmax(17rem,3fr))] gap-7 justify-center items-center w-full px-10 mb-10"
       >
         <ProductCard
           v-for="(item, index) in myStoreStore.mystore.products"
@@ -17,7 +17,7 @@
           :is-recommended="item.recommended"
           :item-name="item.name"
           :item-price="item.price"
-          :item-image="item.productImage"
+          :item-image="item.productImage[0]"
           :rating="item.owner.reviewStar"
           :seller-image="item.sellerImage"
           :seller-name="item.owner.username"

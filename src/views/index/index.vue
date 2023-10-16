@@ -54,7 +54,7 @@
           :is-recommended="item.recommended"
           :item-name="item.name"
           :item-price="item.price"
-          :item-image="item.productImage"
+          :item-image="item.productImage[0]"
           :rating="item.owner.reviewStar"
           :seller-image="item.sellerImage"
           :seller-name="item.owner.username"
@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     handleSearch() {
-      if(this.searchInput === null || this.searchInput === "") return;
+      if (this.searchInput === null || this.searchInput === "") return;
       this.$router.push(`/search?keyword=${this.searchInput}`);
     },
     handleFilterType(type) {

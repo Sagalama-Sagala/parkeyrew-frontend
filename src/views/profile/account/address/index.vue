@@ -304,11 +304,6 @@ export default {
             } else {
                 this.checked = false;
             }
-
-            // console.log("setEditAddressValue", currentValue);
-        },
-        editAddr(index) {
-            // console.log(this.profileStore.addr[index]);
         },
         async setMainAddr(index) {
             try {
@@ -373,7 +368,7 @@ export default {
 
             try {
                 if (this.name === "") {
-                    this.$toast.info("กรุณากรอกชื่อ-นามสกุล");
+                    this.$toast.info("กรุณากรอกชื่อ-นามสกุลให้ครบถ้วน");
                     return;
                 } else if (!/^\d{10}$/.test(this.phone)) {
                     this.$toast.info(
@@ -385,7 +380,7 @@ export default {
                     this.address === "" ||
                     this.addressDescription === ""
                 ) {
-                    this.$toast.info("กรุณากรอที่อยู่");
+                    this.$toast.info("กรุณากรอกที่อยู่ให้ครบถ้วน");
                     return;
                 }
 

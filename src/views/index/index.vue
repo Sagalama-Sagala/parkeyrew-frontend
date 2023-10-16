@@ -1,5 +1,6 @@
 <template>
   <div class="h-screen bg-secondary pt-16">
+    <Loading :isLoading="isLoading"/>
     <div class="relative">
       <img :src="cover" alt="cover" class="h-[166px] w-full object-cover" />
       <div class="absolute inset-0 flex items-center justify-center">
@@ -86,27 +87,32 @@ import {
   trousers,
 } from "@/assets/home";
 import ProductCard from "@/components/ProductCard/index.vue";
+import Loading from "@/components/Loading/index.vue";
+
 import { ref } from "vue";
 import axios from "axios";
+
 
 export default {
   setup() {
     const products = ref([]);
-
+    const isLoading = ref(true);
     axios
       .get("/product")
       .then((response) => {
         console.log(response.data);
         products.value = response.data;
+        isLoading.value = false;
       })
       .catch((err) => {
         console.log(err);
       });
 
-    return { products };
+    return { products ,isLoading};
   },
   components: {
     ProductCard,
+    Loading,
   },
   methods: {
     handleSearch() {

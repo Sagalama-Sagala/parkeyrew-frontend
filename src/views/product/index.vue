@@ -1,5 +1,6 @@
 <template>
   <div class="bg-secondary min-h-screen flex flex-col gap-2 overflow-hidden">
+    <Loading :isLoading="isLoading"/>
     <div class="bg-white text-black pt-20 flex justify-center items-center">
       <div
         class="border-b-[1px] border-b-black text-black flex md:gap-[10rem] gap-4 md:text-[1.3rem] text-[1.2rem] w-full mx-4 justify-center flex-wrap px-5 pb-3"
@@ -198,6 +199,7 @@ import { useChatStore } from "@/store/chat.store.js";
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
+import Loading from "@/components/Loading/index.vue";
 
 import { T1, T2, T3, T4 } from "@/assets/TestImage";
 import { shareArrow, heart, chat, call, editIcon, heartFilled } from "@/assets/product";
@@ -212,6 +214,7 @@ export default {
     const productId = route.params.id;
     const chatStore = useChatStore();
     const isUserProduct = ref(false);
+    const isLoading = ref(true);
     axios
       .get(`/product/get-info-product-page/${productId}`)
       .then((response) => {
@@ -223,6 +226,7 @@ export default {
         axios.get('/user/get-user-wishlist').then((response) => {
           console.log('test', response.data.wishList)
           isLiked.value = response.data.wishList.some((item) => item._id === productId)
+          isLoading.value = false;
         })
 
       })
@@ -242,12 +246,13 @@ export default {
       });
     };
 
-    return { infoProducts, connectChatRoom, isUserProduct, productId , isLiked };
+    return { infoProducts, connectChatRoom, isUserProduct, productId , isLiked, isLoading };
   },
   components: {
     ProductCard,
     Rating,
     PopupForm,
+    Loading,
   },
   methods: {
     handleLike() {

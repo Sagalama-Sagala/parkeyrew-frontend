@@ -1,8 +1,10 @@
 <template>
+  <div>
   <PopupForm
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
     @fetch-my-store="fetchMyStore()"
+    @handleOk = "handleOk"
     />
   <div class="flex flex-col">
     <div
@@ -162,6 +164,33 @@ export default {
     },
     handleToggle() {
       this.myStoreStore.togglePopupForm();
+    },
+    handleOk(value, resetData) {
+      const newData = {
+        name: value.name,
+        price: value.price,
+        deliveryFee: value.deliveryFee,
+        description: value.description,
+        brand: value.brand,
+        color: value.color,
+        size: value.size,
+        category: value.category,
+        condition: value.condition,
+        sendFrom: value.sendFrom,
+        remain: value.remain,
+      };
+      axios
+        .post("product/create-product", newData)
+        .then((response) => {
+          this.$router.push(`product/${response.data._id}`);
+          this.myStoreStore.isPopupFormModal = false;
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          err.response.data.message.forEach((item) => {
+            alert(item);
+          });
+        });
     },
   },
 };

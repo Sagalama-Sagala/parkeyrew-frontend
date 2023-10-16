@@ -267,8 +267,8 @@
         </div>
       </div>
 
-      <div class="flex-1 flex flex-wrap mx-auto overflow-y-auto ">
-        <div v-if="products.length > 0" class="flex flex-wrap mt-10 gap-5 h-[0px] justify-center">
+      <div class="flex-1 flex flex-col   overflow-y-auto ">
+        <div v-if="products.length > 0" class="grid md:[grid-template-columns:repeat(auto-fill,_minmax(18rem,3fr))] gap-7 md:justify-start justify-center mt-10">
           <ProductCard
             v-for="(item, index) in products"
             :id="item._id"
@@ -287,7 +287,7 @@
             :condition="item.condition"
           />
         </div>
-        <div  v-else class="w-full flex justify-center items-center text-3xl "> Product not found </div>
+        <div  v-else class="flex-1 flex justify-center items-center text-3xl "> Product not found </div>
       </div>
     </div>
   </div>

@@ -279,6 +279,8 @@ export default {
     },
 
     handleCopyLink() {
+      this.$toast.info("คัดลอกลิงค์ไปยังคลิปบอร์ดสำเร็จ");
+      console.log("hello");
       navigator.clipboard.writeText(window.location.href);
     },
 

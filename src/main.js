@@ -15,6 +15,5 @@ app.use(router);
 app.use(pinia);
 app.mount("#app");
 app.use(ToastPlugin, {
-    position: "top",
+  position: "bottom-right",
 });
-

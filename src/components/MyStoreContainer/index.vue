@@ -41,7 +41,7 @@
             </div>
             <div>
               <img
-                class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden"
+                class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden cursor-pointer"
                 :src="shareIcon"
                 alt="share icon"
               />

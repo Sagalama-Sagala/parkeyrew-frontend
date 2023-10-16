@@ -282,10 +282,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    productData: {
-      type: Object,
-      default: () => {},
-    },
   },
   methods: {
     onFileChange(e) {
@@ -308,6 +304,7 @@ export default {
       if (!this.validateData()) {
         return;
       }
+      console.log("from popup");
       axios
         .post("/product/create-product", this.infoProducts)
         .then((response) => {

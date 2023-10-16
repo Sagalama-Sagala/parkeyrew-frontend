@@ -29,8 +29,24 @@
 import ProductCard from "@/components/ProductCard/index.vue";
 import Rating from "@/components/Rating/index.vue";
 import { editIcon, shareIcon } from "@/assets/mystore";
+import { ref } from "vue";
+import axios from "axios";
 
 export default {
+  setup() {
+    const reviews = ref([]);
+    axios
+      .get("/review/get-review-by-userId")
+      .then((response) => {
+        console.log(response.data);
+        reviews.value = response.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return { reviews };
+  },
   components: {
     ProductCard,
     Rating,

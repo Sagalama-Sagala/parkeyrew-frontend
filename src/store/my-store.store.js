@@ -14,7 +14,7 @@ export const useMyStoreStore = defineStore("mystore", {
         .get("/user/get-user-page-by-id")
         .then((response) => {
           this.mystore = response.data;
-          console.log('fetched my store')
+          console.log("fetched my store");
           this.isLoading = false;
         })
         .catch((err) => {

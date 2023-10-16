@@ -94,7 +94,7 @@
             />
             <h1
               v-if="!isFollow"
-              class="border-[1px] border-primary text-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer hidden md:block"
+              class="border-[1px] border-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer hidden md:block"
               @click="handleFollow"
             >
               ติดตาม +
@@ -169,8 +169,6 @@ export default {
     return {
       editIcon,
       shareIcon,
-      profileURL:
-        "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
       isModalOpen: false,
       followerDialog: false,
       followingDialog: false,

@@ -2,9 +2,8 @@
   <Loading :isLoading="this.myStoreStore?.isLoading" />
   <PopupForm
     :isModalOpen="this.myStoreStore?.isPopupFormModal"
-    @toggleModal="handleToggle"
+    @toggle-modal="handleToggle"
     @fetch-my-store="fetchMyStore()"
-    @handleOk="handleOk"
   />
   <div class="flex flex-col">
     <div
@@ -37,7 +36,7 @@
             </div>
           </div>
           <div class="flex flex-col">
-            <div @click="handleEditProfile">
+            <div @click="handleToggleEdit">
               <img
                 class="w-[3rem] rounded-2xl mb-2 hover:cursor-pointer md:block hidden"
                 :src="editIcon"
@@ -83,10 +82,17 @@
           />
         </div>
         <div
-          class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12"
+          class="md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[12rem]"
         >
           <b>คำอธิบาย</b>
-          <div>{{ this.myStoreStore?.mystore?.description }}</div>
+          <div v-if="!this.isEditOpen">
+            {{ this.myStoreStore?.mystore?.description }}
+          </div>
+          <textarea
+            v-else
+            class="w-full rounded border-[1px] border-black p-2"
+            v-model="this.myStoreStore.mystore.description"
+          />
         </div>
       </div>
       <div
@@ -124,11 +130,12 @@ import { useRoute } from "vue-router";
 
 export default {
   setup() {
+    const isEditOpen = ref(false);
     const myStoreStore = useMyStoreStore();
     const route = useRoute();
     const page = ref(route.path.split("/").pop());
     myStoreStore.fetchMyStore();
-    return { myStoreStore, page };
+    return { myStoreStore, page, isEditOpen };
   },
   components: {
     Rating,
@@ -138,11 +145,11 @@ export default {
   },
   data() {
     return {
+      editDescription: "",
       editIcon,
       shareIcon,
       profileURL:
         "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
-      isModalOpen: false,
       followerDialog: false,
       followingDialog: false,
     };
@@ -156,9 +163,6 @@ export default {
     },
     routeToReview() {
       this.$router.push("/mystore/review");
-    },
-    handleEditProfile() {
-      this.$router.push("/profile/record");
     },
     openFollower() {
       this.followerDialog = true;
@@ -175,34 +179,27 @@ export default {
     handleToggle() {
       this.myStoreStore.togglePopupForm();
     },
-    handleOk(value, resetData) {
-      this.myStoreStore.isLoading = true;
-      const newData = {
-        name: value.name,
-        price: value.price,
-        deliveryFee: value.deliveryFee,
-        description: value.description,
-        brand: value.brand,
-        color: value.color,
-        size: value.size,
-        category: value.category,
-        condition: value.condition,
-        sendFrom: value.sendFrom,
-        remain: value.remain,
-      };
+    handleToggleEdit() {
+      if (!this.isEditOpen) {
+        this.handleOpenEdit();
+      } else {
+        this.handleSaveEdit();
+      }
+    },
+    handleOpenEdit() {
+      this.isEditOpen = true;
+    },
+    handleSaveEdit() {
       axios
-        .post("product/create-product", newData)
+        .put("/user/edit-user-description", {
+          description: this.myStoreStore.mystore.description,
+        })
         .then((response) => {
-          this.$router.push(`product/${response.data._id}`);
-          this.myStoreStore.isPopupFormModal = false;
-          this.myStoreStore.isLoading = false;
+          this.$toast.success("บันทึกคำอธิบายสำเร็จ");
+          this.isEditOpen = false;
         })
         .catch((err) => {
-          console.log(err.response.data.message);
-          err.response.data.message.forEach((item) => {
-            alert(item);
-            this.myStoreStore.isLoading = false;
-          });
+          console.log(err);
         });
     },
   },

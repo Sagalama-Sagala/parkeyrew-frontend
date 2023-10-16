@@ -59,6 +59,7 @@ import Edit from "@/components/StepsEditRecord/Edit/index.vue";
 import axios from "axios";
 import { ref } from "vue";
 import { useProfileStore } from "@/store/profile.store.js";
+import ToastPlugin from "vue-toast-notification";
 
 export default {
     setup() {
@@ -86,6 +87,7 @@ export default {
             axios
                 .put("/user/edit-user-info", this.profileStore.profile)
                 .then(() => {
+                    this.$toast.success("แก้ไขข้อมูลสำเร็จแล้ว");
                     this.pageState = 0;
                 })
                 .catch((err) => {
@@ -93,11 +95,7 @@ export default {
                 });
         },
     },
-    // mounted() {
-    //   this.profileStore.fetchMyProfile();
-    //   // const res = await axios.get("user");
-    //   // console.log(res.data);
-    // },
+    mounted() {},
 };
 </script>
 

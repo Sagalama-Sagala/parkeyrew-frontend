@@ -216,6 +216,7 @@ export default {
                     },
                 });
                 this.profileStore.fetchMyAddress();
+                this.$toast.success("เปลี่ยนที่อยู่ตั้งต้นสำเร็จแล้ว");
                 console.log(res.data);
             } catch (error) {
                 console.log(error);
@@ -233,6 +234,7 @@ export default {
                     },
                 });
                 this.profileStore.fetchMyAddress();
+                this.$toast.success("ลบที่อยู่เรียบร้อยแล้ว");
                 console.log(res.data);
             } catch (error) {
                 console.log(error);
@@ -240,6 +242,13 @@ export default {
         },
 
         async createNewAddr() {
+            // Validate the phone number
+            if (!/^\d{10}$/.test(this.phone)) {
+                this.$toast.info("หมายเลขโทรศัพท์ต้องมีจำนวน 10 หลัก(เลข 0-9)");
+                this.phone = "";
+                return;
+            }
+
             try {
                 const res = await axios({
                     url: "/address/create-address",
@@ -259,6 +268,7 @@ export default {
                     },
                 });
                 console.log(res.data);
+                this.$toast.success("เพิ่มที่อยู่ใหม่สำเร็จแล้ว");
                 this.showPopup = !this.showPopup;
                 this.profileStore.fetchMyAddress();
                 this.firstname = "";

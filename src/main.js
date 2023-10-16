@@ -14,5 +14,7 @@ const app = createApp(App);
 app.use(router);
 app.use(pinia);
 app.mount("#app");
-app.use(ToastPlugin);
+app.use(ToastPlugin, {
+    position: "top",
+});
 

@@ -48,7 +48,6 @@
             <div class="flex mt-8">
                 <input type="checkbox" v-model="checked" />
                 <div class="ml-1">เลือกเป็นที่อยู่ตั้งต้น</div>
-                <!-- true false -->
             </div>
 
             <div class="mt-8 justify-end flex">
@@ -74,7 +73,7 @@
         class="w-full font-bold flex items-center justify-start my-2 md:px-16 py-4 shadow"
         :key="index"
     >
-        <!-- desktop scale -->
+        <!--show address desktop scale-->
         <div class="w-full my-4 pl-4 hidden md:block">
             <div class="flex justify-around mr-8">
                 <p class="md:text-xl">{{ adr.firstname }}</p>
@@ -206,11 +205,6 @@ export default {
                 const res = await axios({
                     url: "/user/set-main-address",
                     method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                        )}`,
-                    },
                     data: {
                         addressId: this.profileStore.addr[index]._id,
                     },
@@ -227,11 +221,6 @@ export default {
                 const res = await axios({
                     url: `/address/delete-address/${this.profileStore.addr[index]._id}`,
                     method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                        )}`,
-                    },
                 });
                 this.profileStore.fetchMyAddress();
                 this.$toast.success("ลบที่อยู่เรียบร้อยแล้ว");
@@ -242,22 +231,15 @@ export default {
         },
 
         async createNewAddr() {
-            // Validate the phone number
             if (!/^\d{10}$/.test(this.phone)) {
                 this.$toast.info("หมายเลขโทรศัพท์ต้องมีจำนวน 10 หลัก(เลข 0-9)");
                 this.phone = "";
                 return;
             }
-
             try {
                 const res = await axios({
                     url: "/address/create-address",
                     method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                        )}`,
-                    },
                     data: {
                         firstname: this.firstname,
                         lastname: this.lastname,

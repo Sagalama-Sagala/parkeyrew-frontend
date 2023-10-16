@@ -115,6 +115,7 @@ export default {
   setup() {
     const myStoreStore = useMyStoreStore();
     myStoreStore.fetchMyStore()
+    console.log('myStoreStore', myStoreStore.mystore)
     return { myStoreStore };
   },
   components: {

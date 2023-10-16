@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <Loading :isLoading="myStoreStore.isLoading" />
   <PopupForm
     :isModalOpen="this.myStoreStore.isPopupFormModal"
     @toggleModal="handleToggle"
@@ -98,8 +98,7 @@
         </div>
       </div>
     </div>
-  </div>
-  </div>  
+  </div> 
 </template>
 
 <script>
@@ -110,18 +109,19 @@ import { editIcon, shareIcon } from "@/assets/mystore";
 import { ref } from "vue";
 import axios from "axios";
 import { useMyStoreStore } from "@/store/my-store.store.js";
+import Loading from "@/components/Loading/index.vue";
 
 export default {
   setup() {
     const myStoreStore = useMyStoreStore();
-    myStoreStore.fetchMyStore();
-    console.log(myStoreStore.mystore);
+    myStoreStore.fetchMyStore()
     return { myStoreStore };
   },
   components: {
     Rating,
     PopupForm,
     Dialog,
+    Loading
   },
   data() {
     return {
@@ -166,6 +166,7 @@ export default {
       this.myStoreStore.togglePopupForm();
     },
     handleOk(value, resetData) {
+      this.myStoreStore.isLoading = true;
       const newData = {
         name: value.name,
         price: value.price,
@@ -184,11 +185,13 @@ export default {
         .then((response) => {
           this.$router.push(`product/${response.data._id}`);
           this.myStoreStore.isPopupFormModal = false;
+          this.myStoreStore.isLoading = false;
         })
         .catch((err) => {
           console.log(err.response.data.message);
           err.response.data.message.forEach((item) => {
             alert(item);
+            this.myStoreStore.isLoading = false;
           });
         });
     },

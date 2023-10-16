@@ -1,6 +1,5 @@
-
 <template>
-  <Loading v-if="isLoading" />
+  <Loading :isLoading="isLoading"/>
   <div class="h-screen bg-secondary pt-16">
     <div class="relative">
       <img :src="cover" alt="cover" class="h-[166px] w-full object-cover" />

@@ -8,7 +8,7 @@
         :is-recommended="item.recommended"
         :item-name="item.name"
         :item-price="item.price"
-        :item-image="item.productImage"
+        :item-image="item.productImage[0]"
         :rating="item.owner.reviewStar"
         :seller-image="item.sellerImage"
         :seller-name="item.owner.username"

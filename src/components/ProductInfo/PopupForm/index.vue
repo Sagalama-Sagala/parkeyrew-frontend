@@ -31,11 +31,11 @@
                   <label
                     for="upload"
                     class="flex flex-col justify-center items-center"
-                    v-if="!(imageList.length === 4)"
+                    v-if="!(imageList.length === 5)"
                   >
                     <img :src="imageHolder" class="w-[5rem]" />
                     <label class="text-gray-600">
-                      {{ imageList.length }}/4</label
+                      {{ imageList.length }}/5</label
                     >
                   </label>
                   <input
@@ -289,10 +289,11 @@ export default {
   methods: {
     onFileChange(e) {
       const files = e.target.files;
-      if (this.imageList.length < 4) {
-        const remainingSlots = 4 - this.imageList.length;
+      if (this.imageList.length < 5) {
+        const remainingSlots = 5 - this.imageList.length;
         for (let i = 0; i < Math.min(remainingSlots, files.length); i++) {
           this.imageList.push(URL.createObjectURL(files[i]));
+          this.imageFileList.push(files[i]);
         }
       }
     },
@@ -303,9 +304,36 @@ export default {
       this.$emit("toggleModal");
     },
     handleOk() {
-      if (this.validateData()) {
-        this.$emit("handleOk", this.infoProducts, this.handleReset);
-      }
+      axios
+        .post("/product/create-product", this.infoProducts)
+        .then((response) => {
+          const productId = response.data._id;
+          const productImage = new FormData();
+          for (let i = 0; i < this.imageFileList.length; i++) {
+            productImage.append(`image${i + 1}`, this.imageFileList[i]);
+          }
+
+          // for (const pair of productImage.entries()) {
+          //   console.log(pair[0], pair[1]);
+          // }
+          axios
+            .put(`/product/add-product-image/${productId}`, productImage, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((response) => {
+              this.$emit("fetchMyStore");
+              this.handleReset();
+              this.handleToggleModal();
+            })
+            .catch((err) => {
+              console.log("error from upload image", err);
+            });
+        })
+        .catch((err) => {
+          console.log("error from create product", err);
+        });
     },
     handleReset() {
       this.infoProducts.brand = "0";
@@ -449,6 +477,7 @@ export default {
   data() {
     return {
       imageList: [],
+      imageFileList: [],
       imageHolder: imageHolder,
       thaiProvinces,
       categoryOptions,

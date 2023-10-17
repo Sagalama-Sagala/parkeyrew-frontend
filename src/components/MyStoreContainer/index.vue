@@ -18,7 +18,7 @@
                     class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8"
                 >
                     <img
-                        class="h-[7rem] w-[7rem] rounded-full"
+                        class="md:h-[7rem] md:w-[7rem] h-[5rem] w-[5rem] rounded-full"
                         :src="
                             !this.myStoreStore?.mystore?.profileImage ||
                             this.myStoreStore?.mystore?.profileImage === ''
@@ -34,7 +34,7 @@
                             <b>{{ this.myStoreStore?.mystore?.username }}</b>
                             <div @click="handleToggleEdit" class="z-30">
                                 <img
-                                    class="md:w-[3rem] md:rounded-2xl mb-2 hover:cursor-pointer md:hidden w-[2rem]"
+                                    class="md:w-[3rem]  md:rounded-2xl mb-2 hover:cursor-pointer md:hidden w-[2rem]"
                                     :src="editIcon"
                                     alt="edit profile icon"
                                 />
@@ -149,11 +149,14 @@ export default {
     setup() {
         const isEditOpen = ref(false);
         const myStoreStore = useMyStoreStore();
+        myStoreStore.resetMystore()
         const route = useRoute();
         const page = ref(route.path.split("/").pop());
 
         myStoreStore.fetchMyStore();
         const editDescription = ref(myStoreStore?.mystore?.description);
+
+
         return { myStoreStore, page, isEditOpen, editDescription };
     },
     components: {

@@ -166,6 +166,7 @@ export default {
       );
       axios
         .post("/product/decrease-product-count", {
+          roomId: this.chatStore.chatRoom.,
           productId: this.chatStore.chatRoom.product._id,
           customerId: this.chatStore.chatRoom.otherUser.user._id,
         })

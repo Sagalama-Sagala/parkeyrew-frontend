@@ -13,20 +13,22 @@
     :isModalOpen="this.myStoreStore?.isPopupFormModal"
     @toggle-modal="handleToggle"
     @fetch-my-store="fetchMyStore()"
+    @toggleLoading="handleToggleLoading()"
   />
+
+
   <div class="flex flex-col">
     <div
-      class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
+      class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2 md:h-[36rem]  md:pt-0 pt-8"
     >
       <div
-        class="bg-secondary text-black flex flex-col md:gap-6 gap-16 items-center justify-center md:w-[48rem] w-[16rem] md:h-[24rem] h-full mt-12 md:pb-0 pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
+        class="bg-secondary mx-[3rem] text-black flex flex-col md:gap-6 gap-[3rem] items-center justify-center px-10 md:py-[3rem] py-0 mt-12 md:pb-[6rem] pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
       >
         <div
           class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8"
         >
-          <div>
             <img
-              class="h-[7rem] w-[7rem] rounded-full mb-4"
+              class="h-[7rem] w-[7rem] rounded-full "
               :src="
                 !this.myStoreStore?.mystore?.profileImage ||
                 this.myStoreStore?.mystore?.profileImage === ''
@@ -35,8 +37,7 @@
               "
               alt="profile picture"
             />
-          </div>
-          <div class="flex flex-col justify-center w-[12rem] md:pt-0 pt-4">
+          <div class="flex flex-col justify-center md:items-start items-center w-[12rem] md:pt-0 pt-4">
             <div>
               <b>{{ this.myStoreStore?.mystore?.username }}</b>
             </div>
@@ -63,7 +64,7 @@
           </div>
         </div>
         <div
-          class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]"
+          class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[7rem]  "
         >
           <div class="hover:cursor-pointer" @click="openFollower">
             <b>{{ this.myStoreStore?.mystore?.follower?.length }} ผู้ติดตาม</b>
@@ -92,7 +93,7 @@
           />
         </div>
         <div
-          class="md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[12rem]"
+          class="md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] "
         >
           <div class ="flex">
             <b>คำอธิบาย</b>
@@ -200,6 +201,10 @@ export default {
       } else {
         this.handleSaveEdit();
       }
+    },
+    handleToggleLoading()
+    {
+      this.myStoreStore.isLoading = !this.myStoreStore.isLoading;
     },
     handleOpenEdit() {
       this.isEditOpen = true;

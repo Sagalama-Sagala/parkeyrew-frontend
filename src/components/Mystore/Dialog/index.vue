@@ -17,15 +17,20 @@
           >
             <img
               alt="follower profile"
-              :src="item.profileImage"
+              :src="item.data.profileImage"
               class="w-[5.5rem] h-[5.5rem] rounded-full md:block hidden border-[2px] border-black"
             />
-            <b class="w-[55%]">{{ item.username }}</b>
-            <div
-              class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
-            >
-              + ติดตาม
-            </div>
+            <b class="w-[55%]">{{ item.data.username }}</b>
+                <div v-if="item.status === 'not following'"
+                class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
+                >
+                + ติดตาม
+                </div>
+                <div v-else-if="item.status === 'i'"
+                class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
+                >
+                - ยกเลิกติดตาม
+                </div>
           </div>
         </div>
         <div v-else>
@@ -36,15 +41,20 @@
           >
             <img
               alt="follower profile"
-              :src="item.profileImage"
+              :src="item.data.profileImage"
               class="w-[5.5rem] h-[5.5rem] rounded-full md:block hidden border-[2px] border-black"
             />
-            <b class="w-[55%]">{{ item.username }}</b>
-            <div
+            <b class="w-[55%]">{{ item.data.username }}</b>
+              <div v-if="item.status === 'not following'"
               class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
-            >
+              >
               + ติดตาม
-            </div>
+              </div>
+              <div v-else-if="item.status === 'following'"
+              class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
+              >
+              - ยกเลิกติดตาม
+              </div>
           </div>
         </div>
         <slot></slot>
@@ -81,14 +91,26 @@ export default {
   setup(props) {
     const StoreStore = ref(null);
 
+
     if (props.isMyStore) {
       StoreStore.value = useMyStoreStore().mystore;
     } else {
       StoreStore.value = useOtherStoreStore().otherStore;
     }
 
-    const { follower, following } = StoreStore.value;
+    const follower = StoreStore.value.follower.map((item, index) => {
+    return {
+        data : item,
+        status : StoreStore.value.followerStatus[index],
+    };
+    });
 
+    const following = StoreStore.value.following.map((item, index) => {
+    return {
+        data : item,
+        status : StoreStore.value.followingStatus[index],
+    };
+    });
     return { follower, following };
   },
   methods: {

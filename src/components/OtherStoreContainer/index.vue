@@ -2,10 +2,10 @@
   <Loading :isLoading="this.otherStoreStore?.isLoading" />
   <div class="flex flex-col">
     <div
-      class="bg-primary text-white flex flex-col px-20 md:items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
+      class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2 md:h-[36rem]  md:pt-0 pt-8"
     >
       <div
-        class="bg-secondary text-black flex flex-col md:gap-6 gap-16 items-center justify-center md:w-[48rem] md:h-[24rem] h-full mt-12 md:pb-0 pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
+        class="bg-secondary mx-[3rem] text-black flex flex-col md:gap-6 gap-[3rem] items-center justify-center px-10 md:py-[3rem] py-0 mt-[5rem] md:pb-[6rem] pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg "
       >
         <div
           class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8 md:mb-0 mb-20"
@@ -22,7 +22,7 @@
               alt="profile picture"
             />
           </div>
-          <h1
+          <h1 v-if="!this.otherStoreStore?.otherStore?.isFollow"
             class="border-[1px] border-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer md:hidden"
             @click="handleFollow"
           >
@@ -107,7 +107,7 @@
           </div>
         </div>
         <div
-          class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12"
+          class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[4rem]   "
         >
           <b>คำอธิบาย</b>
           <div>{{ this.otherStoreStore?.otherStore?.description }}</div>

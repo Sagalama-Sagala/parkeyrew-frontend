@@ -6,6 +6,8 @@ export const useProfileStore = defineStore("profile", {
         focusPage: "record",
         profile: null,
         addr: [],
+        purchase: [],
+        sales: [],
     }),
     actions: {
         async fetchMyProfile() {
@@ -35,6 +37,34 @@ export const useProfileStore = defineStore("profile", {
                     this.addr = [res.data?.mainAddress, ...res.data?.Addresses];
                 } else {
                     this.addr = [];
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async fetchMyPurchase() {
+            try {
+                const res = await axios({
+                    url: "/history/get-my-purchase",
+                    method: "GET",
+                });
+
+                if (res.data) {
+                    this.purchase = res.data;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async fetchMySales() {
+            try {
+                const res = await axios({
+                    url: "/history/get-my-sale",
+                    method: "GET",
+                });
+
+                if (res.data) {
+                    this.sales = res.data;
                 }
             } catch (error) {
                 console.log(error);

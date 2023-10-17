@@ -1,6 +1,8 @@
 <template>
     <button :class="class" @click="onClick" :disabled="loading">
-        <img v-if="loading" class="animate-spin h-5 w-5" :src="loadingSVG" />
+        <div class="flex justify-center" v-if="loading">
+            <img class="animate-spin h-5 w-5" :src="loadingSVG" />
+        </div>
         <p v-else>{{ text }}</p>
     </button>
 </template>

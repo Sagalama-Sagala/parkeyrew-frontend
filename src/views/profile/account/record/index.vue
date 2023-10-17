@@ -47,7 +47,7 @@
     </div>
     <div class="flex md:mt-10 justify-center">
         <div v-if="pageState === 1" class="flex flex-col">
-            <compu-button
+            <chompu-button
                 :loading="loading"
                 text="บันทึก"
                 @click="save"
@@ -75,7 +75,7 @@
 import { view } from "@/assets/profile";
 import Defaultrecord from "@/components/StepsEditRecord/Default/index.vue";
 import Edit from "@/components/StepsEditRecord/Edit/index.vue";
-import CompuButton from "@/components/CompuButton/index.vue";
+import ChompuButton from "@/components/ChompuButton/index.vue";
 import axios from "axios";
 import { ref } from "vue";
 import { useProfileStore } from "@/store/profile.store.js";
@@ -89,7 +89,7 @@ export default {
     components: {
         Defaultrecord,
         Edit,
-        CompuButton,
+        ChompuButton,
     },
     data() {
         return {

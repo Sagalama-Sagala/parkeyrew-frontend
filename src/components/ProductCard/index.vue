@@ -10,7 +10,7 @@
     </div>
 
     <div class="px-2 relative">
-      <img :src="itemImage" class="rounded-xl h-[215px] w-[297px] bg-cover" />
+      <img :src="itemImage" class="rounded-xl h-[215px] w-[297px] object-cover " />
       <div
         class="absolute bottom-4 right-3 z-10"
         @click.stop="$emit('toggleLike', id)"
@@ -33,7 +33,11 @@
         <div>
           <div class="flex items-center gap-2">
             <img
-              :src="sellerImage"
+              :src="
+                !sellerImage || sellerImage === ''
+                  ? 'https://placehold.co/600x400'
+                  : sellerImage
+              "
               class="rounded-full w-[20px] h-[20px] border-2"
             />
             <p
@@ -139,11 +143,9 @@ export default {
       this.$emit("sellerClick");
 
       //รอBackend แก้ขัดไปก่อน
-      if(this.sellerName == this.myStoreStore.mystore.username){
+      if (this.sellerName == this.myStoreStore.mystore.username) {
         this.$router.push("/mystore");
-      }
-      else
-      {
+      } else {
         this.$router.push(`/store/${this.ownerId}`);
       }
     },
@@ -163,7 +165,6 @@ export default {
   setup() {
     const myStoreStore = useMyStoreStore();
     return { myStoreStore };
-    
   },
   data() {
     return {

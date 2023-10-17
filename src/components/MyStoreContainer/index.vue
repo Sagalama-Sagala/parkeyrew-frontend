@@ -1,42 +1,57 @@
 <template>
-  <Loading :isLoading="myStoreStore.isLoading" />
+  <Loading :isLoading="this.myStoreStore?.isLoading" />
+  <div v-if="isEditOpen" class="fixed bg-black bg-opacity-50 w-screen h-screen z-30  " @click="handleToggleEdit" >
+    <div class="flex flex-1 h-screen justify-center items-center">
+      <div class="bg-white flex flex-col p-10 gap-5 rounded-xl " @click.stop> 
+        <h1>คำอธิบาย</h1>
+        <textarea v-model="this.editDescription" class="border-[1px] border-black w-[15rem] rounded px-2 md:w-[20rem] md:h-[10rem]" ></textarea>
+        <button @click="handleSaveEdit" class="border-[1px] border-primary hover:text-white text-primary hover:bg-primary duration-100 rounded-lg">บันทึก</button>
+      </div>
+    </div>
+  </div>
   <PopupForm
-    :isModalOpen="this.myStoreStore.isPopupFormModal"
-    @toggleModal="handleToggle"
+    :isModalOpen="this.myStoreStore?.isPopupFormModal"
+    @toggle-modal="handleToggle"
     @fetch-my-store="fetchMyStore()"
-    @handleOk="handleOk"
+    @toggleLoading="handleToggleLoading()"
   />
+
+
   <div class="flex flex-col">
     <div
-      class="bg-primary text-white flex flex-col items-center justify-center w-full mt-2 md:h-[36rem] h-[48rem] md:pt-0 pt-8"
+      class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2 md:h-[36rem]  md:pt-0 pt-8"
     >
       <div
-        class="bg-secondary text-black flex flex-col md:gap-6 gap-16 items-center justify-center md:w-[48rem] w-[16rem] md:h-[24rem] h-full mt-12 md:pb-0 pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
+        class="bg-secondary mx-[3rem] text-black flex flex-col md:gap-6 gap-[3rem] items-center justify-center px-10 md:py-[3rem] py-0 mt-12 md:pb-[6rem] pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
       >
         <div
           class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8"
         >
-          <div>
             <img
-              class="h-[7rem] rounded-full mb-4"
-              :src="profileURL"
+              class="h-[7rem] w-[7rem] rounded-full "
+              :src="
+                !this.myStoreStore?.mystore?.profileImage ||
+                this.myStoreStore?.mystore?.profileImage === ''
+                  ? 'https://placehold.co/600x400'
+                  : this.myStoreStore?.mystore?.profileImage
+              "
               alt="profile picture"
             />
-          </div>
-          <div class="flex flex-col justify-center w-[12rem] md:pt-0 pt-4">
+          <div class="flex flex-col justify-center md:items-start items-center w-[12rem] md:pt-0 pt-4">
             <div>
-              <b>{{ myStoreStore.mystore.username }}</b>
+              <b>{{ this.myStoreStore?.mystore?.username }}</b>
             </div>
             <div class="md:pt-0 pt-3">
-              <Rating :rating="myStoreStore.mystore.reviewStar" />
+              <Rating :rating="this.myStoreStore?.mystore?.reviewStar" />
             </div>
           </div>
           <div class="flex flex-col">
-            <div @click="handleEditProfile">
+            <div >
               <img
                 class="w-[3rem] rounded-2xl mb-2 hover:cursor-pointer md:block hidden"
                 :src="editIcon"
                 alt="edit profile icon"
+                @click="handleGoToEditProfile"
               />
             </div>
             <div>
@@ -49,10 +64,10 @@
           </div>
         </div>
         <div
-          class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[8.5rem]"
+          class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[7rem]  "
         >
           <div class="hover:cursor-pointer" @click="openFollower">
-            <b>{{ myStoreStore.mystore.follower.length }} ผู้ติดตาม</b>
+            <b>{{ this.myStoreStore?.mystore?.follower?.length }} ผู้ติดตาม</b>
           </div>
           <Dialog
             v-if="followerDialog"
@@ -63,7 +78,12 @@
           </Dialog>
           |
           <div class="hover:cursor-pointer" @click="openFollowing">
-            <b>{{ myStoreStore.mystore.following.length }} กำลังติดตาม</b>
+            <b
+              >{{
+                this.myStoreStore?.mystore?.following?.length
+              }}
+              กำลังติดตาม</b
+            >
           </div>
           <Dialog
             v-if="followingDialog"
@@ -73,10 +93,15 @@
           />
         </div>
         <div
-          class="flex flex-col md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[8rem] mb-8 pb-12"
+          class="md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] "
         >
-          <b>คำอธิบาย</b>
-          <div>{{ myStoreStore.mystore.description }}</div>
+          <div class ="flex">
+            <b>คำอธิบาย</b>
+            <img :src="editIcon" class="w-[1rem] ml-2 hover:cursor-pointer" @click="handleToggleEdit" />
+          </div>
+          <div >
+            {{ this.myStoreStore?.mystore?.description }}
+          </div>
         </div>
       </div>
       <div
@@ -99,6 +124,8 @@
       </div>
     </div>
   </div>
+
+  
 </template>
 
 <script>
@@ -114,11 +141,14 @@ import { useRoute } from "vue-router";
 
 export default {
   setup() {
+    const isEditOpen = ref(false);
     const myStoreStore = useMyStoreStore();
     const route = useRoute();
     const page = ref(route.path.split("/").pop());
+    
     myStoreStore.fetchMyStore();
-    return { myStoreStore, page};
+    const editDescription = ref(myStoreStore.mystore.description);
+    return { myStoreStore, page, isEditOpen , editDescription };
   },
   components: {
     Rating,
@@ -128,11 +158,11 @@ export default {
   },
   data() {
     return {
+      editDescription: "",
       editIcon,
       shareIcon,
       profileURL:
         "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
-      isModalOpen: false,
       followerDialog: false,
       followingDialog: false,
     };
@@ -147,7 +177,7 @@ export default {
     routeToReview() {
       this.$router.push("/mystore/review");
     },
-    handleEditProfile() {
+    handleGoToEditProfile() {
       this.$router.push("/profile/record");
     },
     openFollower() {
@@ -165,34 +195,32 @@ export default {
     handleToggle() {
       this.myStoreStore.togglePopupForm();
     },
-    handleOk(value, resetData) {
-      this.myStoreStore.isLoading = true;
-      const newData = {
-        name: value.name,
-        price: value.price,
-        deliveryFee: value.deliveryFee,
-        description: value.description,
-        brand: value.brand,
-        color: value.color,
-        size: value.size,
-        category: value.category,
-        condition: value.condition,
-        sendFrom: value.sendFrom,
-        remain: value.remain,
-      };
+    handleToggleEdit() {
+      if (!this.isEditOpen) {
+        this.handleOpenEdit();
+      } else {
+        this.handleSaveEdit();
+      }
+    },
+    handleToggleLoading()
+    {
+      this.myStoreStore.isLoading = !this.myStoreStore.isLoading;
+    },
+    handleOpenEdit() {
+      this.isEditOpen = true;
+    },
+    handleSaveEdit() {
       axios
-        .post("product/create-product", newData)
+        .put("/user/edit-user-description", {
+          description: this.editDescription,
+        })
         .then((response) => {
-          this.$router.push(`product/${response.data._id}`);
-          this.myStoreStore.isPopupFormModal = false;
-          this.myStoreStore.isLoading = false;
+          this.$toast.success("บันทึกคำอธิบายสำเร็จ");
+          this.myStoreStore.mystore.description = this.editDescription;
+          this.isEditOpen = false;
         })
         .catch((err) => {
-          console.log(err.response.data.message);
-          err.response.data.message.forEach((item) => {
-            alert(item);
-            this.myStoreStore.isLoading = false;
-          });
+          console.log(err);
         });
     },
   },

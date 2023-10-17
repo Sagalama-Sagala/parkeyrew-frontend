@@ -11,7 +11,7 @@
         class="grid md:[grid-template-columns:repeat(auto-fill,_minmax(17rem,3fr))] gap-7 justify-center items-center w-full px-10 mb-10"
       >
         <ProductCard
-          v-for="(item, index) in myStoreStore.mystore.products"
+          v-for="(item, index) in myStoreStore?.mystore?.products"
           :id="item._id"
           :key="item.title"
           :is-recommended="item.recommended"
@@ -19,7 +19,7 @@
           :item-price="item.price"
           :item-image="item.productImage[0]"
           :rating="item.owner.reviewStar"
-          :seller-image="item.sellerImage"
+          :seller-image="item.owner.profileImage"
           :seller-name="item.owner.username"
           :liked="item.liked"
           :color="item.color"
@@ -46,6 +46,7 @@ import { ref } from "vue";
 export default {
   setup() {
     const myStoreStore = useMyStoreStore();
+    myStoreStore.fetchMyStore();
     const isModalOpen = ref(false);
     return { myStoreStore, isModalOpen };
   },

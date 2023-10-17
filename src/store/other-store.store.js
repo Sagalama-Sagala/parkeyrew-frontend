@@ -10,6 +10,7 @@ export const useOtherStoreStore = defineStore("otherstore", {
   actions: {
     async fetchOtherStore(id) {
       this.isLoading = true;
+      console.log("fetch other store...");
       axios
         .get(`/user/get-shop-page-by-id/${id}`)
         .then((response) => {

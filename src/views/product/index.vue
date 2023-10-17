@@ -25,7 +25,7 @@
               :src="imageUrl"
               class="h-[8rem] w-[11rem] border-grey rounded-xl border-[1px] aspect-[10.5/9] object-contain bg-[#d5d5d5]"
               :class="{
-                ' blur-sm border-2 border-black': selectedImageIndex === index,
+                '  border-[3px] border-primary ': selectedImageIndex === index,
               }"
               @click="updateSelectedImage(index)"
             />
@@ -91,7 +91,7 @@
               <div class="md:font-normal font-light">
                 <h1>{{ infoProducts?.product?.brand }}</h1>
                 <h1>{{ infoProducts?.product?.color }}</h1>
-                <h1>{{ infoProducts?.product?.condition }}</h1>
+                <h1>{{ infoProducts?.product?.condition }} %</h1>
                 <h1>{{ infoProducts?.product?.size }}</h1>
               </div>
             </div>
@@ -107,7 +107,7 @@
                 <h1>{{ infoProducts?.product?.category }}</h1>
                 <h1>{{ formatDate(infoProducts?.product?.createdAt) }}</h1>
                 <h1>{{ infoProducts?.product?.sendFrom }}</h1>
-                <h1>{{ infoProducts?.product?.deliveryFee }}</h1>
+                <h1>{{ infoProducts?.product?.deliveryFee }} ฿</h1>
               </div>
             </div>
           </div>
@@ -117,7 +117,7 @@
           >
             <div class="flex items-center gap-4">
               <img
-                src=""
+                :src="infoProducts?.product?.owner?.profileImage"
                 class="hover:bg-secondary hover:cursor-pointer w-[4rem] h-[4rem] rounded-full object-cover border-4"
               />
               <div>
@@ -188,7 +188,9 @@
       :isModalOpen="isModalOpen"
       @toggleModal="handleModal"
       :productData="infoProducts.product"
-      @handleOk="handleOk"
+      :isEdit="true"
+      @toggleLoading="toggleLoading" 
+      @fetchProduct="fetchProduct"
     />
   </div>
 </template>
@@ -226,7 +228,11 @@ export default {
     const chatStore = useChatStore();
     const isUserProduct = ref(false);
     const isLoading = ref(true);
-    axios
+
+  
+    const fetchProduct = async ()=>
+    {
+      axios
       .get(`/product/get-info-product-page/${productId}`)
       .then((response) => {
         console.log(response.data);
@@ -245,9 +251,9 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+    }
 
     const connectChatRoom = () => {
-      let roomId = "";
       socket.emit("connectRoom", {
         product: infoProducts.value.product,
         seller: infoProducts.value.product.owner,
@@ -258,6 +264,8 @@ export default {
       });
     };
 
+    fetchProduct()
+
     return {
       infoProducts,
       connectChatRoom,
@@ -265,6 +273,7 @@ export default {
       productId,
       isLiked,
       isLoading,
+      fetchProduct
     };
   },
   components: {
@@ -305,44 +314,19 @@ export default {
     handleModal() {
       this.isModalOpen = !this.isModalOpen;
     },
-    handleOk(value, resetData) {
-      const newData = {
-        productId: this.productId,
-        name: value.name,
-        price: value.price,
-        deliveryFee: value.deliveryFee,
-        description: value.description,
-        brand: value.brand,
-        color: value.color,
-        size: value.size,
-        category: value.category,
-        condition: value.condition,
-        sendFrom: value.sendFrom,
-        remain: value.remain,
-      };
-      axios
-        .post("product/edit-product-info", newData, {
-          headers: {
-            Authorization: "Bearer " + `${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          const oldOwner = this.infoProducts.product.owner;
-          this.infoProducts.product = response.data;
-          this.infoProducts.product.owner = oldOwner;
-          resetData();
-          this.isModalOpen = false;
-        })
-        .catch((err) => {
-          console.log(err.response.data.message);
-          err.response.data.message.forEach((item) => {
-            alert(item);
-          });
-        });
-    },
+    
     handleGotoStore() {
-      this.$router.push(`/store/${this.infoProducts.product.owner._id}`);
+      if(this.isUserProduct) this.$router.push(`/mystore`);
+      else
+      {
+        this.$router.push(`/store/${this.infoProducts.product.owner._id}`);
+      }
+      
     },
+    toggleLoading()
+    {
+      this.isLoading = !this.isLoading
+    }
   },
   data() {
     return {

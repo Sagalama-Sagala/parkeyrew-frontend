@@ -245,7 +245,7 @@
                 ยกเลิก
               </button>
               <button
-                @click="handleOk"
+                @click="this.isEdit ? handleEditOk() : handleOk()"
                 class="text-primary border-[1px] border-primary hover:bg-primary hover:text-white duration-100 rounded-lg px-4"
               >
                 ลงขาย
@@ -271,11 +271,6 @@ import {
 import { useMyStoreStore } from "@/store/my-store.store.js";
 import axios from "axios";
 export default {
-  setup() {
-    const myStoreStore = useMyStoreStore();
-    myStoreStore.fetchMyStore();
-    return { myStoreStore };
-  },
   name: "PopupForm",
   props: {
     isModalOpen: {
@@ -284,8 +279,12 @@ export default {
     },
     productData: {
       type: Object,
-      default: () => {},
+      default: null,
     },
+    isEdit :{
+      type: Boolean,
+      default: false,
+    }
   },
   methods: {
     onFileChange(e) {
@@ -297,9 +296,11 @@ export default {
           this.imageFileList.push(files[i]);
         }
       }
+      console.log(this.imageList);
     },
     deleteImage(index) {
       this.imageList.splice(index, 1);
+      this.imageFileList.splice(index, 1);
     },
     handleToggleModal() {
       this.$emit("toggleModal");
@@ -308,6 +309,8 @@ export default {
       if (!this.validateData()) {
         return;
       }
+      this.toggleLoading();
+      console.log("from popup");
       axios
         .post("/product/create-product", this.infoProducts)
         .then((response) => {
@@ -326,6 +329,7 @@ export default {
               this.$emit("fetchMyStore");
               this.handleReset();
               this.handleToggleModal();
+              this.toggleLoading();
             })
             .catch((err) => {
               console.log("error from upload image", err);
@@ -334,6 +338,62 @@ export default {
         .catch((err) => {
           console.log("error from create product", err);
         });
+      },
+    async handleEditOk() {
+          if (!this.validateData()) {
+          return;
+        }
+        this.toggleLoading();
+        const newData = {
+          productId: this.productData._id,
+          brand: this.infoProducts.brand,
+          category: this.infoProducts.category,
+          color: this.infoProducts.color,
+          condition: this.infoProducts.condition,
+          sendFrom: this.infoProducts.sendFrom,
+          size: this.infoProducts.size,
+          price: this.infoProducts.price,
+          description: this.infoProducts.description,
+          name: this.infoProducts.name,
+          remain: this.infoProducts.remain,
+          deliveryFee: this.infoProducts.deliveryFee,
+        };
+
+        const imageToUrl = async (imageUrl) => {
+          const response = await fetch(imageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], "image.png", { type: "image/png" });
+          return file;
+        };
+
+        try {
+              const imageFiles = [];
+              for (let i = 0; i < this.imageList.length; i++) {
+                  const file = await imageToUrl(this.imageList[i]);
+                  imageFiles.push(file);
+              }
+
+              await axios.post('/product/edit-product-info', newData)
+                  .then(async (response) => {
+                      const productImage = new FormData();
+                      for (let i = 0; i < imageFiles.length; i++) {
+                          productImage.append(`image${i + 1}`, imageFiles[i]);
+                      }
+                      await axios.put(`/product/add-product-image/${this.productData._id}`, productImage, {
+                          headers: {
+                              "Content-Type": "multipart/form-data",
+                          },
+                      });
+                      await this.$emit("fetchProduct");
+                      this.handleToggleModal();
+
+                  })
+                  .catch((err) => {
+                      console.log("error from edit product", err);
+                  });
+          } catch (error) {
+              console.error("Error converting image URL to file: ", error);
+          }
     },
     handleReset() {
       this.infoProducts.brand = "0";
@@ -442,7 +502,11 @@ export default {
       }
       return isValid;
     },
-  },
+    toggleLoading()
+    {
+      this.$emit("toggleLoading");
+    }
+      },
   setup(props) {
     const infoProducts = reactive({
       brand: "0",
@@ -457,8 +521,10 @@ export default {
       remain: 0,
       deliveryFee: 0,
     });
+    const imageList = ref([]);
     watchEffect(() => {
       if (props.productData) {
+        imageList.value = props.productData.productImage;
         infoProducts.brand = props.productData.brand;
         infoProducts.category = props.productData.category;
         infoProducts.condition = props.productData.condition;
@@ -472,11 +538,11 @@ export default {
         infoProducts.color = props.productData.color;
       }
     });
-    return { infoProducts };
+    
+    return { infoProducts , imageList };
   },
   data() {
     return {
-      imageList: [],
       imageFileList: [],
       imageHolder: imageHolder,
       thaiProvinces,

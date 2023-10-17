@@ -173,9 +173,8 @@ export default {
     },
     
     methods: {
-      
       sendEmail() {
-      emailjs.sendForm('service_x4d0cem', 'template_nuj1nau', this.$refs.form, 'MGXaQzcdX9_gSx5lO')
+        emailjs.sendForm('service_x4d0cem', 'template_nuj1nau', this.$refs.form, 'MGXaQzcdX9_gSx5lO')
         .then((result) => {
             console.log('SUCCESS!', result.text);
             setTimeout(() => {

@@ -276,7 +276,6 @@ import {
   colorOptions,
   sizeOptions,
 } from "@/constants";
-import { useMyStoreStore } from "@/store/my-store.store.js";
 import axios from "axios";
 export default {
   name: "PopupForm",
@@ -452,8 +451,6 @@ export default {
     validateData() {
       let isValid = true;
       const warnings = [];
-      const formatWarnings = [];
-      const sizeWarnings = [];
 
       //NAME
       if (!this.infoProducts.name) {
@@ -465,8 +462,12 @@ export default {
         warnings.push("Please enter the product description.");
         isValid = false;
       }
+      else if(this.infoProducts.description.length > 600){
+        warnings.push("Please enter the product description less than 600 characters.");
+        isValid = false;
+      }
       //Category
-      if (this.infoProducts.category === "0") {
+      if (this.infoProducts.category === "0" ) {
         warnings.push("Please select a category.");
         isValid = false;
       }
@@ -481,7 +482,7 @@ export default {
         isValid = false;
       }
       //Condition
-      if (this.infoProducts.condition === 0) {
+      if (this.infoProducts.condition === 0 || this.infoProducts.condition === null) {
         warnings.push("Please enter the product condition.");
         isValid = false;
       } else if (this.infoProducts.condition < 51) {
@@ -499,12 +500,12 @@ export default {
       ) {
         warnings.push("Please enter the product price.");
         isValid = false;
-      } else if (this.infoProducts.price < 0) {
+      } else if (this.infoProducts.price < 0 || this.infoProducts.price === 0 || this.infoProducts.price === null) {
         warnings.push("Please enter the product price more than 0 baht.");
         isValid = false;
       }
       //Remain
-      if (this.infoProducts.remain === 0) {
+      if (this.infoProducts.remain === 0 || this.infoProducts.remain === null) {
         warnings.push("Please enter the product remain.");
         isValid = false;
       }

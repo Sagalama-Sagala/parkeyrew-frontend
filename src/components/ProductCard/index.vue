@@ -10,7 +10,7 @@
     </div>
 
     <div class="px-2 relative">
-      <img :src="itemImage" class="rounded-xl h-[215px] w-[297px] bg-cover" />
+      <img :src="itemImage" class="rounded-xl h-[215px] w-[297px] object-cover " />
       <div
         class="absolute bottom-4 right-3 z-10"
         @click.stop="$emit('toggleLike', id)"

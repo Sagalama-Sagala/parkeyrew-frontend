@@ -135,7 +135,7 @@
 
 <script>
 import { useProfileStore } from "@/store/profile.store.js";
-import ReviewModal from "@/components/Profile/Sale/Review/Rating/index.vue";
+import ReviewModal from "@/components/Profile/Sale/Review/index.vue";
 
 export default {
     components: { ReviewModal },

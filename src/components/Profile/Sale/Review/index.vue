@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import Rating from "@/views/profile/sales/review/Rating/index.vue";
+import Rating from "@/components/Profile/Sale/Review/Rating/index.vue";
 import ChompuButton from "@/components/ChompuButton/index.vue";
 
 export default {

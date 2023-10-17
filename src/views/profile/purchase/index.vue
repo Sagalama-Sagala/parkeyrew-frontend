@@ -118,8 +118,7 @@
                 :review="purchase?.review"
                 :shop="purchase?.shop?._id"
                 :history-id="purchase?._id"
-                :shopName="`${purchase?.shop?.firstname}
-            ${purchase?.shop?.lastname}`"
+                :shopName="`${purchase?.shop?.firstname} ${purchase?.shop?.lastname}`"
             />
         </div>
 
@@ -129,7 +128,7 @@
 
 <script>
 import { useProfileStore } from "@/store/profile.store.js";
-import ReviewModal from "@/components/Profile/Purchase/Review/Rating/index.vue";
+import ReviewModal from "@/components/Profile/Purchase/Review/index.vue";
 
 export default {
     components: { ReviewModal },

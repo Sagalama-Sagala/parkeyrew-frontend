@@ -147,7 +147,7 @@ export default {
     const page = ref(route.path.split("/").pop());
     
     myStoreStore.fetchMyStore();
-    const editDescription = ref(myStoreStore.mystore.description);
+    const editDescription = ref(myStoreStore?.mystore?.description);
     return { myStoreStore, page, isEditOpen , editDescription };
   },
   components: {

@@ -1,21 +1,32 @@
 <template>
   <div class="md:text-2xl text-lg my-2 font-semibold">การขายของฉัน</div>
+  <div v-if="profileStore.purchase.length === 0">
+    <p class="text-center mt-10">ไม่พบรายการ</p>
+  </div>
 
   <div
-    v-for="(sale, index) in sales"
+    v-for="(purchase, index) in profileStore?.sales"
     class="w-full items-center justify-start my-8 md:px-16 text-lg font-medium"
     :key="index"
   >
     <div class="md:text-2xl text-lg my-8">
-      จากผู้ซื้อ {{ sale.customer.username }} >
+      จากผู้ซื้อ {{ purchase?.customer?.firstname }}
+      {{ purchase?.customer?.lastname }} >
     </div>
 
+    <!-- <pre>{{ purchase }}</pre> -->
+
     <!-- desktop scale -->
-    <div>
+    <div class="hidden md:block">
       <div class="w-full flex justify-around">
+        <!-- <div
+                    class="w-28 h-28 flex justify-center bg-gray-300 items-center mx-4 rounded-lg"
+                >
+                    รูป
+                </div> -->
         <img
           class="w-28 h-28 flex justify-center bg-gray-300 items-center mx-4 rounded-lg"
-          :src="sale.product?.productImage[0]"
+          :src="purchase?.product?.productImage[0]"
         />
         <div class="w-3/5 flex mx-4">
           <div class="w-1/4">
@@ -25,13 +36,13 @@
           </div>
           <div>
             <p class="mb-4 text-gray-500 line-clamp-1">
-              {{ sale.product.name }}
+              {{ purchase?.product?.name }}
             </p>
             <p class="mb-4 text-gray-500">
-              {{ formatDate(sale.createdAt) }}
+              {{ formatDate(purchase?.product?.createdAt) }}
             </p>
             <p class="mb-4 text-gray-500">
-              {{ formatStatus(sale.status) }}
+              {{ purchase?.status }}
             </p>
           </div>
         </div>
@@ -42,23 +53,74 @@
             <p class="mb-4 text-2xl">รวม</p>
           </div>
           <div class="w-1/2 items-end flex flex-col">
-            <p class="mb-4">฿ {{ sale.product.price }}</p>
-            <p class="mb-4">฿ {{ sale.product.deliveryFee }}</p>
+            <p class="mb-4">฿ {{ purchase?.product?.price }}</p>
+            <p class="mb-4">฿ {{ purchase?.product?.deliveryFee }}</p>
             <p class="mb-4 text-2xl">
-              ฿ {{ sale.product.price + sale.product.deliveryFee }}
+              ฿
+              {{ purchase?.product?.price + purchase?.product?.deliveryFee }}
             </p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="flex justify-end mt-2 mr-4 md:mr-0">
-      <button
-        class="border-[0.05rem] border-primary px-2 py-1 text-sm md:text-xl md:px-4 md:py-2 rounded-lg text-primary"
-        @click="reviewShop"
-      >
-        ดูรีวิว
-      </button>
+    <!-- mobile scale -->
+    <div class="md:hidden">
+      <div class="flex">
+        <div
+          class="w-1/2 my-6 flex justify-center bg-gray-300 items-center rounded-lg"
+        >
+          รูป
+        </div>
+        <div class="ml-4 text-black text-base font-normal">
+          <div>
+            <p class="mb-2 line-clamp-2">
+              {{ purchase?.productName }}
+            </p>
+          </div>
+          <div class="flex justify-between pr-4">
+            <div class="w-1/2 flex flex-col justify-around text-gray-500">
+              <p class="mb-2">
+                {{ purchase?.time }}
+              </p>
+              <p class="mb-2">
+                {{ purchase?.status }}
+              </p>
+            </div>
+            <div class="w-1/2">
+              <div class="mb-1 flex justify-between text-sm">
+                <div>ราคาสินค้า</div>
+                <div>฿ {{ purchase?.price }}</div>
+              </div>
+              <div class="mb-1 flex justify-between text-sm">
+                <div>ค่าส่ง</div>
+                <div>฿ {{ purchase?.deliveryFee }}</div>
+              </div>
+              <div class="mb-1 flex justify-between font-semibold">
+                <div>รวม</div>
+                <div>
+                  ฿
+                  {{ purchase?.price + purchase?.deliveryFee }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end mt-2 mr-4 md:mr-0 relative">
+      <!-- <button
+                class="border-[0.05rem] border-primary px-2 py-1 text-sm md:text-xl md:px-4 md:py-2 rounded-lg text-primary"
+                @click="reviewShop"
+            >
+                ดูรีวิว
+            </button> -->
+      <review-modal
+        :review="purchase?.review"
+        :customerName="`${purchase?.customer?.firstname}
+            ${purchase?.customer?.lastname}`"
+      />
     </div>
 
     <div class="border-b-[0.08rem] border-black mr-12 my-8 w-full"></div>
@@ -66,52 +128,27 @@
 </template>
 
 <script>
-import axios from "axios";
-import { ref } from "vue";
-import { formatDate, formatStatus } from "@/common/js/utils.js";
+import { useProfileStore } from "@/store/profile.store.js";
+import ReviewModal from "@/components/Profile/Sale/Review/index.vue";
+import { formatDate } from "@/common/js/utils.js";
+
 export default {
+  components: { ReviewModal },
   setup() {
-    const sales = ref([]);
+    const profileStore = useProfileStore();
 
-    axios
-      .get("/history/get-my-sale")
-      .then((response) => {
-        console.log(response.data);
-        sales.value = response.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    return { profileStore };
+  },
+  async mounted() {
+    // fetch data
+    try {
+      await this.profileStore.fetchMySales();
+      // console.log(this.profileStore?.purchase);
+    } catch (err) {
+      console.log(err);
+    }
+  },
 
-    return { sales };
-  },
-  data() {
-    return {
-      purchaseInfo: [
-        {
-          from: "aaa",
-          productName:
-            "โอดีบีโอ ซิกเนเจอร์ อายแชโดว์ พาเลท ทาตา 4.8g OD276 odbo Signature Eyeshadow Palette",
-          time: "12/12/12",
-          status: "สำเร็จแล้ว",
-          price: 2234,
-          deliveryFee: 45,
-        },
-        {
-          from: "bbb",
-          productName:
-            "โอดีบีโอ เอ็กซ์เทนชั่น มาสคาร่า สองหัว OD922 กันน้ำ ติดทน 4g+4g odbo Extra Extension Mascara",
-          time: "01/23/45",
-          status: "กำลังจัดส่ง",
-          price: 99,
-          deliveryFee: 30,
-        },
-      ],
-    };
-  },
-  methods: {
-    formatStatus,
-    formatDate,
-  },
+  methods: { formatDate },
 };
 </script>

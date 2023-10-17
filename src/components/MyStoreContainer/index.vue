@@ -1,14 +1,5 @@
 <template>
   <Loading :isLoading="this.myStoreStore?.isLoading" />
-  <div v-if="isEditOpen" class="fixed bg-black bg-opacity-50 w-screen h-screen z-30  " @click="handleToggleEdit" >
-    <div class="flex flex-1 h-screen justify-center items-center">
-      <div class="bg-white flex flex-col p-10 gap-5 rounded-xl " @click.stop> 
-        <h1>คำอธิบาย</h1>
-        <textarea v-model="this.editDescription" class="border-[1px] border-black w-[15rem] rounded px-2 md:w-[20rem] md:h-[10rem]" ></textarea>
-        <button @click="handleSaveEdit" class="border-[1px] border-primary hover:text-white text-primary hover:bg-primary duration-100 rounded-lg">บันทึก</button>
-      </div>
-    </div>
-  </div>
   <PopupForm
     :isModalOpen="this.myStoreStore?.isPopupFormModal"
     @toggle-modal="handleToggle"
@@ -38,20 +29,27 @@
               alt="profile picture"
             />
           <div class="flex flex-col justify-center md:items-start items-center w-[12rem] md:pt-0 pt-4">
-            <div>
+            <div class="flex gap-2 ">
               <b>{{ this.myStoreStore?.mystore?.username }}</b>
+              <div @click="handleToggleEdit" class="z-30" >
+              <img
+                class="md:w-[3rem] md:rounded-2xl mb-2 hover:cursor-pointer  md:hidden w-[2rem] "
+                :src="editIcon"
+                alt="edit profile icon"
+              />
+              </div>
             </div>
-            <div class="md:pt-0 pt-3">
+            
+            <div class="md:pt-0 md:pt-3">
               <Rating :rating="this.myStoreStore?.mystore?.reviewStar" />
             </div>
           </div>
-          <div class="flex flex-col">
-            <div >
+          <div class="flex md:flex-col">
+            <div @click="handleToggleEdit" >
               <img
-                class="w-[3rem] rounded-2xl mb-2 hover:cursor-pointer md:block hidden"
+                class="md:w-[3rem] md:rounded-2xl mb-2 hover:cursor-pointer  hidden md:block"
                 :src="editIcon"
                 alt="edit profile icon"
-                @click="handleGoToEditProfile"
               />
             </div>
             <div>
@@ -95,13 +93,15 @@
         <div
           class="md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] "
         >
-          <div class ="flex">
-            <b>คำอธิบาย</b>
-            <img :src="editIcon" class="w-[1rem] ml-2 hover:cursor-pointer" @click="handleToggleEdit" />
-          </div>
-          <div >
+          <b>คำอธิบาย</b>
+          <div v-if="!this.isEditOpen">
             {{ this.myStoreStore?.mystore?.description }}
           </div>
+          <textarea
+            v-else
+            class="w-full rounded border-[1px] border-black p-2"
+            v-model="this.myStoreStore.mystore.description"
+          />
         </div>
       </div>
       <div
@@ -212,11 +212,10 @@ export default {
     handleSaveEdit() {
       axios
         .put("/user/edit-user-description", {
-          description: this.editDescription,
+          description: this.myStoreStore.mystore.description,
         })
         .then((response) => {
           this.$toast.success("บันทึกคำอธิบายสำเร็จ");
-          this.myStoreStore.mystore.description = this.editDescription;
           this.isEditOpen = false;
         })
         .catch((err) => {

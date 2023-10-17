@@ -33,7 +33,8 @@
     </div>
     <!-- chat -->
     <div
-      class="w-full flex flex-col-reverse md:pt-32 pt-48 pb-28 text-lg font-semibold h-full overflow-y-auto z-0 scroll-smooth"
+      class="w-full flex flex-col-reverse md:pt-32 pt-48 text-lg font-semibold h-full overflow-y-auto z-0 scroll-smooth"
+      :class="isAddOption ? 'pb-48' : 'pb-28'"
     >
       <div
         v-for="(item, index) in messages.slice().reverse()"
@@ -49,9 +50,12 @@
       </div>
     </div>
     <div class="absolute bottom-0 w-full py-6 z-10 bg-white rounded-b-2xl">
-      <div class="w-full flex justify-center items-center">
+      <div
+        class="w-full flex justify-center items-center"
+        :class="isAddOption ? 'flex-col' : ''"
+      >
         <div class="flex md:w-3/5 w-full md:px-0 px-4 md:gap-x-4 gap-x-2">
-          <button class="text-5xl py-0">
+          <button class="text-5xl py-0" @click="toggleAddOption">
             <img :src="add" class="w-9 border-[1px] border-black rounded p-1" />
           </button>
           <input
@@ -70,6 +74,27 @@
             <p class="text-lg font-semibold">ส่ง</p>
           </button>
         </div>
+        <div v-if="isAddOption" class="flex gap-x-10 pt-3">
+          <button
+            class="bg-[#d9d9d9] w-24 h-24 rounded-xl flex justify-center items-center"
+          >
+            <img :src="image" class="w-12 h-12" />
+          </button>
+          <button
+            class="bg-[#d9d9d9] w-24 h-24 rounded-xl flex justify-center items-center"
+          >
+            <img
+              v-if="chatStore.chatRoom.user.role === 'seller'"
+              :src="closeDeal"
+              class="w-12 h-12"
+            />
+            <img
+              v-if="chatStore.chatRoom.user.role === 'customer'"
+              :src="location"
+              class="w-12 h-12"
+            />
+          </button>
+        </div>
       </div>
     </div>
   </Container>
@@ -81,11 +106,13 @@ import { state, socket } from "@/socket";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { chevronLeft, threePointLeader, send, add } from "@/assets/common";
+import { image, closeDeal, location, delivery } from "@/assets/chat";
 import { onBeforeRouteLeave } from "vue-router";
 import { useChatStore } from "@/store/chat.store.js";
 
 export default {
   setup() {
+    const isAddOption = ref(false);
     const messages = ref([]);
     const route = useRoute();
     const chatStore = useChatStore();
@@ -107,7 +134,7 @@ export default {
       }
     });
 
-    return { messages, chatStore };
+    return { isAddOption, messages, chatStore };
   },
   computed: {
     connected() {
@@ -127,6 +154,10 @@ export default {
     handleBack() {
       this.$router.push("/chat");
     },
+    toggleAddOption() {
+      this.isAddOption = !this.isAddOption;
+      console.log("hello");
+    },
   },
   components: {
     Container,
@@ -138,7 +169,11 @@ export default {
       chevronLeft,
       threePointLeader,
       send,
+      image,
+      closeDeal,
       add,
+      location,
+      closeDeal,
       mockProfile:
         "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Circle_Davys-Grey_Solid.svg/1024px-Circle_Davys-Grey_Solid.svg.png",
     };

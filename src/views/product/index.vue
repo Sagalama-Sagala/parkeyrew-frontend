@@ -188,8 +188,8 @@
       :isModalOpen="isModalOpen"
       @toggleModal="handleModal"
       :productData="infoProducts.product"
-      @handleOk="handleOk"
       :isEdit="true"
+      @toggleLoading="toggleLoading" 
     />
   </div>
 </template>
@@ -305,44 +305,14 @@ export default {
     handleModal() {
       this.isModalOpen = !this.isModalOpen;
     },
-    handleOk(value, resetData) {
-      const newData = {
-        productId: this.productId,
-        name: value.name,
-        price: value.price,
-        deliveryFee: value.deliveryFee,
-        description: value.description,
-        brand: value.brand,
-        color: value.color,
-        size: value.size,
-        category: value.category,
-        condition: value.condition,
-        sendFrom: value.sendFrom,
-        remain: value.remain,
-      };
-      axios
-        .post("product/edit-product-info", newData, {
-          headers: {
-            Authorization: "Bearer " + `${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          const oldOwner = this.infoProducts.product.owner;
-          this.infoProducts.product = response.data;
-          this.infoProducts.product.owner = oldOwner;
-          resetData();
-          this.isModalOpen = false;
-        })
-        .catch((err) => {
-          console.log(err.response.data.message);
-          err.response.data.message.forEach((item) => {
-            alert(item);
-          });
-        });
-    },
+    
     handleGotoStore() {
       this.$router.push(`/store/${this.infoProducts.product.owner._id}`);
     },
+    toggleLoading()
+    {
+      this.isLoading = !this.isLoading
+    }
   },
   data() {
     return {

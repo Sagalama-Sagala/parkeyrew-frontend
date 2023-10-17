@@ -309,6 +309,7 @@ export default {
       if (!this.validateData()) {
         return;
       }
+      this.toggleLoading();
       console.log("from popup");
       axios
         .post("/product/create-product", this.infoProducts)
@@ -328,6 +329,7 @@ export default {
               this.$emit("fetchMyStore");
               this.handleReset();
               this.handleToggleModal();
+              this.toggleLoading();
             })
             .catch((err) => {
               console.log("error from upload image", err);
@@ -337,169 +339,176 @@ export default {
           console.log("error from create product", err);
         });
       },
-      async handleEditOk() {
-          const newData = {
-            productId: this.productData._id,
-            brand: this.infoProducts.brand,
-            category: this.infoProducts.category,
-            color: this.infoProducts.color,
-            condition: this.infoProducts.condition,
-            sendFrom: this.infoProducts.sendFrom,
-            size: this.infoProducts.size,
-            price: this.infoProducts.price,
-            description: this.infoProducts.description,
-            name: this.infoProducts.name,
-            remain: this.infoProducts.remain,
-            deliveryFee: this.infoProducts.deliveryFee,
-          };
+    async handleEditOk() {
+          if (!this.validateData()) {
+          return;
+        }
+        this.toggleLoading();
+        const newData = {
+          productId: this.productData._id,
+          brand: this.infoProducts.brand,
+          category: this.infoProducts.category,
+          color: this.infoProducts.color,
+          condition: this.infoProducts.condition,
+          sendFrom: this.infoProducts.sendFrom,
+          size: this.infoProducts.size,
+          price: this.infoProducts.price,
+          description: this.infoProducts.description,
+          name: this.infoProducts.name,
+          remain: this.infoProducts.remain,
+          deliveryFee: this.infoProducts.deliveryFee,
+        };
 
-          const imageToUrl = async (imageUrl) => {
-            const response = await fetch(imageUrl);
-            const blob = await response.blob();
-            const file = new File([blob], "image.png", { type: "image/png" });
-            return file;
-          };
+        const imageToUrl = async (imageUrl) => {
+          const response = await fetch(imageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], "image.png", { type: "image/png" });
+          return file;
+        };
 
-          try {
-            const imageFiles = [];
-            for (let i = 0; i < this.imageList.length; i++) {
-              const file = await imageToUrl(this.imageList[i]);
-              imageFiles.push(file);
-            }
+        try {
+          const imageFiles = [];
+          for (let i = 0; i < this.imageList.length; i++) {
+            const file = await imageToUrl(this.imageList[i]);
+            imageFiles.push(file);
+          }
 
-            axios
-              .post('/product/edit-product-info', newData)
-              .then((response) => {
-                const productImage = new FormData();
-                for (let i = 0; i < imageFiles.length; i++) {
-                  productImage.append(`image${i + 1}`, imageFiles[i]);
-                }
-                axios
-                  .put(`/product/add-product-image/${this.productData._id}`, productImage, {
-                    headers: {
-                      "Content-Type": "multipart/form-data",
-                    },
-                  })
-                  .then((response) => {
-                    this.$emit("fetchMyStore");
-                    this.handleReset();
-                    this.handleToggleModal();
-                  });
-              })
-              .catch((err) => {
-                console.log("error from edit product", err);
-              });
-          } catch (error) {
-            console.error("Error converting image URL to file: ", error);
-          }
-        },
-        handleReset() {
-          this.infoProducts.brand = "0";
-          this.infoProducts.category = "0";
-          this.infoProducts.condition = 0;
-          this.infoProducts.sendFrom = "0";
-          this.infoProducts.size = "0";
-          this.infoProducts.price = 0;
-          this.infoProducts.description = "";
-          this.infoProducts.name = "";
-          this.infoProducts.remain = 0;
-          this.infoProducts.deliveryFee = 0;
-          this.infoProducts.color = "0";
-          this.warnings = [];
-        },
-        handleIncrese() {
-          this.infoProducts.remain += 1;
-        },
-        handleDecrese() {
-          if (this.infoProducts.remain > 0) {
-            this.infoProducts.remain -= 1;
-          }
-        },
-        handleClose() {
-          this.handleToggleModal();
-          this.handleReset();
-        },
-        validateData() {
-          let isValid = true;
-          const warnings = [];
-          //NAME
-          if (!this.infoProducts.name) {
-            warnings.push("Please enter the product name.");
-            isValid = false;
-          }
-          //Description
-          if (!this.infoProducts.description) {
-            warnings.push("Please enter the product description.");
-            isValid = false;
-          }
-          //Category
-          if (this.infoProducts.category === "0") {
-            warnings.push("Please select a category.");
-            isValid = false;
-          }
-          //Brand
-          if (this.infoProducts.brand === "0") {
-            warnings.push("Please select a brand.");
-            isValid = false;
-          }
-          //Color
-          if (this.infoProducts.color === "0") {
-            warnings.push("Please select a color.");
-            isValid = false;
-          }
-          //Condition
-          if (this.infoProducts.condition === 0) {
-            warnings.push("Please enter the product condition.");
-            isValid = false;
-          } else if (this.infoProducts.condition < 51) {
-            warnings.push("Please enter the product condition more than 51%.");
-            isValid = false;
-          } else if (this.infoProducts.condition > 100) {
-            warnings.push("Please enter the product condition less than 100%.");
-            isValid = false;
-          }
-          //Price
-          if (
-            this.infoProducts.price === undefined ||
-            this.infoProducts.price === null ||
-            this.infoProducts.price === ""
-          ) {
-            warnings.push("Please enter the product price.");
-            isValid = false;
-          } else if (this.infoProducts.price < 0) {
-            warnings.push("Please enter the product price more than 0 baht.");
-            isValid = false;
-          }
-          //Remain
-          if (this.infoProducts.remain === 0) {
-            warnings.push("Please enter the product remain.");
-            isValid = false;
-          }
-          //Size
-          if (this.infoProducts.size === "0") {
-            warnings.push("Please select a size.");
-            isValid = false;
-          }
-          //SendFrom
-          if (this.infoProducts.sendFrom === "0") {
-            warnings.push("Please select a province.");
-            isValid = false;
-          }
-          //DeliveryFee
-          if (
-            this.infoProducts.deliveryFee === undefined ||
-            this.infoProducts.deliveryFee === null ||
-            this.infoProducts.deliveryFee === ""
-          ) {
-            warnings.push("Please enter the delivery fee.");
-            isValid = false;
-          }
-          this.warnings = warnings;
-          if (!isValid) {
-            console.log("Data validation failed: ", this.warnings);
-          }
-          return isValid;
-        },
+          axios
+            .post('/product/edit-product-info', newData)
+            .then((response) => {
+              const productImage = new FormData();
+              for (let i = 0; i < imageFiles.length; i++) {
+                productImage.append(`image${i + 1}`, imageFiles[i]);
+              }
+              axios
+                .put(`/product/add-product-image/${this.productData._id}`, productImage, {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                })
+                .then((response) => {
+                  this.handleToggleModal();
+                  this.toggleLoading();
+                });
+            })
+            .catch((err) => {
+              console.log("error from edit product", err);
+            });
+        } catch (error) {
+          console.error("Error converting image URL to file: ", error);
+        }
+    },
+    handleReset() {
+      this.infoProducts.brand = "0";
+      this.infoProducts.category = "0";
+      this.infoProducts.condition = 0;
+      this.infoProducts.sendFrom = "0";
+      this.infoProducts.size = "0";
+      this.infoProducts.price = 0;
+      this.infoProducts.description = "";
+      this.infoProducts.name = "";
+      this.infoProducts.remain = 0;
+      this.infoProducts.deliveryFee = 0;
+      this.infoProducts.color = "0";
+      this.warnings = [];
+    },
+    handleIncrese() {
+      this.infoProducts.remain += 1;
+    },
+    handleDecrese() {
+      if (this.infoProducts.remain > 0) {
+        this.infoProducts.remain -= 1;
+      }
+    },
+    handleClose() {
+      this.handleToggleModal();
+      this.handleReset();
+    },
+    validateData() {
+      let isValid = true;
+      const warnings = [];
+      //NAME
+      if (!this.infoProducts.name) {
+        warnings.push("Please enter the product name.");
+        isValid = false;
+      }
+      //Description
+      if (!this.infoProducts.description) {
+        warnings.push("Please enter the product description.");
+        isValid = false;
+      }
+      //Category
+      if (this.infoProducts.category === "0") {
+        warnings.push("Please select a category.");
+        isValid = false;
+      }
+      //Brand
+      if (this.infoProducts.brand === "0") {
+        warnings.push("Please select a brand.");
+        isValid = false;
+      }
+      //Color
+      if (this.infoProducts.color === "0") {
+        warnings.push("Please select a color.");
+        isValid = false;
+      }
+      //Condition
+      if (this.infoProducts.condition === 0) {
+        warnings.push("Please enter the product condition.");
+        isValid = false;
+      } else if (this.infoProducts.condition < 51) {
+        warnings.push("Please enter the product condition more than 51%.");
+        isValid = false;
+      } else if (this.infoProducts.condition > 100) {
+        warnings.push("Please enter the product condition less than 100%.");
+        isValid = false;
+      }
+      //Price
+      if (
+        this.infoProducts.price === undefined ||
+        this.infoProducts.price === null ||
+        this.infoProducts.price === ""
+      ) {
+        warnings.push("Please enter the product price.");
+        isValid = false;
+      } else if (this.infoProducts.price < 0) {
+        warnings.push("Please enter the product price more than 0 baht.");
+        isValid = false;
+      }
+      //Remain
+      if (this.infoProducts.remain === 0) {
+        warnings.push("Please enter the product remain.");
+        isValid = false;
+      }
+      //Size
+      if (this.infoProducts.size === "0") {
+        warnings.push("Please select a size.");
+        isValid = false;
+      }
+      //SendFrom
+      if (this.infoProducts.sendFrom === "0") {
+        warnings.push("Please select a province.");
+        isValid = false;
+      }
+      //DeliveryFee
+      if (
+        this.infoProducts.deliveryFee === undefined ||
+        this.infoProducts.deliveryFee === null ||
+        this.infoProducts.deliveryFee === ""
+      ) {
+        warnings.push("Please enter the delivery fee.");
+        isValid = false;
+      }
+      this.warnings = warnings;
+      if (!isValid) {
+        console.log("Data validation failed: ", this.warnings);
+      }
+      return isValid;
+    },
+    toggleLoading()
+    {
+      this.$emit("toggleLoading");
+    }
       },
   setup(props) {
     const infoProducts = reactive({

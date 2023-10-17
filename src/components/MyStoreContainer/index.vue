@@ -13,6 +13,7 @@
     :isModalOpen="this.myStoreStore?.isPopupFormModal"
     @toggle-modal="handleToggle"
     @fetch-my-store="fetchMyStore()"
+    @toggleLoading="handleToggleLoading()"
   />
   <div class="flex flex-col">
     <div
@@ -200,6 +201,10 @@ export default {
       } else {
         this.handleSaveEdit();
       }
+    },
+    handleToggleLoading()
+    {
+      this.myStoreStore.isLoading = !this.myStoreStore.isLoading;
     },
     handleOpenEdit() {
       this.isEditOpen = true;

@@ -367,36 +367,33 @@ export default {
         };
 
         try {
-          const imageFiles = [];
-          for (let i = 0; i < this.imageList.length; i++) {
-            const file = await imageToUrl(this.imageList[i]);
-            imageFiles.push(file);
-          }
-
-          axios
-            .post('/product/edit-product-info', newData)
-            .then((response) => {
-              const productImage = new FormData();
-              for (let i = 0; i < imageFiles.length; i++) {
-                productImage.append(`image${i + 1}`, imageFiles[i]);
+              const imageFiles = [];
+              for (let i = 0; i < this.imageList.length; i++) {
+                  const file = await imageToUrl(this.imageList[i]);
+                  imageFiles.push(file);
               }
-              axios
-                .put(`/product/add-product-image/${this.productData._id}`, productImage, {
-                  headers: {
-                    "Content-Type": "multipart/form-data",
-                  },
-                })
-                .then((response) => {
-                  this.handleToggleModal();
-                  this.toggleLoading();
-                });
-            })
-            .catch((err) => {
-              console.log("error from edit product", err);
-            });
-        } catch (error) {
-          console.error("Error converting image URL to file: ", error);
-        }
+
+              await axios.post('/product/edit-product-info', newData)
+                  .then(async (response) => {
+                      const productImage = new FormData();
+                      for (let i = 0; i < imageFiles.length; i++) {
+                          productImage.append(`image${i + 1}`, imageFiles[i]);
+                      }
+                      await axios.put(`/product/add-product-image/${this.productData._id}`, productImage, {
+                          headers: {
+                              "Content-Type": "multipart/form-data",
+                          },
+                      });
+                      await this.$emit("fetchProduct");
+                      this.handleToggleModal();
+
+                  })
+                  .catch((err) => {
+                      console.log("error from edit product", err);
+                  });
+          } catch (error) {
+              console.error("Error converting image URL to file: ", error);
+          }
     },
     handleReset() {
       this.infoProducts.brand = "0";

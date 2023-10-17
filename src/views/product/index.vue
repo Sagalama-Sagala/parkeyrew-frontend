@@ -190,6 +190,7 @@
       :productData="infoProducts.product"
       :isEdit="true"
       @toggleLoading="toggleLoading" 
+      @fetchProduct="fetchProduct"
     />
   </div>
 </template>
@@ -227,7 +228,11 @@ export default {
     const chatStore = useChatStore();
     const isUserProduct = ref(false);
     const isLoading = ref(true);
-    axios
+
+  
+    const fetchProduct = async ()=>
+    {
+      axios
       .get(`/product/get-info-product-page/${productId}`)
       .then((response) => {
         console.log(response.data);
@@ -246,6 +251,7 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+    }
 
     const connectChatRoom = () => {
       socket.emit("connectRoom", {
@@ -258,6 +264,8 @@ export default {
       });
     };
 
+    fetchProduct()
+
     return {
       infoProducts,
       connectChatRoom,
@@ -265,6 +273,7 @@ export default {
       productId,
       isLiked,
       isLoading,
+      fetchProduct
     };
   },
   components: {

@@ -28,7 +28,7 @@
           >
             ติดตาม +
           </h1>
-          <h1
+          <h1 v-else
             class="border-[1px] border-primary text-primary px-2 rounded-md hover:bg-primary hover:text-white duration-100 text-sm cursor-pointer md:hidden"
             @click="handleUnfollow"
           >

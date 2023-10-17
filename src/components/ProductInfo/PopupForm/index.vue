@@ -1,12 +1,12 @@
 <template>
   <div v-if="isModalOpen" class="fixed w-full h-[100%] z-50">
-    <div class="w-full h-full flex justify-center items-center fixed z-40">
+    <div class="w-full h-full flex justify-center items-center fixed z-40 ">
       <div
         class="fixed w-full h-[100%] bg-black bg-opacity-50 z-30 cursor-pointer"
         @click="handleClose"
       ></div>
       <div
-        class="w-[40rem] md:h-[40rem] h-[30rem] bg-white py-2 rounded-xl flex flex-col items-center mx-10 overflow-auto scrollable-container fixed z-40"
+        class="md:w-[40rem] px-[3rem] md:h-[40rem] h-[30rem] bg-white py-2 rounded-xl flex flex-col items-center mx-10 overflow-auto scrollable-container fixed z-40 "
       >
         <div class="flex flex-col md:items-start">
           <div class="md:mt-[0rem] mt-[1rem]">
@@ -247,7 +247,7 @@
             </div>
             <div class="flex gap-6 h-[2.5rem] md:justify-end justify-center">
               <button
-                @click="handleClose"
+                @click="handleToggleModal"
                 class="text-[#969696] hover:text-black duration-100"
               >
                 ยกเลิก

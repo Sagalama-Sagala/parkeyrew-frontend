@@ -316,7 +316,12 @@ export default {
     },
     
     handleGotoStore() {
-      this.$router.push(`/store/${this.infoProducts.product.owner._id}`);
+      if(this.isUserProduct) this.$router.push(`/mystore`);
+      else
+      {
+        this.$router.push(`/store/${this.infoProducts.product.owner._id}`);
+      }
+      
     },
     toggleLoading()
     {

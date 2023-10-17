@@ -189,6 +189,7 @@
       @toggleModal="handleModal"
       :productData="infoProducts.product"
       @handleOk="handleOk"
+      :isEdit="true"
     />
   </div>
 </template>

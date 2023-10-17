@@ -245,7 +245,7 @@
                 ยกเลิก
               </button>
               <button
-                @click="handleOk"
+                @click="this.isEdit ? handleEditOk() : handleOk()"
                 class="text-primary border-[1px] border-primary hover:bg-primary hover:text-white duration-100 rounded-lg px-4"
               >
                 ลงขาย
@@ -271,17 +271,20 @@ import {
 import { useMyStoreStore } from "@/store/my-store.store.js";
 import axios from "axios";
 export default {
-  setup() {
-    const myStoreStore = useMyStoreStore();
-    myStoreStore.fetchMyStore();
-    return { myStoreStore };
-  },
   name: "PopupForm",
   props: {
     isModalOpen: {
       type: Boolean,
       default: false,
     },
+    productData: {
+      type: Object,
+      default: null,
+    },
+    isEdit :{
+      type: Boolean,
+      default: false,
+    }
   },
   methods: {
     onFileChange(e) {
@@ -293,9 +296,11 @@ export default {
           this.imageFileList.push(files[i]);
         }
       }
+      console.log(this.imageList);
     },
     deleteImage(index) {
       this.imageList.splice(index, 1);
+      this.imageFileList.splice(index, 1);
     },
     handleToggleModal() {
       this.$emit("toggleModal");
@@ -331,115 +336,171 @@ export default {
         .catch((err) => {
           console.log("error from create product", err);
         });
-    },
-    handleReset() {
-      this.infoProducts.brand = "0";
-      this.infoProducts.category = "0";
-      this.infoProducts.condition = 0;
-      this.infoProducts.sendFrom = "0";
-      this.infoProducts.size = "0";
-      this.infoProducts.price = 0;
-      this.infoProducts.description = "";
-      this.infoProducts.name = "";
-      this.infoProducts.remain = 0;
-      this.infoProducts.deliveryFee = 0;
-      this.infoProducts.color = "0";
-      this.warnings = [];
-    },
-    handleIncrese() {
-      this.infoProducts.remain += 1;
-    },
-    handleDecrese() {
-      if (this.infoProducts.remain > 0) {
-        this.infoProducts.remain -= 1;
-      }
-    },
-    handleClose() {
-      this.handleToggleModal();
-      this.handleReset();
-    },
-    validateData() {
-      let isValid = true;
-      const warnings = [];
-      //NAME
-      if (!this.infoProducts.name) {
-        warnings.push("Please enter the product name.");
-        isValid = false;
-      }
-      //Description
-      if (!this.infoProducts.description) {
-        warnings.push("Please enter the product description.");
-        isValid = false;
-      }
-      //Category
-      if (this.infoProducts.category === "0") {
-        warnings.push("Please select a category.");
-        isValid = false;
-      }
-      //Brand
-      if (this.infoProducts.brand === "0") {
-        warnings.push("Please select a brand.");
-        isValid = false;
-      }
-      //Color
-      if (this.infoProducts.color === "0") {
-        warnings.push("Please select a color.");
-        isValid = false;
-      }
-      //Condition
-      if (this.infoProducts.condition === 0) {
-        warnings.push("Please enter the product condition.");
-        isValid = false;
-      } else if (this.infoProducts.condition < 51) {
-        warnings.push("Please enter the product condition more than 51%.");
-        isValid = false;
-      } else if (this.infoProducts.condition > 100) {
-        warnings.push("Please enter the product condition less than 100%.");
-        isValid = false;
-      }
-      //Price
-      if (
-        this.infoProducts.price === undefined ||
-        this.infoProducts.price === null ||
-        this.infoProducts.price === ""
-      ) {
-        warnings.push("Please enter the product price.");
-        isValid = false;
-      } else if (this.infoProducts.price < 0) {
-        warnings.push("Please enter the product price more than 0 baht.");
-        isValid = false;
-      }
-      //Remain
-      if (this.infoProducts.remain === 0) {
-        warnings.push("Please enter the product remain.");
-        isValid = false;
-      }
-      //Size
-      if (this.infoProducts.size === "0") {
-        warnings.push("Please select a size.");
-        isValid = false;
-      }
-      //SendFrom
-      if (this.infoProducts.sendFrom === "0") {
-        warnings.push("Please select a province.");
-        isValid = false;
-      }
-      //DeliveryFee
-      if (
-        this.infoProducts.deliveryFee === undefined ||
-        this.infoProducts.deliveryFee === null ||
-        this.infoProducts.deliveryFee === ""
-      ) {
-        warnings.push("Please enter the delivery fee.");
-        isValid = false;
-      }
-      this.warnings = warnings;
-      if (!isValid) {
-        console.log("Data validation failed: ", this.warnings);
-      }
-      return isValid;
-    },
-  },
+      },
+      async handleEditOk() {
+          const newData = {
+            productId: this.productData._id,
+            brand: this.infoProducts.brand,
+            category: this.infoProducts.category,
+            color: this.infoProducts.color,
+            condition: this.infoProducts.condition,
+            sendFrom: this.infoProducts.sendFrom,
+            size: this.infoProducts.size,
+            price: this.infoProducts.price,
+            description: this.infoProducts.description,
+            name: this.infoProducts.name,
+            remain: this.infoProducts.remain,
+            deliveryFee: this.infoProducts.deliveryFee,
+          };
+
+          const imageToUrl = async (imageUrl) => {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const file = new File([blob], "image.png", { type: "image/png" });
+            return file;
+          };
+
+          try {
+            const imageFiles = [];
+            for (let i = 0; i < this.imageList.length; i++) {
+              const file = await imageToUrl(this.imageList[i]);
+              imageFiles.push(file);
+            }
+
+            axios
+              .post('/product/edit-product-info', newData)
+              .then((response) => {
+                const productImage = new FormData();
+                for (let i = 0; i < imageFiles.length; i++) {
+                  productImage.append(`image${i + 1}`, imageFiles[i]);
+                }
+                axios
+                  .put(`/product/add-product-image/${this.productData._id}`, productImage, {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                  })
+                  .then((response) => {
+                    this.$emit("fetchMyStore");
+                    this.handleReset();
+                    this.handleToggleModal();
+                  });
+              })
+              .catch((err) => {
+                console.log("error from edit product", err);
+              });
+          } catch (error) {
+            console.error("Error converting image URL to file: ", error);
+          }
+        },
+        handleReset() {
+          this.infoProducts.brand = "0";
+          this.infoProducts.category = "0";
+          this.infoProducts.condition = 0;
+          this.infoProducts.sendFrom = "0";
+          this.infoProducts.size = "0";
+          this.infoProducts.price = 0;
+          this.infoProducts.description = "";
+          this.infoProducts.name = "";
+          this.infoProducts.remain = 0;
+          this.infoProducts.deliveryFee = 0;
+          this.infoProducts.color = "0";
+          this.warnings = [];
+        },
+        handleIncrese() {
+          this.infoProducts.remain += 1;
+        },
+        handleDecrese() {
+          if (this.infoProducts.remain > 0) {
+            this.infoProducts.remain -= 1;
+          }
+        },
+        handleClose() {
+          this.handleToggleModal();
+          this.handleReset();
+        },
+        validateData() {
+          let isValid = true;
+          const warnings = [];
+          //NAME
+          if (!this.infoProducts.name) {
+            warnings.push("Please enter the product name.");
+            isValid = false;
+          }
+          //Description
+          if (!this.infoProducts.description) {
+            warnings.push("Please enter the product description.");
+            isValid = false;
+          }
+          //Category
+          if (this.infoProducts.category === "0") {
+            warnings.push("Please select a category.");
+            isValid = false;
+          }
+          //Brand
+          if (this.infoProducts.brand === "0") {
+            warnings.push("Please select a brand.");
+            isValid = false;
+          }
+          //Color
+          if (this.infoProducts.color === "0") {
+            warnings.push("Please select a color.");
+            isValid = false;
+          }
+          //Condition
+          if (this.infoProducts.condition === 0) {
+            warnings.push("Please enter the product condition.");
+            isValid = false;
+          } else if (this.infoProducts.condition < 51) {
+            warnings.push("Please enter the product condition more than 51%.");
+            isValid = false;
+          } else if (this.infoProducts.condition > 100) {
+            warnings.push("Please enter the product condition less than 100%.");
+            isValid = false;
+          }
+          //Price
+          if (
+            this.infoProducts.price === undefined ||
+            this.infoProducts.price === null ||
+            this.infoProducts.price === ""
+          ) {
+            warnings.push("Please enter the product price.");
+            isValid = false;
+          } else if (this.infoProducts.price < 0) {
+            warnings.push("Please enter the product price more than 0 baht.");
+            isValid = false;
+          }
+          //Remain
+          if (this.infoProducts.remain === 0) {
+            warnings.push("Please enter the product remain.");
+            isValid = false;
+          }
+          //Size
+          if (this.infoProducts.size === "0") {
+            warnings.push("Please select a size.");
+            isValid = false;
+          }
+          //SendFrom
+          if (this.infoProducts.sendFrom === "0") {
+            warnings.push("Please select a province.");
+            isValid = false;
+          }
+          //DeliveryFee
+          if (
+            this.infoProducts.deliveryFee === undefined ||
+            this.infoProducts.deliveryFee === null ||
+            this.infoProducts.deliveryFee === ""
+          ) {
+            warnings.push("Please enter the delivery fee.");
+            isValid = false;
+          }
+          this.warnings = warnings;
+          if (!isValid) {
+            console.log("Data validation failed: ", this.warnings);
+          }
+          return isValid;
+        },
+      },
   setup(props) {
     const infoProducts = reactive({
       brand: "0",
@@ -454,8 +515,10 @@ export default {
       remain: 0,
       deliveryFee: 0,
     });
+    const imageList = ref([]);
     watchEffect(() => {
       if (props.productData) {
+        imageList.value = props.productData.productImage;
         infoProducts.brand = props.productData.brand;
         infoProducts.category = props.productData.category;
         infoProducts.condition = props.productData.condition;
@@ -469,11 +532,11 @@ export default {
         infoProducts.color = props.productData.color;
       }
     });
-    return { infoProducts };
+    
+    return { infoProducts , imageList };
   },
   data() {
     return {
-      imageList: [],
       imageFileList: [],
       imageHolder: imageHolder,
       thaiProvinces,

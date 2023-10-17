@@ -117,7 +117,7 @@
           >
             <div class="flex items-center gap-4">
               <img
-                src=""
+                :src="infoProducts?.product?.owner?.profileImage"
                 class="hover:bg-secondary hover:cursor-pointer w-[4rem] h-[4rem] rounded-full object-cover border-4"
               />
               <div>

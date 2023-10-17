@@ -23,14 +23,12 @@
             />
           </div>
           <h1
-            v-if="!isFollow"
             class="border-[1px] border-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer md:hidden"
             @click="handleFollow"
           >
             ติดตาม +
           </h1>
           <h1
-            v-else
             class="border-[1px] border-primary text-primary px-2 rounded-md hover:bg-primary hover:text-white duration-100 text-sm cursor-pointer md:hidden"
             @click="handleUnfollow"
           >
@@ -93,7 +91,7 @@
               :isMyStore="false"
             />
             <h1
-              v-if="!isFollow"
+              v-if="!this.otherStoreStore?.otherStore?.isFollow"
               class="border-[1px] border-primary px-2 rounded-md hover:bg-white bg-primary hover:text-primary text-white duration-100 text-sm cursor-pointer hidden md:block"
               @click="handleFollow"
             >
@@ -153,11 +151,10 @@ export default {
   setup() {
     const route = useRoute();
     const id = route.params.id;
-    const isFollow = ref(false);
     const otherStoreStore = useOtherStoreStore();
     const page = ref(route.path.split("/").pop());
     otherStoreStore.fetchOtherStore(id);
-    return { otherStoreStore, isFollow, page };
+    return { otherStoreStore, page, id };
   },
   components: {
     Rating,
@@ -201,7 +198,7 @@ export default {
         .then(
           (response) => {
             console.log(response.data);
-            this.isFollow = true;
+            this.otherStoreStore.fetchOtherStore(this.id);
           },
           (error) => {
             console.log(error);
@@ -215,8 +212,8 @@ export default {
         })
         .then(
           (response) => {
+            this.otherStoreStore.fetchOtherStore(this.id);
             console.log(response.data);
-            this.isFollow = false;
           },
           (error) => {
             console.log(error);

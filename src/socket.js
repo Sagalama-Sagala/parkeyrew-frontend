@@ -15,3 +15,7 @@ export const socket = io(URL, {
     Authorization: getLocal("token"),
   },
 });
+
+socket.on("connect", () => {
+  state.connected = true;
+});

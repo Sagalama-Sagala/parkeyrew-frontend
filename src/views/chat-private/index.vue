@@ -86,6 +86,7 @@
             <img
               v-if="chatStore.chatRoom.user.role === 'seller'"
               :src="closeDeal"
+              @click="handleEndDeal"
               class="w-12 h-12"
             />
             <img
@@ -109,6 +110,7 @@ import { chevronLeft, threePointLeader, send, add } from "@/assets/common";
 import { image, closeDeal, location, delivery } from "@/assets/chat";
 import { onBeforeRouteLeave } from "vue-router";
 import { useChatStore } from "@/store/chat.store.js";
+import axios from "axios";
 
 export default {
   setup() {
@@ -156,7 +158,23 @@ export default {
     },
     toggleAddOption() {
       this.isAddOption = !this.isAddOption;
-      console.log("hello");
+    },
+    handleEndDeal() {
+      console.log(
+        this.chatStore.chatRoom.product._id,
+        this.chatStore.chatRoom.user.user._id,
+      );
+      axios
+        .post("/product/decrease-product-count", {
+          productId: this.chatStore.chatRoom.product._id,
+          customerId: this.chatStore.chatRoom.otherUser.user._id,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   components: {

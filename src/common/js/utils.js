@@ -20,3 +20,13 @@ export const formatDate = (dateFromDb) => {
   const dateFormat = dd + "/" + mm + "/" + yy;
   return dateFormat;
 };
+
+export const formatStatus = (statusFromDb) => {
+  const status = {
+    waiting: "รอส่ง",
+    ongoing: "กำลังส่ง",
+    complete: "ดำเนินการเสร็จสิ้น",
+  };
+
+  return status[statusFromDb];
+};

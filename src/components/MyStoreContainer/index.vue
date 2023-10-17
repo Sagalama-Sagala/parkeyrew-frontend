@@ -1,5 +1,14 @@
 <template>
   <Loading :isLoading="this.myStoreStore?.isLoading" />
+  <div v-if="isEditOpen" class="fixed bg-black bg-opacity-50 w-screen h-screen z-30  " @click="handleToggleEdit" >
+    <div class="flex flex-1 h-screen justify-center items-center">
+      <div class="bg-white flex flex-col p-10 gap-5 rounded-xl " @click.stop> 
+        <h1>คำอธิบาย</h1>
+        <textarea v-model="this.editDescription" class="border-[1px] border-black w-[15rem] rounded px-2 md:w-[20rem] md:h-[10rem]" ></textarea>
+        <button @click="handleSaveEdit" class="border-[1px] border-primary hover:text-white text-primary hover:bg-primary duration-100 rounded-lg">บันทึก</button>
+      </div>
+    </div>
+  </div>
   <PopupForm
     :isModalOpen="this.myStoreStore?.isPopupFormModal"
     @toggle-modal="handleToggle"
@@ -36,11 +45,12 @@
             </div>
           </div>
           <div class="flex flex-col">
-            <div @click="handleToggleEdit">
+            <div >
               <img
                 class="w-[3rem] rounded-2xl mb-2 hover:cursor-pointer md:block hidden"
                 :src="editIcon"
                 alt="edit profile icon"
+                @click="handleGoToEditProfile"
               />
             </div>
             <div>
@@ -84,15 +94,13 @@
         <div
           class="md:text-lg text-sm md:w-[32rem] w-[12rem] md:h-[4rem] h-[12rem]"
         >
-          <b>คำอธิบาย</b>
-          <div v-if="!this.isEditOpen">
+          <div class ="flex">
+            <b>คำอธิบาย</b>
+            <img :src="editIcon" class="w-[1rem] ml-2 hover:cursor-pointer" @click="handleToggleEdit" />
+          </div>
+          <div >
             {{ this.myStoreStore?.mystore?.description }}
           </div>
-          <textarea
-            v-else
-            class="w-full rounded border-[1px] border-black p-2"
-            v-model="this.myStoreStore.mystore.description"
-          />
         </div>
       </div>
       <div
@@ -115,6 +123,8 @@
       </div>
     </div>
   </div>
+
+  
 </template>
 
 <script>
@@ -134,8 +144,10 @@ export default {
     const myStoreStore = useMyStoreStore();
     const route = useRoute();
     const page = ref(route.path.split("/").pop());
+    
     myStoreStore.fetchMyStore();
-    return { myStoreStore, page, isEditOpen };
+    const editDescription = ref(myStoreStore.mystore.description);
+    return { myStoreStore, page, isEditOpen , editDescription };
   },
   components: {
     Rating,
@@ -163,6 +175,9 @@ export default {
     },
     routeToReview() {
       this.$router.push("/mystore/review");
+    },
+    handleGoToEditProfile() {
+      this.$router.push("/profile/record");
     },
     openFollower() {
       this.followerDialog = true;
@@ -192,10 +207,11 @@ export default {
     handleSaveEdit() {
       axios
         .put("/user/edit-user-description", {
-          description: this.myStoreStore.mystore.description,
+          description: this.editDescription,
         })
         .then((response) => {
           this.$toast.success("บันทึกคำอธิบายสำเร็จ");
+          this.myStoreStore.mystore.description = this.editDescription;
           this.isEditOpen = false;
         })
         .catch((err) => {

@@ -36,10 +36,10 @@
                             {{ purchase?.product?.name }}
                         </p>
                         <p class="mb-4 text-gray-500">
-                            {{ purchase?.product?.createdAt }}
+                            {{ formatDate(purchase?.product?.createdAt) }}
                         </p>
                         <p class="mb-4 text-gray-500">
-                            {{ purchase.status }}
+                            {{ purchase?.status }}
                         </p>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                     <div class="w-1/2 items-end flex flex-col">
                         <p class="mb-4">฿ {{ purchase?.product?.price }}</p>
                         <p class="mb-4">
-                            ฿ {{ purchase?.product.deliveryFee }}
+                            ฿ {{ purchase?.product?.deliveryFee }}
                         </p>
                         <p class="mb-4 text-2xl">
                             ฿
@@ -77,7 +77,7 @@
                 <div class="ml-4 text-black text-base font-normal">
                     <div>
                         <p class="mb-2 line-clamp-2">
-                            {{ purchase.productName }}
+                            {{ purchase?.productName }}
                         </p>
                     </div>
                     <div class="flex justify-between pr-4">
@@ -85,20 +85,20 @@
                             class="w-1/2 flex flex-col justify-around text-gray-500"
                         >
                             <p class="mb-2">
-                                {{ purchase.time }}
+                                {{ purchase?.time }}
                             </p>
                             <p class="mb-2">
-                                {{ purchase.status }}
+                                {{ purchase?.status }}
                             </p>
                         </div>
                         <div class="w-1/2">
                             <div class="mb-1 flex justify-between text-sm">
                                 <div>ราคาสินค้า</div>
-                                <div>฿ {{ purchase.price }}</div>
+                                <div>฿ {{ purchase?.price }}</div>
                             </div>
                             <div class="mb-1 flex justify-between text-sm">
                                 <div>ค่าส่ง</div>
-                                <div>฿ {{ purchase.deliveryFee }}</div>
+                                <div>฿ {{ purchase?.deliveryFee }}</div>
                             </div>
                             <div
                                 class="mb-1 flex justify-between font-semibold"
@@ -106,7 +106,9 @@
                                 <div>รวม</div>
                                 <div>
                                     ฿
-                                    {{ purchase.price + purchase.deliveryFee }}
+                                    {{
+                                        purchase?.price + purchase?.deliveryFee
+                                    }}
                                 </div>
                             </div>
                         </div>
@@ -136,6 +138,7 @@
 <script>
 import { useProfileStore } from "@/store/profile.store.js";
 import ReviewModal from "@/components/Profile/Sale/Review/index.vue";
+import { formatDate } from "@/common/js/utils.js";
 
 export default {
     components: { ReviewModal },
@@ -154,7 +157,7 @@ export default {
         }
     },
 
-    methods: {},
+    methods: { formatDate },
 };
 </script>
 

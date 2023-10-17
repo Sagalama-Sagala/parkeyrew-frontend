@@ -26,6 +26,7 @@
                       >
                         x
                       </button>
+                          
                     </div>
                   </div>
                   <label
@@ -47,6 +48,13 @@
                   />
                 </div>
               </div>
+              <label
+                    class="text-red-400 text-sm"
+                    v-for="text in imageWarning"
+                    :key="text"
+                  >
+                    {{ text }}
+                      </label>
             </div>
 
             <div>
@@ -288,16 +296,35 @@ export default {
   },
   methods: {
     onFileChange(e) {
-      const files = e.target.files;
-      if (this.imageList.length < 5) {
-        const remainingSlots = 5 - this.imageList.length;
-        for (let i = 0; i < Math.min(remainingSlots, files.length); i++) {
-          this.imageList.push(URL.createObjectURL(files[i]));
-          this.imageFileList.push(files[i]);
+        const files = e.target.files;
+        const imageWarning = [];
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const fileSize = file.size / 1024 / 1024; // in MB
+          const fileType = file.type;
+          const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i; 
+
+          if (!allowedExtensions.exec(file.name)) {
+            if (!imageWarning.includes("Please upload files having extensions .jpeg/.jpg/.png only.")) {
+              imageWarning.push("Please upload files having extensions .jpeg/.jpg/.png only.");
+            }
+            continue;
+          }
+
+          if (fileSize > 2) {
+            if (!imageWarning.includes("File size should be less than 2MB.")) {
+              imageWarning.push("File size should be less than 2MB.");
+            }
+            continue;
+          }
+
+          if (this.imageList.length < 5) {
+            this.imageList.push(URL.createObjectURL(file));
+            this.imageFileList.push(file);
+          }
         }
-      }
-      console.log(this.imageList);
-    },
+        this.imageWarning = imageWarning;
+      },
     deleteImage(index) {
       this.imageList.splice(index, 1);
       this.imageFileList.splice(index, 1);
@@ -408,6 +435,7 @@ export default {
       this.infoProducts.deliveryFee = 0;
       this.infoProducts.color = "0";
       this.warnings = [];
+      this.imageWarning = [];
     },
     handleIncrese() {
       this.infoProducts.remain += 1;
@@ -424,6 +452,9 @@ export default {
     validateData() {
       let isValid = true;
       const warnings = [];
+      const formatWarnings = [];
+      const sizeWarnings = [];
+
       //NAME
       if (!this.infoProducts.name) {
         warnings.push("Please enter the product name.");
@@ -496,6 +527,12 @@ export default {
         warnings.push("Please enter the delivery fee.");
         isValid = false;
       }
+      //Image
+      if(this.imageFileList.length === 0){
+        warnings.push("Please upload at least 1 image.");
+        isValid = false;
+      }
+
       this.warnings = warnings;
       if (!isValid) {
         console.log("Data validation failed: ", this.warnings);
@@ -551,6 +588,7 @@ export default {
       colorOptions,
       sizeOptions,
       warnings: [],
+      imageWarning: [],
     };
   },
 };

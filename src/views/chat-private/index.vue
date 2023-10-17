@@ -51,7 +51,7 @@
     <div class="absolute bottom-0 w-full py-6 z-10 bg-white rounded-b-2xl">
       <div class="w-full flex justify-center items-center">
         <div class="flex md:w-3/5 w-full md:px-0 px-4 md:gap-x-4 gap-x-2">
-          <button class="text-5xl py-0">
+          <button class="text-5xl py-0" @click="addOption">
             <img :src="add" class="w-9 border-[1px] border-black rounded p-1" />
           </button>
           <input
@@ -126,6 +126,9 @@ export default {
     },
     handleBack() {
       this.$router.push("/chat");
+    },
+    addOption() {
+      console.log("hello");
     },
   },
   components: {

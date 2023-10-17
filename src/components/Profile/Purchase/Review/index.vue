@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import Rating from "@/components/Profile/Purchase/Review/index.vue";
+import Rating from "@/components/Profile/Purchase/Review/Rating/index.vue";
 import ChompuButton from "@/components/ChompuButton/index.vue";
 import axios from "axios";
 

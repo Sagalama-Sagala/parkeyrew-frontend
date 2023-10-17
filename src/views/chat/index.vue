@@ -71,6 +71,8 @@ import { noti, profile } from "@/assets/chat";
 import Container from "@/components/ChatContainer/index.vue";
 import { socket } from "@/socket";
 import { ref } from "vue";
+import axios from "axios";
+
 import { getLocal } from "@/common/js/utils.js";
 import { io } from "socket.io-client";
 import { useChatStore } from "@/store/chat.store.js";

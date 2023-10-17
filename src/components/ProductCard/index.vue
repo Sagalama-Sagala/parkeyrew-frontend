@@ -1,35 +1,35 @@
 <template>
   <div
-    class="bg-white p-2 rounded-xl w-[320px] h-[400px] flex flex-col relative cursor-pointer z-0"
+    class="bg-white p-2 rounded-xl md:w-[300px] w-[150px] md:h-[360px] h-[180px] flex flex-col relative cursor-pointer z-0"
     @click="handleClick()"
   >
     <div
-      class="flex items-end h-[9rem] w-[12.5rem] absolute flex-col mt-[-0.5rem] right-5 justify-stretch"
+      class="flex items-end md:h-[9rem] h-[4.5rem] md:w-[12.5rem] w-[6rem] absolute flex-col mt-[-0.5rem] right-5 justify-stretch"
     >
-      <img v-if="isRecommended(rating)" :src="recommend" class="w-14 z-10" />
+      <img v-if="isRecommended(rating)" :src="recommend" class="md:w-14 w-7 z-10" />
     </div>
 
-    <div class="px-2 relative">
-      <img :src="itemImage" class="rounded-xl h-[215px] w-[297px] object-cover " />
+    <div class="md:px-2 relative">
+      <img :src="itemImage" class="rounded-xl md:h-[215px] h-[108px] md:w-[297px] w-[150px] object-cover " />
       <div
         class="absolute bottom-4 right-3 z-10"
         @click.stop="$emit('toggleLike', id)"
       >
-        <img v-if="liked" :src="heartfilled" class="w-10" />
+        <img v-if="liked" :src="heartfilled" class="md:w-10 w-5" />
       </div>
     </div>
-    <div class="px-4 pt-2">
-      <h1 class="text-xl font-semibold pb-2">{{ itemName }}</h1>
+    <div class="md:px-4 px-2 pt-2">
+      <h1 class="md:text-xl text-xs font-semibold pb-1">{{ itemName }}</h1>
       <div class="flex overflow-x-auto mx-auto gap-x-1">
         <div v-for="item in getTags(brand, size, condition, color)" :key="item">
           <div
-            class="border-[1px] border-black rounded-md px-1 text-center text-sm w-full m-1 whitespace-nowrap"
+            class="md:block hidden border-[1px] border-black rounded-md px-1 text-center text-sm w-full m-1 whitespace-nowrap" 
           >
             {{ item }} {{ item == condition ? "%" : "" }}
           </div>
         </div>
       </div>
-      <div class="flex justify-between absolute bottom-4 w-full left-0 px-6">
+      <div class="flex justify-between absolute bottom-1 w-full left-0 md:px-6 px-3">
         <div>
           <div class="flex items-center gap-2">
             <img
@@ -38,10 +38,10 @@
                   ? 'https://placehold.co/600x400'
                   : sellerImage
               "
-              class="rounded-full w-[20px] h-[20px] border-2"
+              class="rounded-full md:w-[20px] w-[10px] md:h-[20px] h-[10px] border-2"
             />
             <p
-              class="text-[0.8rem] hover:underline hover:cursor-pointer"
+              class="text-[0.8rem] hover:underline hover:cursor-pointer md:w-fit w-[60px] overflow-hidden overflow-ellipsis"
               @click.stop="handleSellerClick()"
             >
               {{ sellerName }}
@@ -52,7 +52,7 @@
           </div>
         </div>
         <div class="flex items-end justify-end flex-col">
-          <h1 class="text-4xl leading-4 font-bold">
+          <h1 class="md:text-4xl text-base leading-4 font-bold">
             {{ itemPrice }}
           </h1>
           <h1 class="text-[0.7rem]">บาท</h1>

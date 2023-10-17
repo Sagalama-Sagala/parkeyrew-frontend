@@ -142,6 +142,8 @@
 import { useProfileStore } from "@/store/profile.store.js";
 import ReviewModal from "@/components/Profile/Purchase/Review/index.vue";
 import { formatDate } from "@/common/js/utils.js";
+import axios from "axios";
+
 
 export default {
     components: { ReviewModal },

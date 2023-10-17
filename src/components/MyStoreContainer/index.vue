@@ -41,7 +41,7 @@
                             </div>
                         </div>
 
-                        <div class="md:pt-0 md:pt-3">
+                        <div class="pt-0 md:pt-3">
                             <Rating
                                 :rating="this.myStoreStore?.mystore?.reviewStar"
                             />
@@ -146,36 +146,15 @@ import Loading from "@/components/Loading/index.vue";
 import { useRoute } from "vue-router";
 
 export default {
-  setup() {
-    const isEditOpen = ref(false);
-    const myStoreStore = useMyStoreStore();
-    const route = useRoute();
-    const page = ref(route.path.split("/").pop());
+    setup() {
+        const isEditOpen = ref(false);
+        const myStoreStore = useMyStoreStore();
+        const route = useRoute();
+        const page = ref(route.path.split("/").pop());
 
-    myStoreStore.fetchMyStore();
-    const editDescription = ref(myStoreStore?.mystore?.description);
-    return { myStoreStore, page, isEditOpen , editDescription };
-  },
-  components: {
-    Rating,
-    PopupForm,
-    Dialog,
-    Loading,
-  },
-  data() {
-    return {
-      editDescription: "",
-      editIcon,
-      shareIcon,
-      profileURL:
-        "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
-      followerDialog: false,
-      followingDialog: false,
-    };
-  },
-  methods: {
-    fetchMyStore() {
-      this.myStoreStore.fetchMyStore();
+        myStoreStore.fetchMyStore();
+        const editDescription = ref(myStoreStore?.mystore?.description);
+        return { myStoreStore, page, isEditOpen, editDescription };
     },
     components: {
         Rating,
@@ -198,57 +177,79 @@ export default {
         fetchMyStore() {
             this.myStoreStore.fetchMyStore();
         },
-        routeToMyStore() {
-            this.$router.push("/mystore");
+        components: {
+            Rating,
+            PopupForm,
+            Dialog,
+            Loading,
         },
-        routeToReview() {
-            this.$router.push("/mystore/review");
+        data() {
+            return {
+                editDescription: "",
+                editIcon,
+                shareIcon,
+                profileURL:
+                    "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
+                followerDialog: false,
+                followingDialog: false,
+            };
         },
-        handleGoToEditProfile() {
-            this.$router.push("/profile/record");
-        },
-        openFollower() {
-            this.followerDialog = true;
-        },
-        closeFollower() {
-            this.followerDialog = false;
-        },
-        openFollowing() {
-            this.followingDialog = true;
-        },
-        closeFollowing() {
-            this.followingDialog = false;
-        },
-        handleToggle() {
-            this.myStoreStore.togglePopupForm();
-        },
-        handleToggleEdit() {
-            if (!this.isEditOpen) {
-                this.handleOpenEdit();
-            } else {
-                this.handleSaveEdit();
-            }
-        },
-        handleToggleLoading() {
-            this.myStoreStore.isLoading = !this.myStoreStore.isLoading;
-        },
-        handleOpenEdit() {
-            this.isEditOpen = true;
-        },
-        handleSaveEdit() {
-            axios
-                .put("/user/edit-user-description", {
-                    description: this.myStoreStore.mystore.description,
-                })
-                .then((response) => {
-                    this.$toast.success("บันทึกคำอธิบายสำเร็จ");
-                    this.isEditOpen = false;
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+        methods: {
+            fetchMyStore() {
+                this.myStoreStore.fetchMyStore();
+            },
+            routeToMyStore() {
+                this.$router.push("/mystore");
+            },
+            routeToReview() {
+                this.$router.push("/mystore/review");
+            },
+            handleGoToEditProfile() {
+                this.$router.push("/profile/record");
+            },
+            openFollower() {
+                this.followerDialog = true;
+            },
+            closeFollower() {
+                this.followerDialog = false;
+            },
+            openFollowing() {
+                this.followingDialog = true;
+            },
+            closeFollowing() {
+                this.followingDialog = false;
+            },
+            handleToggle() {
+                this.myStoreStore.togglePopupForm();
+            },
+            handleToggleEdit() {
+                if (!this.isEditOpen) {
+                    this.handleOpenEdit();
+                } else {
+                    this.handleSaveEdit();
+                }
+            },
+            handleToggleLoading() {
+                this.myStoreStore.isLoading = !this.myStoreStore.isLoading;
+            },
+            handleOpenEdit() {
+                this.isEditOpen = true;
+            },
+            handleSaveEdit() {
+                axios
+                    .put("/user/edit-user-description", {
+                        description: this.myStoreStore.mystore.description,
+                    })
+                    .then((response) => {
+                        this.$toast.success("บันทึกคำอธิบายสำเร็จ");
+                        this.isEditOpen = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            },
         },
     },
-}
+};
 </script>
 

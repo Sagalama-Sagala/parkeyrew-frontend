@@ -57,7 +57,7 @@
           :item-price="item.price"
           :item-image="item.productImage[0]"
           :rating="item.owner.reviewStar"
-          :seller-image="item.sellerImage"
+          :seller-image="item.owner.profileImage"
           :seller-name="item.owner.username"
           :liked="item.liked"
           :color="item.color"

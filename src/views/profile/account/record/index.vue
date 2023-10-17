@@ -129,16 +129,15 @@ export default {
             axios
                 .put("/user/edit-user-info", this.profileStore.profile)
                 .then(() => {
-                    this.$toast.success("แก้ไขข้อมูลสำเร็จแล้ว");
-                    this.pageState = 0;
+                    setTimeout(() => {
+                        this.$toast.success("แก้ไขข้อมูลสำเร็จแล้ว");
+                        this.pageState = 0;
+                        this.loading = false;
+                    }, 1000);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
-
-            setTimeout(() => {
-                this.loading = false;
-            }, 3000);
         },
     },
     mounted() {},

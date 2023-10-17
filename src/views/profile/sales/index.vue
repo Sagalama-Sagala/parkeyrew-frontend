@@ -10,7 +10,7 @@
         :key="index"
     >
         <div class="md:text-2xl text-lg my-8">
-            จากผู้ขาย {{ purchase?.customer?.firstname }}
+            จากผู้ซื้อ {{ purchase?.customer?.firstname }}
             {{ purchase?.customer?.lastname }} >
         </div>
 

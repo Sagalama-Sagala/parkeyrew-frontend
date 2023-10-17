@@ -5,13 +5,13 @@
     </div>
 
     <div
-        v-for="(purchase, index) in profileStore?.sales"
+        v-for="(purchase, index) in profileStore?.purchase"
         class="w-full items-center justify-start my-8 md:px-16 text-lg font-medium"
         :key="index"
     >
         <div class="md:text-2xl text-lg my-8">
-            จากผู้ซื้อ {{ purchase?.customer?.firstname }}
-            {{ purchase?.customer?.lastname }} >
+            จากผู้ขาย {{ purchase?.shop?.firstname }}
+            {{ purchase?.shop?.lastname }} >
         </div>
 
         <!-- <pre>{{ purchase }}</pre> -->
@@ -144,7 +144,6 @@ import ReviewModal from "@/components/Profile/Purchase/Review/index.vue";
 import { formatDate } from "@/common/js/utils.js";
 import axios from "axios";
 
-
 export default {
     components: { ReviewModal },
     setup() {
@@ -155,7 +154,7 @@ export default {
     async mounted() {
         // fetch data
         try {
-            await this.profileStore.fetchMySales();
+            await this.profileStore.fetchMyPurchase();
             // console.log(this.profileStore?.purchase);
         } catch (err) {
             console.log(err);

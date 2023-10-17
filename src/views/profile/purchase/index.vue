@@ -113,13 +113,14 @@
             </div>
         </div>
 
-        <div class="flex justify-end mt-2 mr-4 md:mr-0">
-            <button
-                class="border-[0.05rem] border-primary px-2 py-1 text-sm md:text-xl md:px-4 md:py-2 rounded-lg text-primary"
-                @click="reviewShop"
-            >
-                รีวิวร้านค้า
-            </button>
+        <div class="flex justify-end mt-2 mr-4 md:mr-0 relative">
+            <review-modal
+                :review="purchase?.review"
+                :shop="purchase?.shop?._id"
+                :history-id="purchase?._id"
+                :shopName="`${purchase?.shop?.firstname}
+            ${purchase?.shop?.lastname}`"
+            />
         </div>
 
         <div class="border-b-[0.08rem] border-black mr-12 my-8 w-full"></div>
@@ -128,8 +129,10 @@
 
 <script>
 import { useProfileStore } from "@/store/profile.store.js";
+import ReviewModal from "@/components/Profile/Purchase/Review/Rating/index.vue";
 
 export default {
+    components: { ReviewModal },
     setup() {
         const profileStore = useProfileStore();
 

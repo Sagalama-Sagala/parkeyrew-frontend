@@ -115,13 +115,18 @@
             </div>
         </div>
 
-        <div class="flex justify-end mt-2 mr-4 md:mr-0">
-            <button
+        <div class="flex justify-end mt-2 mr-4 md:mr-0 relative">
+            <!-- <button
                 class="border-[0.05rem] border-primary px-2 py-1 text-sm md:text-xl md:px-4 md:py-2 rounded-lg text-primary"
                 @click="reviewShop"
             >
                 ดูรีวิว
-            </button>
+            </button> -->
+            <review-modal
+                :review="purchase?.review"
+                :customerName="`${purchase?.customer?.firstname}
+            ${purchase?.customer?.lastname}`"
+            />
         </div>
 
         <div class="border-b-[0.08rem] border-black mr-12 my-8 w-full"></div>
@@ -130,8 +135,10 @@
 
 <script>
 import { useProfileStore } from "@/store/profile.store.js";
+import ReviewModal from "@/components/Profile/Sale/Review/Rating/index.vue";
 
 export default {
+    components: { ReviewModal },
     setup() {
         const profileStore = useProfileStore();
 
@@ -146,30 +153,7 @@ export default {
             console.log(err);
         }
     },
-    // data() {
-    //     return {
-    //         purchaseInfo: [
-    //             {
-    //                 from: "aaa",
-    //                 productName:
-    //                     "โอดีบีโอ ซิกเนเจอร์ อายแชโดว์ พาเลท ทาตา 4.8g OD276 odbo Signature Eyeshadow Palette",
-    //                 time: "12/12/12",
-    //                 status: "สำเร็จแล้ว",
-    //                 price: 2234,
-    //                 deliveryFee: 45,
-    //             },
-    //             {
-    //                 from: "bbb",
-    //                 productName:
-    //                     "โอดีบีโอ เอ็กซ์เทนชั่น มาสคาร่า สองหัว OD922 กันน้ำ ติดทน 4g+4g odbo Extra Extension Mascara",
-    //                 time: "01/23/45",
-    //                 status: "กำลังจัดส่ง",
-    //                 price: 99,
-    //                 deliveryFee: 30,
-    //             },
-    //         ],
-    //     };
-    // },
+
     methods: {},
 };
 </script>

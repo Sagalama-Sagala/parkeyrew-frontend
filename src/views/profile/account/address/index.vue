@@ -8,6 +8,9 @@
             เพิ่ม +
         </button>
     </div>
+    <div v-if="profileStore.addr.length === 0">
+        <p class="text-center mt-10">ไม่พบรายการ</p>
+    </div>
 
     <!-- new address modal -->
     <div
@@ -33,12 +36,59 @@
                 placeholder="หมายเลขโทรศัพท์"
                 v-model="phone"
             />
-            <input
-                type="text"
-                class="focus:outline-none mt-4 block w-full px-8 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
-                placeholder="จังหวัด, เขต, อำเภอ, รหัสไปรษณีย์"
-                v-model="address"
-            />
+
+            <div
+                class="text-xs border border-black rounded-md mt-4 flex justify-between p-2"
+            >
+                <!-- <p v-if="!selectedProvince" >เลือกจังหวัด</p>
+                <p v-if="selectedProvince" >เลือกอำเภอ/เขต</p>
+                <p v-if="selectedAmphure" >เลือกตำบล/แขวง</p> -->
+
+                <select
+                    v-model="idProvince"
+                    @change="handleFirstSelectChange"
+                    class="w-[30%] border-r border-black"
+                >
+                    <option value="" disabled selected>เลือกจังหวัด</option>
+                    <option
+                        v-for="record in thaiProvinces.RECORDS"
+                        :key="record.id"
+                        :value="record.id"
+                    >
+                        {{ record.name_th }}
+                    </option>
+                </select>
+
+                <select
+                    v-model="selectedAmphure"
+                    @change="handleSecondSelectChange"
+                    class="w-[30%] border-r border-black"
+                    :disabled="!idProvince"
+                >
+                    <option
+                        v-for="record in filteredAmphures"
+                        :key="record.id"
+                        :value="record.id"
+                    >
+                        {{ record.name_th }}
+                    </option>
+                </select>
+
+                <select
+                    v-model="selectedTambon"
+                    class="w-[30%]"
+                    :disabled="!selectedAmphure"
+                >
+                    <option
+                        v-for="record in filteredTambons"
+                        :key="record.id"
+                        :value="record.id"
+                    >
+                        {{ record.name_th }}
+                    </option>
+                </select>
+            </div>
+
             <textarea
                 type="text"
                 class="focus:outline-none block w-full h-[100px] mt-4 px-8 py-2 bg-white border border-black rounded-md shadow-sm placeholder-slate-400"
@@ -237,9 +287,10 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { provide, ref } from "vue";
 import { useProfileStore } from "@/store/profile.store.js";
 import axios from "axios";
+import { thaiProvinces, thaiAmphures, thaiTambons } from "@/constants";
 
 export default {
     setup() {
@@ -249,6 +300,21 @@ export default {
     },
     data() {
         return {
+            idProvince: null,
+            idAmphures: null,
+
+            selectedProvince: null,
+            selectedAmphure: null,
+            selectedTambon: null,
+
+            thaiProvinces,
+            thaiAmphures,
+            thaiTambons,
+
+            selectedProvinceName: "",
+            selectedAmphureName: "",
+            selectedTambonName: "",
+
             checked: ref(false),
             showPopup: false, // new address modal
             showEditAddressModal: false, // edit address modal
@@ -264,6 +330,36 @@ export default {
         };
     },
     computed: {
+        address() {
+            const selectedProvince = this.thaiProvinces.RECORDS.find(
+                (record) => record.id === this.idProvince
+            );
+
+            const selectedAmphure = this.filteredAmphures.find(
+                (record) => record.id === this.selectedAmphure
+            );
+
+            const selectedTambon = this.filteredTambons.find(
+                (record) => record.id === this.selectedTambon
+            );
+
+            if (selectedProvince && selectedAmphure && selectedTambon) {
+                this.address =
+                    selectedProvince.name_th +
+                    " " +
+                    selectedAmphure.name_th +
+                    " " +
+                    selectedTambon.name_th +
+                    " " +
+                    selectedTambon.zip_code;
+
+                console.log(this.address);
+                return this.address;
+            }
+
+            return "";
+        },
+
         name: {
             set(value) {
                 const splited = value.split(" ");
@@ -276,6 +372,16 @@ export default {
                 return `${this.firstname} ${this.lastname}`.trim();
             },
         },
+        filteredAmphures() {
+            return this.thaiAmphures.RECORDS.filter(
+                (record) => record.province_id === this.idProvince
+            );
+        },
+        filteredTambons() {
+            return this.thaiTambons.RECORDS.filter(
+                (record) => record.amphure_id === this.selectedAmphure
+            );
+        },
     },
     mounted() {
         if (this.profileStore.addr.length === 0) {
@@ -283,6 +389,16 @@ export default {
         }
     },
     methods: {
+        handleFirstSelectChange() {
+            console.log("Selected Province ID :", this.idProvince);
+            this.selectedAmphure = null;
+            this.selectedTambon = null;
+        },
+        handleSecondSelectChange() {
+            console.log("Selected Amphure ID :", this.selectedAmphure);
+            this.selectedTambon = null;
+        },
+
         preventDisableDefaultAddr(e) {
             alert("อย่าติ๊กออกไอเย็ดแม่");
             this.checked = true;
@@ -304,6 +420,11 @@ export default {
             } else {
                 this.checked = false;
             }
+
+            // console.log("setEditAddressValue", currentValue);
+        },
+        editAddr(index) {
+            // console.log(this.profileStore.addr[index]);
         },
         async setMainAddr(index) {
             try {
@@ -368,7 +489,7 @@ export default {
 
             try {
                 if (this.name === "") {
-                    this.$toast.info("กรุณากรอกชื่อ-นามสกุลให้ครบถ้วน");
+                    this.$toast.info("กรุณากรอกชื่อ-นามสกุล");
                     return;
                 } else if (!/^\d{10}$/.test(this.phone)) {
                     this.$toast.info(
@@ -380,7 +501,7 @@ export default {
                     this.address === "" ||
                     this.addressDescription === ""
                 ) {
-                    this.$toast.info("กรุณากรอกที่อยู่ให้ครบถ้วน");
+                    this.$toast.info("กรุณากรอที่อยู่");
                     return;
                 }
 

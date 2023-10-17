@@ -112,6 +112,7 @@
 
 <script >
 import {naning,mayji,jap,hon,boss,bambie,chompu,cd,card,jark,next,prev,circleBlack,circleGray} from "@/assets/contact";
+import axios from "axios";
 
 export default {
   data() {

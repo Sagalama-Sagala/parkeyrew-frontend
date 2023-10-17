@@ -25,6 +25,12 @@ export const useMyStoreStore = defineStore("mystore", {
     togglePopupForm() {
       this.isPopupFormModal = !this.isPopupFormModal;
     },
+    resetMystore()
+    {
+      this.mystore = null;
+      this.isPopupFormModal = false;
+      this.isLoading = false;
+    }
   },
   persist: true,
 });

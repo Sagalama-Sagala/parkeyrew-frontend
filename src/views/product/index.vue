@@ -25,7 +25,7 @@
               :src="imageUrl"
               class="h-[8rem] w-[11rem] border-grey rounded-xl border-[1px] aspect-[10.5/9] object-contain bg-[#d5d5d5]"
               :class="{
-                ' blur-sm border-2 border-black': selectedImageIndex === index,
+                '  border-[3px] border-primary ': selectedImageIndex === index,
               }"
               @click="updateSelectedImage(index)"
             />
@@ -91,7 +91,7 @@
               <div class="md:font-normal font-light">
                 <h1>{{ infoProducts?.product?.brand }}</h1>
                 <h1>{{ infoProducts?.product?.color }}</h1>
-                <h1>{{ infoProducts?.product?.condition }}</h1>
+                <h1>{{ infoProducts?.product?.condition }} %</h1>
                 <h1>{{ infoProducts?.product?.size }}</h1>
               </div>
             </div>
@@ -107,7 +107,7 @@
                 <h1>{{ infoProducts?.product?.category }}</h1>
                 <h1>{{ formatDate(infoProducts?.product?.createdAt) }}</h1>
                 <h1>{{ infoProducts?.product?.sendFrom }}</h1>
-                <h1>{{ infoProducts?.product?.deliveryFee }}</h1>
+                <h1>{{ infoProducts?.product?.deliveryFee }} ฿</h1>
               </div>
             </div>
           </div>

@@ -4,7 +4,7 @@
     <div class="flex flex-1 h-screen justify-center items-center">
       <div class="bg-white flex flex-col p-10 gap-5 rounded-xl " @click.stop> 
         <h1>คำอธิบาย</h1>
-        <textarea v-model="this.editDescription" class="border-[1px] border-black w-[6rem] rounded px-2 md:w-[20rem] md:h-[10rem]" ></textarea>
+        <textarea v-model="this.editDescription" class="border-[1px] border-black w-[15rem] rounded px-2 md:w-[20rem] md:h-[10rem]" ></textarea>
         <button @click="handleSaveEdit" class="border-[1px] border-primary hover:text-white text-primary hover:bg-primary duration-100 rounded-lg">บันทึก</button>
       </div>
     </div>

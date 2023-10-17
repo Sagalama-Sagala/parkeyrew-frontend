@@ -2,7 +2,7 @@
     <Loading :isLoading="this.myStoreStore?.isLoading" />
     <PopupForm
         :isModalOpen="this.myStoreStore?.isPopupFormModal"
-        @toggle-modal="handleToggle"
+        @toggleModal="handleToggle()"
         @fetch-my-store="fetchMyStore()"
         @toggleLoading="handleToggleLoading()"
     />
@@ -177,77 +177,55 @@ export default {
         fetchMyStore() {
             this.myStoreStore.fetchMyStore();
         },
-        components: {
-            Rating,
-            PopupForm,
-            Dialog,
-            Loading,
+        routeToMyStore() {
+            this.$router.push("/mystore");
         },
-        data() {
-            return {
-                editDescription: "",
-                editIcon,
-                shareIcon,
-                profileURL:
-                    "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
-                followerDialog: false,
-                followingDialog: false,
-            };
+        routeToReview() {
+            this.$router.push("/mystore/review");
         },
-        methods: {
-            fetchMyStore() {
-                this.myStoreStore.fetchMyStore();
-            },
-            routeToMyStore() {
-                this.$router.push("/mystore");
-            },
-            routeToReview() {
-                this.$router.push("/mystore/review");
-            },
-            handleGoToEditProfile() {
-                this.$router.push("/profile/record");
-            },
-            openFollower() {
-                this.followerDialog = true;
-            },
-            closeFollower() {
-                this.followerDialog = false;
-            },
-            openFollowing() {
-                this.followingDialog = true;
-            },
-            closeFollowing() {
-                this.followingDialog = false;
-            },
-            handleToggle() {
-                this.myStoreStore.togglePopupForm();
-            },
-            handleToggleEdit() {
-                if (!this.isEditOpen) {
-                    this.handleOpenEdit();
-                } else {
-                    this.handleSaveEdit();
-                }
-            },
-            handleToggleLoading() {
-                this.myStoreStore.isLoading = !this.myStoreStore.isLoading;
-            },
-            handleOpenEdit() {
-                this.isEditOpen = true;
-            },
-            handleSaveEdit() {
-                axios
-                    .put("/user/edit-user-description", {
-                        description: this.myStoreStore.mystore.description,
-                    })
-                    .then((response) => {
-                        this.$toast.success("บันทึกคำอธิบายสำเร็จ");
-                        this.isEditOpen = false;
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            },
+        handleGoToEditProfile() {
+            this.$router.push("/profile/record");
+        },
+        openFollower() {
+            this.followerDialog = true;
+        },
+        closeFollower() {
+            this.followerDialog = false;
+        },
+        openFollowing() {
+            this.followingDialog = true;
+        },
+        closeFollowing() {
+            this.followingDialog = false;
+        },
+        handleToggle() {
+            this.myStoreStore.togglePopupForm();
+        },
+        handleToggleEdit() {
+            if (!this.isEditOpen) {
+                this.handleOpenEdit();
+            } else {
+                this.handleSaveEdit();
+            }
+        },
+        handleToggleLoading() {
+            this.myStoreStore.isLoading = !this.myStoreStore.isLoading;
+        },
+        handleOpenEdit() {
+            this.isEditOpen = true;
+        },
+        handleSaveEdit() {
+            axios
+                .put("/user/edit-user-description", {
+                    description: this.myStoreStore.mystore.description,
+                })
+                .then((response) => {
+                    this.$toast.success("บันทึกคำอธิบายสำเร็จ");
+                    this.isEditOpen = false;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
     },
 };

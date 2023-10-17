@@ -247,7 +247,7 @@
             </div>
             <div class="flex gap-6 h-[2.5rem] md:justify-end justify-center">
               <button
-                @click="handleClose"
+                @click="handleToggleModal"
                 class="text-[#969696] hover:text-black duration-100"
               >
                 ยกเลิก

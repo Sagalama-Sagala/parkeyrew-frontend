@@ -8,6 +8,9 @@
             เพิ่ม +
         </button>
     </div>
+    <div v-if="profileStore.addr.length === 0">
+        <p class="text-center mt-10">ไม่พบรายการ</p>
+    </div>
 
     <!-- new address modal -->
     <div

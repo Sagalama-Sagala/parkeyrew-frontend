@@ -1,5 +1,8 @@
 <template>
     <div class="md:text-2xl text-lg my-2 font-semibold">การขายของฉัน</div>
+    <div v-if="profileStore.purchase.length === 0">
+        <p class="text-center mt-10">ไม่พบรายการ</p>
+    </div>
 
     <div
         v-for="(purchase, index) in profileStore?.sales"

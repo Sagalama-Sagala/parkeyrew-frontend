@@ -134,8 +134,8 @@ const routes = [
         name: "Search",
         component: () => import("@/views/search/index.vue"),
         meta: { auth: false },
-        props: (route) => ({ keyword: route.query.keyword })
-      }
+        props: (route) => ({ keyword: route.query.keyword }),
+      },
     ],
   },
 ];

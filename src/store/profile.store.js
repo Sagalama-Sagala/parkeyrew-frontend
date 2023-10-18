@@ -17,7 +17,6 @@ export const useProfileStore = defineStore("profile", {
           method: "GET",
         });
 
-        console.log(res.data);
         this.profile = res.data;
       } catch (error) {
         console.log(error);

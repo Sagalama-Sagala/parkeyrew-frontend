@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary w-full md:justify-center  md:flex text-white md:pt-16 pt-5 md:h-screen h-full"> 
+  <div class="bg-primary w-full md:justify-center  md:flex text-white md:pt-16 pt-5 md:h-screen h-full justify-center items-center gap-x-4"> 
     <div class="md:pl-48 pl-10 md:pr-0 pr-10 md:w-[50%] w-full">
       <p class="pt-20 md:text-3xl text-xl font-medium">ช่องทางติดต่อ</p>
       <p class="mt-2 ">

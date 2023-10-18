@@ -1,7 +1,7 @@
 <template>
   <Container>
     <!-- chat menu -->
-    <div class="md:px-24 px-4 pt-7 pb-20">
+    <div class="md:px-24 px-4 pt-7 pb-20 overflow-y-auto h-full">
       <div>
         <ul class="flex justify-between items-center pb-4">
           <li
@@ -21,7 +21,7 @@
         <div v-for="(item, index) in chatRooms" :key="index">
           <div
             @click="handleChatPrivate(item)"
-            class="flex justify-between items-start border-b-[1px] border-black md:text-lg text-sm py-1 cursor-pointer overflow-y-auto"
+            class="flex justify-between items-start border-b-[1px] border-black md:text-lg text-sm py-1 cursor-pointer overflow-y-auto h-full"
           >
             <div class="flex justify-center items-start gap-x-2">
               <img

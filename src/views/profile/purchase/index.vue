@@ -1,6 +1,6 @@
 <template>
     <div class="md:text-2xl text-lg my-2 font-semibold">การซื้อของฉัน</div>
-    <div v-if="profileStore.sales.length === 0">
+    <div v-if="profileStore.purchase.length === 0">
         <p class="text-center mt-10">ไม่พบรายการ</p>
     </div>
 

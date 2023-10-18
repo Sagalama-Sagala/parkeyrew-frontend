@@ -31,7 +31,11 @@
       >
         <div class="w-16 h-16">
           <img
-            :src="chatStore.chatRoom?.product?.productImage[0]"
+            :src="
+              chatStore.chatRoom?.product?.productImage[0]
+                ? chatStore.chatRoom?.product?.productImage[0]
+                : ''
+            "
             alt="product_image"
             class="rounded-lg w-16 h-16"
           />

@@ -55,7 +55,7 @@
           </div>
         </div>
         <div
-          class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-16"
+          class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem]  md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-3"
         >
           <div class="flex w-[50%] justify-end">
             <div class="hover:cursor-pointer" @click="openFollower">

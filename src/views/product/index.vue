@@ -1,9 +1,9 @@
 <template>
   <div class="bg-secondary min-h-screen flex flex-col gap-2 overflow-hidden">
     <Loading :isLoading="isLoading" />
-    <div class="bg-white text-black pt-20 flex justify-center items-center">
+    <div class="bg-white text-black pt-20 flex  justify-center items-center">
       <div
-        class="border-b-[1px] border-b-black text-black flex md:gap-[10rem] gap-4 md:text-[1.3rem] text-[1.2rem] w-full mx-4 justify-center flex-wrap px-5 pb-3"
+        class="border-b-[1px] border-b-black text-black flex md:gap-[2rem] gap-1 md:text-[1.3rem] text-[1.2rem] w-full mx-4 justify-center flex-wrap px-5 pb-1"
       >
         <div class="flex flex-col gap-5 w-[40rem]">
           <div class="flex flex-wrap gap-2 bg-[#d5d5d5] rounded-xl">
@@ -37,7 +37,7 @@
           </div>
         </div>
 
-        <div class="w-[30rem] flex flex-col md:gap-12 gap-7">
+        <div class="w-[30rem] flex flex-col md:gap-12 gap-3">
           <div class="flex justify-between md:flex-row flex-col">
             <div
               class="flex flex-row md:flex-col md:justify-end justify-between md:text-[1.5rem] font-bold"
@@ -80,8 +80,8 @@
             </p>
           </div>
 
-          <div class="flex flex-col md:flex-row justify-between md:gap-10">
-            <div class="flex gap-4 md:font-bold">
+          <div class="flex flex-col md:flex-row justify-between md:gap-1">
+            <div class="md:ml-0 ml-12 flex gap-4 md:font-bold">
               <div class="w-[5.5rem] md:w-auto">
                 <h1>แบรนด์</h1>
                 <h1>สี</h1>
@@ -96,7 +96,7 @@
               </div>
             </div>
 
-            <div class="flex gap-4 md:font-bold whitespace-nowrap">
+            <div class="md:ml-0 ml-12 flex gap-4 md:font-bold whitespace-nowrap">
               <div class="w-[5.5rem] md:w-auto">
                 <h1>หมวดหมู่</h1>
                 <h1>ลงขายเมื่อ</h1>
@@ -164,8 +164,8 @@
         </div>
       </div>
     </div>
-    <div class="flex overflow-x-auto pb-10">
-      <div class="flex gap-x-5 mx-auto">
+    <div class="flex overflow-x-auto pb-10 mt-6">
+      <div class="flex gap-x-5 mx-auto ">
         <ProductCard
           v-for="(item, index) in infoProducts?.productsOfUser"
           :id="item._id"
@@ -296,11 +296,18 @@ export default {
     },
 
     handleLike() {
+      this.isLoading = true;
       axios
         .put(`/user/add-user-wishlist/${this.$route.params.id}`)
         .then((response) => {
           console.log(response);
           this.isLiked = !this.isLiked;
+          if(this.isLiked)
+          this.infoProducts.product.likeCount++;
+          else
+          this.infoProducts.product.likeCount--;
+
+          this.isLoading = false;
         })
         .catch((err) => {
           console.log(err);

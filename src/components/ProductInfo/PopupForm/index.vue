@@ -370,7 +370,7 @@ export default {
           console.log("error from create product", err);
         });
     },
-    async handleEditOk() {
+    handleEditOk() {
       if (!this.validateData()) {
         return;
       }
@@ -390,62 +390,49 @@ export default {
         deliveryFee: this.infoProducts.deliveryFee,
       };
 
-      const imageToUrl = async (imageUrl) => {
-        const response = await fetch(imageUrl);
-        const blob = await response.blob();
-        const file = new File([blob], "image.png", { type: "image/png" });
-        return file;
-      };
-
-      try {
-        const imageFiles = [];
-        for (let i = 0; i < this.imageList.length; i++) {
-          const file = await imageToUrl(this.imageList[i]);
-          imageFiles.push(file);
-        }
-
-        await axios
-          .post("/product/edit-product-info", newData)
-          .then(async (response) => {
-            const productImage = new FormData();
-            for (let i = 0; i < imageFiles.length; i++) {
-              productImage.append(`image${i + 1}`, imageFiles[i]);
-            }
-            await axios.put(
-              `/product/add-product-image/${this.productData._id}`,
-              productImage,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
+      axios
+        .post("/product/edit-product-info", newData)
+        .then((response) => {
+          const productImage = new FormData();
+          for (let i = 0; i < this.imageFileList.length; i++) {
+            productImage.append(`image${i + 1}`, this.imageFileList[i]);
+          }
+          axios.put(
+            `/product/add-product-image/${this.productData._id}`,
+            productImage,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
               },
-            );
-            await this.$emit("fetchProduct");
-            this.handleToggleModal();
-          })
-          .catch((err) => {
-            console.log("error from edit product", err);
-          });
-      } catch (error) {
-        console.error("Error converting image URL to file: ", error);
-      }
+            },
+          );
+          this.$emit("fetchProduct");
+          this.handleToggleModal();
+          this.handleReset();
+        })
+        .catch((err) => {
+          console.log("error from edit product", err);
+        });
     },
     handleReset() {
-      this.infoProducts.brand = "0";
-      this.infoProducts.category = "0";
-      this.infoProducts.condition = 0;
-      this.infoProducts.sendFrom = "0";
-      this.infoProducts.size = "0";
-      this.infoProducts.price = 0;
-      this.infoProducts.description = "";
-      this.infoProducts.name = "";
-      this.infoProducts.remain = 0;
-      this.infoProducts.deliveryFee = 0;
-      this.infoProducts.color = "0";
-      this.imageFileList = [];
-      this.imageList = [];
-      this.warnings = [];
-      this.imageWarning = [];
+      if(!this.isEdit) {
+        this.infoProducts.brand = "0";
+        this.infoProducts.category = "0";
+        this.infoProducts.condition = 0;
+        this.infoProducts.sendFrom = "0";
+        this.infoProducts.size = "0";
+        this.infoProducts.price = 0;
+        this.infoProducts.description = "";
+        this.infoProducts.name = "";
+        this.infoProducts.remain = 0;
+        this.infoProducts.deliveryFee = 0;
+        this.infoProducts.color = "0";
+        this.warnings = [];
+        this.imageWarning = [];
+      }
+        this.imageFileList = [];
+        this.imageList = [];
+      
     },
     handleIncrese() {
       this.infoProducts.remain += 1;
@@ -523,6 +510,10 @@ export default {
         warnings.push("Please enter the product price more than 0 baht.");
         isValid = false;
       }
+      else if(this.infoProducts.price > 500000) {
+        warnings.push("Please enter the product price less than 500,000 baht.");
+        isValid = false;
+      }
       //Remain
       if (this.infoProducts.remain === 0 || this.infoProducts.remain === null) {
         warnings.push("Please enter the product remain.");
@@ -580,7 +571,6 @@ export default {
     const imageList = ref([]);
     watchEffect(() => {
       if (props.productData) {
-        imageList.value = props.productData.productImage;
         infoProducts.brand = props.productData.brand;
         infoProducts.category = props.productData.category;
         infoProducts.condition = props.productData.condition;

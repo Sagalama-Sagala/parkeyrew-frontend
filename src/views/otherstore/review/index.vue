@@ -8,14 +8,14 @@
     >
       <img
         alt="user profile"
-        :src="item.profileURL"
+        :src="item.customer.profileImage"
         class="rounded-full w-[5.5rem] h-[5.5rem] border-[1px] border-black"
       />
       <div class="flex flex-col md:w-[24rem] w-full gap-2">
         <div
           class="flex flex-row md:w-[24rem] w-full justify-start gap-20 text-[#707070]"
         >
-          <b class="text-black md:w-[10rem] w-full">{{ item.customer }}</b>
+          <b class="text-black md:w-[10rem] w-full">{{ item.customer.username }}</b>
           <div class="md:block hidden">{{ formatDate(item.createdAt) }}</div>
         </div>
         {{ item.text }}

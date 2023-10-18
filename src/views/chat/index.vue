@@ -18,14 +18,14 @@
 
       <!-- chat box -->
       <div class="h-full overflow-y-auto">
-        <div v-for="(item, index) in chatRooms" :key="item.product">
+        <div v-for="(item, index) in chatRooms" :key="index">
           <div
             @click="handleChatPrivate(item)"
             class="flex justify-between items-start border-b-[1px] border-black md:text-lg text-sm py-1 cursor-pointer"
           >
             <div class="flex justify-center items-start gap-x-2">
               <img
-                :src="profile"
+                :src="item.otherUser?.user?.profileImage"
                 :alt="item.roomId"
                 class="md:w-20 md:h-20 w-12 h-12"
               />
@@ -36,7 +36,11 @@
                 <h3 class="font-light">
                   {{ item.lastMessage?.user?.username }}
                   <span v-if="item.lastMessage" class="px-1 text-lg">:</span>
-                  {{ item.lastMessage?.text }}
+                  {{
+                    item.lastMessage?.text
+                      ? formatMessage(item.lastMessage.text)
+                      : ""
+                  }}
                 </h3>
               </div>
             </div>
@@ -76,6 +80,7 @@ import axios from "axios";
 import { getLocal } from "@/common/js/utils.js";
 import { io } from "socket.io-client";
 import { useChatStore } from "@/store/chat.store.js";
+import { formatMessage } from "@/common/js/utils.js";
 
 export default {
   setup() {
@@ -114,6 +119,7 @@ export default {
       console.log(room.id);
       this.$router.push(`chat/${room.id}`);
     },
+    formatMessage,
   },
   data() {
     return {

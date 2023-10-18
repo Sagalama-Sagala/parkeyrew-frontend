@@ -22,9 +22,11 @@
       <div
         class="md:w-fit w-full flex items-center justify-start md:justify-center gap-x-2 md:mr-16 md:border-black md:border-l-[1px] md:px-3 font-semibold md:pt-0 pt-5"
       >
-        <div class="w-16">
-          <img :src="defaultImg" alt="product_image" class="rounded-lg" />
-        </div>
+        <img
+          :src="chatStore.chatRoom?.product?.productImage[0]"
+          alt="product_image"
+          class="rounded-lg w-16 h-16"
+        />
         <div class="whitespace-nowrap">
           <p>{{ chatStore.chatRoom?.product?.name }}</p>
           <p>฿ {{ chatStore.chatRoom?.product?.price }}</p>
@@ -39,10 +41,31 @@
       <div
         v-for="(item, index) in messages.slice().reverse()"
         :key="index"
-        class="w-full items-center justify-end flex gap-x-3 md:gap-x-5 border-b-[1px] last:border-t-[1px] border-[#d9d9d9] md:px-16 px-4 md:py-4 py-2"
+        class="w-full items-end justify-end flex gap-x-3 md:gap-x-5 border-b-[1px] last:border-t-[1px] border-[#d9d9d9] md:px-16 px-4 md:py-4 py-2"
         :class="item.isMyMessage ? '' : 'flex-row-reverse'"
       >
-        <p class="pt-5">{{ item.text }}</p>
+        <div
+          v-if="!item.isImg"
+          class="w-96"
+          :class="item.isMyMessage ? 'text-right' : 'text-left'"
+        >
+          <p class="break-words">
+            {{ item.text }}
+          </p>
+          <p class="text-xs font-light pt-1"></p>
+        </div>
+
+        <div v-else>
+          <img
+            :src="item.img"
+            class="w-[200px] h-[200px] rounded-lg cursor-pointer"
+            @click="console.log('hello')"
+          />
+          <p
+            class="text-xs font-light pt-1"
+            :class="item.isMyMessage ? 'text-right' : 'text-left'"
+          ></p>
+        </div>
 
         <span>
           <img :src="mockProfile" class="w-16" />
@@ -213,6 +236,7 @@ import { image, closeDeal, location, delivery } from "@/assets/chat";
 import { onBeforeRouteLeave } from "vue-router";
 import { useChatStore } from "@/store/chat.store.js";
 import axios from "axios";
+import { formatDateMessage } from "@/common/js/utils.js";
 
 export default {
   setup() {
@@ -233,6 +257,7 @@ export default {
     socket.emit("joinRoom", route.params.id);
 
     socket.on("messages", (response) => {
+      console.log(response);
       messages.value = response;
     });
 
@@ -282,21 +307,34 @@ export default {
     },
     handleSubmitNewMessage() {
       if (this.imageFileList.length > 0) {
+        const imgSend = new FormData();
         for (let i = 0; i < this.imageFileList.length; i++) {
-          console.log(i);
-          socket.emit("addMessage", {
-            roomId: this.$route.params.id,
-            message: { text: "", isImg: true },
-            img: this.imageFileList[i],
-          });
+          imgSend.append(`image${i + 1}`, this.imageFileList[i]);
         }
-        this.imageFileList = [];
+        axios
+          .post("/file-upload/many", imgSend, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            for (let i = 0; i < this.imageFileList.length; i++) {
+              console.log(i);
+              socket.emit("addMessage", {
+                roomId: this.$route.params.id,
+                message: { text: "", isImg: true, img: response.data[i] },
+              });
+            }
+            this.imageFileList = [];
+          })
+          .catch((err) => {
+            console.log("error from upload image", err);
+          });
       }
       if (this.chatInput !== "") {
         socket.emit("addMessage", {
           roomId: this.$route.params.id,
           message: { text: this.chatInput },
-          img: null,
         });
         this.chatInput = "";
       }
@@ -341,6 +379,7 @@ export default {
           console.log(err);
         });
     },
+    formatDateMessage,
   },
   components: {
     Container,

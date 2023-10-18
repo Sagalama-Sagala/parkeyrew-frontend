@@ -314,7 +314,11 @@ export default {
     handleEndDeal() {
       axios
         .post("/product/decrease-product-count", {
+<<<<<<< HEAD
           roomId: this.chatStore.chatRoom.id,
+=======
+          roomId: this.chatStore.chatRoom,
+>>>>>>> 244bd0c (แก้ responsiv)
           productId: this.chatStore.chatRoom.product._id,
           customerId: this.chatStore.chatRoom.otherUser.user._id,
         })

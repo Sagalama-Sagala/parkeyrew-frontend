@@ -442,6 +442,8 @@ export default {
       this.infoProducts.remain = 0;
       this.infoProducts.deliveryFee = 0;
       this.infoProducts.color = "0";
+      this.imageFileList = [];
+      this.imageList = [];
       this.warnings = [];
       this.imageWarning = [];
     },

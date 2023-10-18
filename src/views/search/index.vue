@@ -442,16 +442,16 @@ export default {
       minRange: 0,
       maxRange: 100,
       unit: "%",
-      value1: 0,
+      value1: 51,
       value2: 100,
   });
   const priceSlider = reactive({
         minRange: 0,
-        maxRange: 10000,
+        maxRange: 500000,
         unit: "฿",
         step: 100,
         value1: 0,
-        value2: 10000,
+        value2: 500000,
     });
   const selectedValue = ref(1)
 

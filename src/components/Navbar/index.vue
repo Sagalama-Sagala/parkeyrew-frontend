@@ -38,7 +38,7 @@
       </div>
       <div>
         <div class="md:block hidden">
-          <div v-if="isAuthPage()" class="font-semibold md:text-lg">
+          <div v-if="isAuthPage()" class="font-semibold md:text-lg hover:cursor-pointer" @click="()=>{this.pushPage('/contact')}">
             {{ MenuItemAuthPage }}
           </div>
           <ul v-else class="flex items-center gap-x-5">
@@ -104,7 +104,7 @@
         :class="!isAuthPage() ? 'divide-y-2' : 'divide-y-0'"
       >
         <ul class="pl-9 pb-4">
-          <li v-if="isAuthPage()" class="py-2 font-semibold">
+          <li v-if="isAuthPage()" class="py-2 font-semibold" @click="()=>{this.pushPage('/contact')}">
             {{ MenuItemAuthPage }}
           </li>
           <li
@@ -202,14 +202,16 @@ export default {
       isProfileToggle.value = !isProfileToggle.value;
     };
 
-    socket.on("notiMessage", (response) => {
-      console.log(response);
-      notiMessage.value = response;
-      isNotiMessage.value = true;
-      setTimeout(() => {
-        isNotiMessage.value = false;
-      }, 5000);
-    });
+    if (getLocal("token")) {
+      socket.on("notiMessage", (response) => {
+        console.log(response);
+        notiMessage.value = response;
+        isNotiMessage.value = true;
+        setTimeout(() => {
+          isNotiMessage.value = false;
+        }, 5000);
+      });
+    }
 
     return {
       isNavToggle,

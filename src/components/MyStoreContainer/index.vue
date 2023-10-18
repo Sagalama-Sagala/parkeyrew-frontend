@@ -9,16 +9,16 @@
 
     <div class="flex flex-col">
         <div
-            class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2 md:h-[36rem] md:pt-0 pt-8"
+            class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2  md:pt-0 pt-8"
         >
             <div
-                class="bg-secondary mx-[3rem] text-black flex flex-col md:gap-6 gap-[3rem] items-center justify-center px-10 md:py-[3rem] py-0 mt-12 md:pb-[6rem] pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
+                class="bg-secondary mx-[3rem] text-black flex flex-col md:gap-6 gap-[1rem]  items-center justify-center px-10 md:py-[3rem] py-0 mt-[5rem] md:pb-[6rem] pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
             >
                 <div
-                    class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8"
+                    class="flex md:flex-row flex-col justify-between items-center md:w-[36rem]  md:pt-0 pt-8 "
                 >
                     <img
-                        class="md:h-[7rem] md:w-[7rem] h-[5rem] w-[5rem] rounded-full"
+                        class="md:h-[6rem] md:w-[6rem] h-[4rem] w-[4rem] rounded-full border-2 "
                         :src="
                             !this.myStoreStore?.mystore?.profileImage ||
                             this.myStoreStore?.mystore?.profileImage === ''
@@ -32,10 +32,10 @@
                     >
                         <div class="flex gap-2">
                             <b>{{ this.myStoreStore?.mystore?.username }}</b>
-                            <div @click="handleToggleEdit" class="z-30">
+                            <div @click="handleToggleEdit" >
                                 <img
                                     class="md:w-[3rem]  md:rounded-2xl mb-2 hover:cursor-pointer md:hidden w-[2rem]"
-                                    :src="editIcon"
+                                    :src="this.isEditOpen ? saveIcon : editIcon"
                                     alt="edit profile icon"
                                 />
                             </div>
@@ -51,11 +51,11 @@
                         <div @click="handleToggleEdit">
                             <img
                                 class="md:w-[3rem] md:rounded-2xl mb-2 hover:cursor-pointer hidden md:block"
-                                :src="editIcon"
+                                :src="this.isEditOpen ? saveIcon : editIcon"
                                 alt="edit profile icon"
                             />
                         </div>
-                        <div>
+                        <div @click="handleCopyLink">
                             <img
                                 class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden cursor-pointer"
                                 :src="shareIcon"
@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div
-                    class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[7rem]"
+                    class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 "
                 >
                     <div class="hover:cursor-pointer" @click="openFollower">
                         <b
@@ -113,17 +113,17 @@
                 </div>
             </div>
             <div
-                class="flex md:flex-row flex-col gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 pb-6"
+                class="flex gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 md:pb-6 pb-3"
             >
                 <div
-                    class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+                    class="flex items-center justify-center md:w-[22rem] w-[7rem] md:h-12 h-10 rounded-[1rem] hover:cursor-pointer"
                     :class="page === 'mystore' ? 'bg-tertiary' : 'bg-secondary'"
                     @click="routeToMyStore()"
                 >
                     <h1><b>ร้านค้า</b></h1>
                 </div>
                 <div
-                    class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+                    class="flex items-center justify-center md:w-[22rem] w-[7rem] md:h-12 h-10 rounded-[1rem] hover:cursor-pointer"
                     :class="page === 'review' ? 'bg-tertiary' : 'bg-secondary'"
                     @click="routeToReview()"
                 >
@@ -138,7 +138,7 @@
 import Dialog from "@/components/Mystore/Dialog/index.vue";
 import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
 import Rating from "@/components/Rating/index.vue";
-import { editIcon, shareIcon } from "@/assets/mystore";
+import { editIcon, shareIcon ,saveIcon } from "@/assets/mystore";
 import { ref } from "vue";
 import axios from "axios";
 import { useMyStoreStore } from "@/store/my-store.store.js";
@@ -164,12 +164,14 @@ export default {
         PopupForm,
         Dialog,
         Loading,
+
     },
     data() {
         return {
             editDescription: "",
             editIcon,
             shareIcon,
+            saveIcon,
             profileURL:
                 "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
             followerDialog: false,
@@ -230,6 +232,11 @@ export default {
                     console.log(err);
                 });
         },
+        handleCopyLink()
+        {
+            navigator.clipboard.writeText(window.location.href);
+            this.$toast.info("คัดลอกลิงค์สำเร็จ");
+        }
     },
 };
 </script>

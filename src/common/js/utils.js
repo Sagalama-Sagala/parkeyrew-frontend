@@ -21,6 +21,23 @@ export const formatDate = (dateFromDb) => {
   return dateFormat;
 };
 
+export const formatDateMessage = (dateFromDb) => {
+  if (!dateFromDb) {
+    return "";
+  }
+  const ddmmyy =
+    dateFromDb.slice(0, 4) +
+    "/" +
+    dateFromDb.slice(5, 7) +
+    "/" +
+    dateFromDb.slice(8, 10);
+  const hh = dateFromDb.slice(11, 13);
+  const hhInt = parseInt(hh) + 7;
+  const mm = dateFromDb.slice(14, 16);
+  const dateFormat = ddmmyy + " " + hhInt + ":" + mm;
+  return dateFormat;
+};
+
 export const formatStatus = (statusFromDb) => {
   const status = {
     waiting: "รอส่ง",
@@ -29,4 +46,11 @@ export const formatStatus = (statusFromDb) => {
   };
 
   return status[statusFromDb];
+};
+
+export const formatMessage = (message) => {
+  if (message.length > 20) {
+    return message.slice(0, 21) + "...";
+  }
+  return message;
 };

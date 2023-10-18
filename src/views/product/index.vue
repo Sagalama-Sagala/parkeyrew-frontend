@@ -145,6 +145,7 @@
               </div>
 
               <div
+                @click="handleCopyNumber()"
                 class="flex border-[1px] border-[#393838] md:border-black w-[4rem] md:w-[6rem] h-[4rem] rounded-full md:rounded-xl justify-center items-center gap-2 hover:bg-secondary hover:cursor-pointer"
               >
                 <img :src="chat" class="w-[1.5rem]" />
@@ -285,6 +286,7 @@ export default {
   methods: {
     handleCopyNumber() {
       navigator.clipboard.writeText("0941231231");
+      this.$toast.info("คัดลอกเบอร์โทรไปยังคลิปบอร์ดสำเร็จ");
     },
 
     handleCopyLink() {

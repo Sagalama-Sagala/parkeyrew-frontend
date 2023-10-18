@@ -296,11 +296,18 @@ export default {
     },
 
     handleLike() {
+      this.isLoading = true;
       axios
         .put(`/user/add-user-wishlist/${this.$route.params.id}`)
         .then((response) => {
           console.log(response);
           this.isLiked = !this.isLiked;
+          if(this.isLiked)
+          this.infoProducts.product.likeCount++;
+          else
+          this.infoProducts.product.likeCount--;
+
+          this.isLoading = false;
         })
         .catch((err) => {
           console.log(err);

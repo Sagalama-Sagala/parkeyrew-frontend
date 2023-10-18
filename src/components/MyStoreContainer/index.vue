@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div
-                    class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[1px] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[7rem]"
+                    class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[7rem]"
                 >
                     <div class="hover:cursor-pointer" @click="openFollower">
                         <b
@@ -113,17 +113,17 @@
                 </div>
             </div>
             <div
-                class="flex md:flex-row flex-col gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 pb-6"
+                class="flex  md:gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 md:pb-6 pb-3"
             >
                 <div
-                    class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+                    class="flex items-center justify-center md:w-[22rem] w-[14rem] md:h-12 h-10 rounded-[1rem] hover:cursor-pointer"
                     :class="page === 'mystore' ? 'bg-tertiary' : 'bg-secondary'"
                     @click="routeToMyStore()"
                 >
                     <h1><b>ร้านค้า</b></h1>
                 </div>
                 <div
-                    class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+                    class="flex items-center justify-center md:w-[22rem] w-[14rem] md:h-12 h-10 rounded-[1rem] hover:cursor-pointer"
                     :class="page === 'review' ? 'bg-tertiary' : 'bg-secondary'"
                     @click="routeToReview()"
                 >

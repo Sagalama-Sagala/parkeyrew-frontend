@@ -510,6 +510,10 @@ export default {
         warnings.push("Please enter the product price more than 0 baht.");
         isValid = false;
       }
+      else if(this.infoProducts.price > 500000) {
+        warnings.push("Please enter the product price less than 500,000 baht.");
+        isValid = false;
+      }
       //Remain
       if (this.infoProducts.remain === 0 || this.infoProducts.remain === null) {
         warnings.push("Please enter the product remain.");

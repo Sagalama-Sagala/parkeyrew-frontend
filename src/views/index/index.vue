@@ -26,12 +26,12 @@
     <div class="md:px-8 px-0 py-5 bg-white w-full">
       <h2 class="md:px-0 px-8 font-semibold text-xl">เลือกซื้อตามหมวดหมู่</h2>
       <ul
-        class="flex md:flex-wrap md:gap-x-4 gap-x-3 gap-y-3 pt-6 md:overflow-hidden overflow-x-auto"
+        class="flex md:flex-wrap md:gap-x-4 gap-x-3 gap-y-3 md:pt-6 pt-3 md:overflow-hidden overflow-x-auto"
       >
         <li
           v-for="(item, index) in types"
           :key="item.title"
-          class="border-[2px] border-primary rounded-lg flex justify-center items-center px-5 md:py-4 text-xl font-semibold md:gap-x-3 cursor-pointer hover:text-white hover:bg-primary duration-500 md:h-[80px] h-[60px] whitespace-nowrap first:ml-5 first:md:ml-0 last:mr-5 last:md:mr-0"
+          class="border-[2px]  border-primary rounded-lg flex justify-center items-center px-2 md:py-4 text-base font-semibold md:gap-x-3 cursor-pointer hover:text-white hover:bg-primary duration-500 md:h-[60px] h-[30px] whitespace-nowrap first:ml-5 first:md:ml-0 last:mr-5 last:md:mr-0"
           @click="handleFilterType(item.title)"
         >
           <span>
@@ -42,7 +42,7 @@
       </ul>
     </div>
     <div class="bg-secondary w-full px-8 py-5">
-      <h2 class="text-xl font-semibold pb-5 md:text-start text-center">
+      <h2 class="text-xl font-semibold pb-5 text-start ">
         สินค้าล่าสุดที่ถูกลงขาย
       </h2>
       <div

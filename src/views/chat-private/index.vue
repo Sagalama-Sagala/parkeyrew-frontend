@@ -407,6 +407,12 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      socket.emit("addMessage", {
+        roomId: this.$route.params.id,
+        message: {
+          text: "ขอบคุณสำหรับการอุดหนุนจ้า ส่งของแล้วจะมาแจ้งน้าาา~~",
+        },
+      });
     },
     handleDelivered() {
       axios
@@ -416,7 +422,7 @@ export default {
         .then((response) => {
           socket.emit("addMessage", {
             roomId: this.$route.params.id,
-            message: { text: "ส่งของไปแล้วจ้า" },
+            message: { text: "ส่งของไปแล้วจ้าาาา" },
           });
           console.log(response.data);
         })

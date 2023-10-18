@@ -113,7 +113,7 @@
                 </div>
             </div>
             <div
-                class="flex  gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 md:pb-6 pb-3"
+                class="flex gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 md:pb-6 pb-3"
             >
                 <div
                     class="flex items-center justify-center md:w-[22rem] w-[7rem] md:h-12 h-10 rounded-[1rem] hover:cursor-pointer"

@@ -32,7 +32,7 @@
                     >
                         <div class="flex gap-2">
                             <b>{{ this.myStoreStore?.mystore?.username }}</b>
-                            <div @click="handleToggleEdit" class="z-30">
+                            <div @click="handleToggleEdit" >
                                 <img
                                     class="md:w-[3rem]  md:rounded-2xl mb-2 hover:cursor-pointer md:hidden w-[2rem]"
                                     :src="this.isEditOpen ? saveIcon : editIcon"

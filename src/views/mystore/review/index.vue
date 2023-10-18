@@ -1,16 +1,16 @@
 <template>
   <div
-    class="text-black flex flex-col w-full items-center justify-center pt-2 text-lg"
+  class="text-black flex flex-col w-full items-center justify-between pt-2 text-lg bg-secondary  px-4"
   >
     <div
       v-for="(item, index) in creview"
       :key="index"
-      class="flex md:flex-row flex-col items-center justify-start border-b-2 border-black gap-5 pl-5 py-1 pr-5"
+      class="flex  items-center justify-start border-b-2 border-slate-400 gap-5 pl-5 py-1 pr-5 w-fit  "
     >
       <img
         :alt="item.customer?.username"
         :src="item.customer?.profileImage"
-        class="rounded-full w-[5.5rem] h-[5.5rem] border-[1px] border-black"
+        class="rounded-full md:w-[5.5rem] md:h-[5.5rem] w-[2.5rem] h-[2.5rem] border-[1px] border-black my-2"
       />
       <div class="flex flex-col md:w-[24rem] w-full gap-2">
         <div

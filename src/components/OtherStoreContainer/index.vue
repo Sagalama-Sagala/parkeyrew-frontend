@@ -1,6 +1,6 @@
 <template>
   <Loading :isLoading="this.otherStoreStore?.isLoading" />
-  <div class="flex flex-col">
+  <div class="flex flex-col ">
     <div
     class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2  md:pt-0 pt-8"
     >

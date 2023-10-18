@@ -1,7 +1,7 @@
 <template>
   <div class="bg-secondary min-h-screen flex flex-col gap-2 overflow-hidden">
     <Loading :isLoading="isLoading" />
-    <div class="bg-white text-black pt-20 flex  justify-center items-center">
+    <div class="bg-white text-black pt-20 flex justify-center items-center">
       <div
         class="border-b-[1px] border-b-black text-black flex md:gap-[2rem] gap-1 md:text-[1.3rem] text-[1.2rem] w-full mx-4 justify-center flex-wrap px-5 pb-1"
       >
@@ -96,7 +96,9 @@
               </div>
             </div>
 
-            <div class="md:ml-0 ml-12 flex gap-4 md:font-bold whitespace-nowrap">
+            <div
+              class="md:ml-0 ml-12 flex gap-4 md:font-bold whitespace-nowrap"
+            >
               <div class="w-[5.5rem] md:w-auto">
                 <h1>หมวดหมู่</h1>
                 <h1>ลงขายเมื่อ</h1>
@@ -165,7 +167,7 @@
       </div>
     </div>
     <div class="flex overflow-x-auto pb-10 mt-6">
-      <div class="flex gap-x-5 mx-auto ">
+      <div class="flex gap-x-5 mx-auto">
         <ProductCard
           v-for="(item, index) in infoProducts?.productsOfUser"
           :id="item._id"
@@ -190,7 +192,7 @@
       @toggleModal="handleModal"
       :productData="infoProducts.product"
       :isEdit="true"
-      @toggleLoading="toggleLoading" 
+      @toggleLoading="toggleLoading"
       @fetchProduct="fetchProduct"
     />
   </div>
@@ -230,29 +232,27 @@ export default {
     const isUserProduct = ref(false);
     const isLoading = ref(true);
 
-  
-    const fetchProduct = async ()=>
-    {
+    const fetchProduct = async () => {
       axios
-      .get(`/product/get-info-product-page/${productId}`)
-      .then((response) => {
-        console.log(response.data);
-        infoProducts.value = response.data;
-        isUserProduct.value = response.data.isUserProduct;
+        .get(`/product/get-info-product-page/${productId}`)
+        .then((response) => {
+          console.log(response.data);
+          infoProducts.value = response.data;
+          isUserProduct.value = response.data.isUserProduct;
 
-        //ใส่ไว้ก่อนนะ รอbackend
-        axios.get("/user/get-user-wishlist").then((response) => {
-          console.log("test", response.data.wishList);
-          isLiked.value = response.data.wishList.some(
-            (item) => item._id === productId,
-          );
-          isLoading.value = false;
+          //ใส่ไว้ก่อนนะ รอbackend
+          axios.get("/user/get-user-wishlist").then((response) => {
+            console.log("test", response.data.wishList);
+            isLiked.value = response.data.wishList.some(
+              (item) => item._id === productId,
+            );
+            isLoading.value = false;
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
+    };
 
     const connectChatRoom = () => {
       socket.emit("connectRoom", {
@@ -260,12 +260,13 @@ export default {
         seller: infoProducts.value.product.owner,
       });
       socket.on("roomId", (response) => {
+        console.log(response);
         chatStore.setChatRoom(response);
         router.push(`/chat/${response.id}`);
       });
     };
 
-    fetchProduct()
+    fetchProduct();
 
     return {
       infoProducts,
@@ -274,7 +275,7 @@ export default {
       productId,
       isLiked,
       isLoading,
-      fetchProduct
+      fetchProduct,
     };
   },
   components: {
@@ -302,10 +303,8 @@ export default {
         .then((response) => {
           console.log(response);
           this.isLiked = !this.isLiked;
-          if(this.isLiked)
-          this.infoProducts.product.likeCount++;
-          else
-          this.infoProducts.product.likeCount--;
+          if (this.isLiked) this.infoProducts.product.likeCount++;
+          else this.infoProducts.product.likeCount--;
 
           this.isLoading = false;
         })
@@ -323,19 +322,16 @@ export default {
     handleModal() {
       this.isModalOpen = !this.isModalOpen;
     },
-    
+
     handleGotoStore() {
-      if(this.isUserProduct) this.$router.push(`/mystore`);
-      else
-      {
+      if (this.isUserProduct) this.$router.push(`/mystore`);
+      else {
         this.$router.push(`/store/${this.infoProducts.product.owner._id}`);
       }
-      
     },
-    toggleLoading()
-    {
-      this.isLoading = !this.isLoading
-    }
+    toggleLoading() {
+      this.isLoading = !this.isLoading;
+    },
   },
   data() {
     return {

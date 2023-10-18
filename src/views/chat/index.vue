@@ -21,7 +21,7 @@
         <div v-for="(item, index) in chatRooms" :key="index">
           <div
             @click="handleChatPrivate(item)"
-            class="flex justify-between items-start border-b-[1px] border-black md:text-lg text-sm py-1 cursor-pointer"
+            class="flex justify-between items-start border-b-[1px] border-black md:text-lg text-sm py-1 cursor-pointer overflow-y-auto"
           >
             <div class="flex justify-center items-start gap-x-2">
               <img

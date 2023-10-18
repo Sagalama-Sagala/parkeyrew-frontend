@@ -54,3 +54,12 @@ export const formatMessage = (message) => {
   }
   return message;
 };
+
+export const formatProductName = (name, isMobile) => {
+  if (name.length > 25 && !isMobile) {
+    return name.slice(0, 26) + "...";
+  } else if (name.length > 15 && isMobile) {
+    return name.slice(0, 16) + "...";
+  }
+  return name;
+};

@@ -35,7 +35,7 @@
                             <div @click="handleToggleEdit" class="z-30">
                                 <img
                                     class="md:w-[3rem]  md:rounded-2xl mb-2 hover:cursor-pointer md:hidden w-[2rem]"
-                                    :src="editIcon"
+                                    :src="this.isEditOpen ? saveIcon : editIcon"
                                     alt="edit profile icon"
                                 />
                             </div>
@@ -51,7 +51,7 @@
                         <div @click="handleToggleEdit">
                             <img
                                 class="md:w-[3rem] md:rounded-2xl mb-2 hover:cursor-pointer hidden md:block"
-                                :src="editIcon"
+                                :src="this.isEditOpen ? saveIcon : editIcon"
                                 alt="edit profile icon"
                             />
                         </div>
@@ -138,7 +138,7 @@
 import Dialog from "@/components/Mystore/Dialog/index.vue";
 import PopupForm from "@/components/ProductInfo/PopupForm/index.vue";
 import Rating from "@/components/Rating/index.vue";
-import { editIcon, shareIcon } from "@/assets/mystore";
+import { editIcon, shareIcon ,saveIcon } from "@/assets/mystore";
 import { ref } from "vue";
 import axios from "axios";
 import { useMyStoreStore } from "@/store/my-store.store.js";
@@ -164,12 +164,14 @@ export default {
         PopupForm,
         Dialog,
         Loading,
+
     },
     data() {
         return {
             editDescription: "",
             editIcon,
             shareIcon,
+            saveIcon,
             profileURL:
                 "https://cdn.discordapp.com/attachments/968217024440455258/1161369443323093004/Cat.jpg?ex=65380c94&is=65259794&hm=aa9ff31c401b4cb5e6c9bb1a64478eafb111b0f00735dc487627d8f288c222d0&",
             followerDialog: false,

@@ -1,12 +1,12 @@
 <template>
   <div v-if="isModalOpen" class="fixed w-full h-[100%] z-50">
-    <div class="w-full h-full flex justify-center items-center fixed z-40 ">
+    <div class="w-full h-full flex justify-center items-center fixed z-40">
       <div
         class="fixed w-full h-[100%] bg-black bg-opacity-50 z-30 cursor-pointer"
         @click="handleClose"
       ></div>
       <div
-        class="md:w-[40rem] px-[3rem] md:h-[40rem] h-[30rem] bg-white py-2 rounded-xl flex flex-col items-center mx-10 overflow-auto scrollable-container fixed z-40 "
+        class="md:w-[40rem] px-[3rem] md:h-[40rem] h-[30rem] bg-white py-2 rounded-xl flex flex-col items-center mx-10 overflow-auto scrollable-container fixed z-40"
       >
         <div class="flex flex-col md:items-start">
           <div class="md:mt-[0rem] mt-[1rem]">
@@ -26,7 +26,6 @@
                       >
                         x
                       </button>
-                          
                     </div>
                   </div>
                   <label
@@ -49,12 +48,12 @@
                 </div>
               </div>
               <label
-                    class="text-red-400 text-sm"
-                    v-for="text in imageWarning"
-                    :key="text"
-                  >
-                    {{ text }}
-                      </label>
+                class="text-red-400 text-sm"
+                v-for="text in imageWarning"
+                :key="text"
+              >
+                {{ text }}
+              </label>
             </div>
 
             <div>
@@ -288,42 +287,48 @@ export default {
       type: Object,
       default: null,
     },
-    isEdit :{
+    isEdit: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   methods: {
     onFileChange(e) {
-        const files = e.target.files;
-        const imageWarning = [];
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          const fileSize = file.size / 1024 / 1024; // in MB
-          const fileType = file.type;
-          const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i; 
+      const files = e.target.files;
+      const imageWarning = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileSize = file.size / 1024 / 1024; // in MB
+        const fileType = file.type;
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
 
-          if (!allowedExtensions.exec(file.name)) {
-            if (!imageWarning.includes("Please upload files having extensions .jpeg/.jpg/.png only.")) {
-              imageWarning.push("Please upload files having extensions .jpeg/.jpg/.png only.");
-            }
-            continue;
+        if (!allowedExtensions.exec(file.name)) {
+          if (
+            !imageWarning.includes(
+              "Please upload files having extensions .jpeg/.jpg/.png only.",
+            )
+          ) {
+            imageWarning.push(
+              "Please upload files having extensions .jpeg/.jpg/.png only.",
+            );
           }
-
-          if (fileSize > 2) {
-            if (!imageWarning.includes("File size should be less than 2MB.")) {
-              imageWarning.push("File size should be less than 2MB.");
-            }
-            continue;
-          }
-
-          if (this.imageList.length < 5) {
-            this.imageList.push(URL.createObjectURL(file));
-            this.imageFileList.push(file);
-          }
+          continue;
         }
-        this.imageWarning = imageWarning;
-      },
+
+        if (fileSize > 2) {
+          if (!imageWarning.includes("File size should be less than 2MB.")) {
+            imageWarning.push("File size should be less than 2MB.");
+          }
+          continue;
+        }
+
+        if (this.imageList.length < 5) {
+          this.imageList.push(URL.createObjectURL(file));
+          this.imageFileList.push(file);
+        }
+      }
+      this.imageWarning = imageWarning;
+    },
     deleteImage(index) {
       this.imageList.splice(index, 1);
       this.imageFileList.splice(index, 1);
@@ -364,62 +369,66 @@ export default {
         .catch((err) => {
           console.log("error from create product", err);
         });
-      },
+    },
     async handleEditOk() {
-          if (!this.validateData()) {
-          return;
+      if (!this.validateData()) {
+        return;
+      }
+      this.toggleLoading();
+      const newData = {
+        productId: this.productData._id,
+        brand: this.infoProducts.brand,
+        category: this.infoProducts.category,
+        color: this.infoProducts.color,
+        condition: this.infoProducts.condition,
+        sendFrom: this.infoProducts.sendFrom,
+        size: this.infoProducts.size,
+        price: this.infoProducts.price,
+        description: this.infoProducts.description,
+        name: this.infoProducts.name,
+        remain: this.infoProducts.remain,
+        deliveryFee: this.infoProducts.deliveryFee,
+      };
+
+      const imageToUrl = async (imageUrl) => {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const file = new File([blob], "image.png", { type: "image/png" });
+        return file;
+      };
+
+      try {
+        const imageFiles = [];
+        for (let i = 0; i < this.imageList.length; i++) {
+          const file = await imageToUrl(this.imageList[i]);
+          imageFiles.push(file);
         }
-        this.toggleLoading();
-        const newData = {
-          productId: this.productData._id,
-          brand: this.infoProducts.brand,
-          category: this.infoProducts.category,
-          color: this.infoProducts.color,
-          condition: this.infoProducts.condition,
-          sendFrom: this.infoProducts.sendFrom,
-          size: this.infoProducts.size,
-          price: this.infoProducts.price,
-          description: this.infoProducts.description,
-          name: this.infoProducts.name,
-          remain: this.infoProducts.remain,
-          deliveryFee: this.infoProducts.deliveryFee,
-        };
 
-        const imageToUrl = async (imageUrl) => {
-          const response = await fetch(imageUrl);
-          const blob = await response.blob();
-          const file = new File([blob], "image.png", { type: "image/png" });
-          return file;
-        };
-
-        try {
-              const imageFiles = [];
-              for (let i = 0; i < this.imageList.length; i++) {
-                  const file = await imageToUrl(this.imageList[i]);
-                  imageFiles.push(file);
-              }
-
-              await axios.post('/product/edit-product-info', newData)
-                  .then(async (response) => {
-                      const productImage = new FormData();
-                      for (let i = 0; i < imageFiles.length; i++) {
-                          productImage.append(`image${i + 1}`, imageFiles[i]);
-                      }
-                      await axios.put(`/product/add-product-image/${this.productData._id}`, productImage, {
-                          headers: {
-                              "Content-Type": "multipart/form-data",
-                          },
-                      });
-                      await this.$emit("fetchProduct");
-                      this.handleToggleModal();
-
-                  })
-                  .catch((err) => {
-                      console.log("error from edit product", err);
-                  });
-          } catch (error) {
-              console.error("Error converting image URL to file: ", error);
-          }
+        await axios
+          .post("/product/edit-product-info", newData)
+          .then(async (response) => {
+            const productImage = new FormData();
+            for (let i = 0; i < imageFiles.length; i++) {
+              productImage.append(`image${i + 1}`, imageFiles[i]);
+            }
+            await axios.put(
+              `/product/add-product-image/${this.productData._id}`,
+              productImage,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              },
+            );
+            await this.$emit("fetchProduct");
+            this.handleToggleModal();
+          })
+          .catch((err) => {
+            console.log("error from edit product", err);
+          });
+      } catch (error) {
+        console.error("Error converting image URL to file: ", error);
+      }
     },
     handleReset() {
       this.infoProducts.brand = "0";
@@ -461,13 +470,14 @@ export default {
       if (!this.infoProducts.description) {
         warnings.push("Please enter the product description.");
         isValid = false;
-      }
-      else if(this.infoProducts.description.length > 600){
-        warnings.push("Please enter the product description less than 600 characters.");
+      } else if (this.infoProducts.description.length > 600) {
+        warnings.push(
+          "Please enter the product description less than 600 characters.",
+        );
         isValid = false;
       }
       //Category
-      if (this.infoProducts.category === "0" ) {
+      if (this.infoProducts.category === "0") {
         warnings.push("Please select a category.");
         isValid = false;
       }
@@ -482,7 +492,10 @@ export default {
         isValid = false;
       }
       //Condition
-      if (this.infoProducts.condition === 0 || this.infoProducts.condition === null) {
+      if (
+        this.infoProducts.condition === 0 ||
+        this.infoProducts.condition === null
+      ) {
         warnings.push("Please enter the product condition.");
         isValid = false;
       } else if (this.infoProducts.condition < 51) {
@@ -500,7 +513,11 @@ export default {
       ) {
         warnings.push("Please enter the product price.");
         isValid = false;
-      } else if (this.infoProducts.price < 0 || this.infoProducts.price === 0 || this.infoProducts.price === null) {
+      } else if (
+        this.infoProducts.price < 0 ||
+        this.infoProducts.price === 0 ||
+        this.infoProducts.price === null
+      ) {
         warnings.push("Please enter the product price more than 0 baht.");
         isValid = false;
       }
@@ -529,7 +546,7 @@ export default {
         isValid = false;
       }
       //Image
-      if(this.imageFileList.length === 0){
+      if (this.imageFileList.length === 0) {
         warnings.push("Please upload at least 1 image.");
         isValid = false;
       }
@@ -540,11 +557,10 @@ export default {
       }
       return isValid;
     },
-    toggleLoading()
-    {
+    toggleLoading() {
       this.$emit("toggleLoading");
-    }
-      },
+    },
+  },
   setup(props) {
     const infoProducts = reactive({
       brand: "0",
@@ -576,8 +592,8 @@ export default {
         infoProducts.color = props.productData.color;
       }
     });
-    
-    return { infoProducts , imageList };
+
+    return { infoProducts, imageList };
   },
   data() {
     return {

@@ -254,11 +254,6 @@ export default {
         .catch((err) => {
           const data = err.response.data;
           console.log(data);
-          if (data.statusCode === 400) {
-            // this.next.username = true;
-            alert(data.message);
-            // this.formError.username = "มีชื่อผู้ใช้งานนี้แล้ว";
-          }
           console.log(import.meta.env.VITE_APP_API);
           console.log(err);
         });

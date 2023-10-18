@@ -202,14 +202,16 @@ export default {
       isProfileToggle.value = !isProfileToggle.value;
     };
 
-    socket.on("notiMessage", (response) => {
-      console.log(response);
-      notiMessage.value = response;
-      isNotiMessage.value = true;
-      setTimeout(() => {
-        isNotiMessage.value = false;
-      }, 5000);
-    });
+    if (getLocal("token")) {
+      socket.on("notiMessage", (response) => {
+        console.log(response);
+        notiMessage.value = response;
+        isNotiMessage.value = true;
+        setTimeout(() => {
+          isNotiMessage.value = false;
+        }, 5000);
+      });
+    }
 
     return {
       isNavToggle,

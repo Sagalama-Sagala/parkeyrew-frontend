@@ -1,7 +1,7 @@
 <template>
   <Container>
     <div
-      class="flex md:flex-row flex-col items-center w-full py-5 px-10 absolute top-0 z-10 bg-white border-b-black border-[1px] rounded-t-2xl"
+      class="flex md:flex-row flex-col items-center w-full py-5 px-10 absolute top-0 z-20 bg-white border-b-black border-[1px] rounded-t-2xl"
     >
       <div
         class="flex w-full justify-between items-center text-lg font-semibold"
@@ -49,13 +49,19 @@
         </span>
       </div>
     </div>
+    <!-- footer -->
     <div class="absolute bottom-0 w-full py-6 z-10 bg-white rounded-b-2xl">
       <div
         class="w-full flex justify-center items-center"
         :class="isAddOption ? 'flex-col' : ''"
       >
+        <div></div>
         <div class="flex md:w-3/5 w-full md:px-0 px-4 md:gap-x-4 gap-x-2">
-          <button class="text-5xl py-0" @click="toggleAddOption">
+          <button
+            v-if="!isOnUpload"
+            class="text-5xl py-0"
+            @click="toggleAddOption"
+          >
             <img :src="add" class="w-9 border-[1px] border-black rounded p-1" />
           </button>
           <input
@@ -75,26 +81,122 @@
           </button>
         </div>
         <div v-if="isAddOption" class="flex gap-x-10 pt-3">
-          <button
+          <div
             class="bg-[#d9d9d9] w-24 h-24 rounded-xl flex justify-center items-center"
           >
-            <img :src="image" class="w-12 h-12" />
-          </button>
-          <button
-            class="bg-[#d9d9d9] w-24 h-24 rounded-xl flex justify-center items-center"
-          >
-            <img
-              v-if="chatStore.chatRoom.user.role === 'seller'"
-              :src="closeDeal"
-              @click="handleEndDeal"
-              class="w-12 h-12"
-            />
-            <img
-              v-if="chatStore.chatRoom.user.role === 'customer'"
-              :src="location"
-              class="w-12 h-12"
-            />
-          </button>
+            <label
+              for="upload"
+              class="flex flex-col justify-center items-center cursor-pointer"
+              v-if="!(imageList.length === 5)"
+            >
+              <input
+                id="upload"
+                type="file"
+                @change="onFileChange"
+                style="display: none"
+                multiple
+              />
+              <img :src="image" class="w-12 h-12" />
+            </label>
+          </div>
+          <div>
+            <div v-if="!chatStore.chatRoom?.history?.status">
+              <button
+                class="bg-[#d9d9d9] w-24 h-24 rounded-xl flex justify-center items-center"
+                v-if="chatStore.chatRoom.user.role === 'seller'"
+              >
+                <img
+                  :src="closeDeal"
+                  @click="handleEndDeal"
+                  class="w-12 h-12"
+                />
+              </button>
+              <button
+                class="bg-[#d9d9d9] w-24 h-24 rounded-xl flex justify-center items-center"
+                v-if="chatStore.chatRoom.user.role === 'customer'"
+              >
+                <img :src="location" class="w-12 h-12" />
+              </button>
+            </div>
+            <div v-else>
+              <button
+                class="bg-[#d9d9d9] w-24 h-24 rounded-xl flex justify-center items-center"
+                v-if="
+                  chatStore.chatRoom.history.status !== 'ongoing' &&
+                  chatStore.chatRoom.user.role === 'seller'
+                "
+              >
+                <img
+                  @click="handleDelivered"
+                  :src="delivery"
+                  class="w-12 h-12"
+                />
+              </button>
+              <button
+                class="bg-[#d9d9d9] w-24 h-24 rounded-xl flex justify-center items-center"
+                v-if="
+                  chatStore.chatRoom.history.status === 'ongoing' &&
+                  chatStore.chatRoom.user.role === 'customer'
+                "
+              >
+                <img :src="location" class="w-12 h-12" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      v-if="isOnUpload"
+      class="absolute bottom-0 w-full bg-white h-full pt-[10rem] px-3"
+    >
+      <button @click="handleCloseUpload" class="absolute top-[7rem] right-3">
+        x
+      </button>
+      <div class="flex justify-center items-start w-full h-full">
+        <div class="space-y-6">
+          <img class="w-[500px] h-[500px]" :src="imageList[imageIndex]" />
+          <div class="flex justify-center gap-x-4">
+            <div v-for="(image, index) in imageList">
+              <div class="relative">
+                <button
+                  class="absolute top-0 right-[6px] text-white"
+                  @click="
+                    () => {
+                      imageList.splice(index, 1);
+                      imageFileList.splice(index, 1);
+                      if (imageFileList.length === 0) {
+                        this.handleToggleUpload();
+                      }
+                      if (imageIndex - 1 > 0) {
+                        imageIndex -= 1;
+                        return;
+                      }
+                      if (imageIndex + 1 > imageList.length) {
+                        imageIndex += 1;
+                      }
+                    }
+                  "
+                >
+                  x
+                </button>
+                <img
+                  @click="
+                    () => {
+                      imageIndex = index;
+                      console.log(index);
+                    }
+                  "
+                  class="w-[80px] h-[80px] cursor-pointer rounded"
+                  :class="
+                    index === imageIndex ? 'border-[3px] border-primary' : ''
+                  "
+                  :key="index"
+                  :src="image"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -118,6 +220,10 @@ export default {
     const messages = ref([]);
     const route = useRoute();
     const chatStore = useChatStore();
+    const imageList = ref([]);
+    const isOnUpload = ref(false);
+    const imageFileList = ref([]);
+    const imageIndex = ref(0);
 
     onBeforeRouteLeave((to, from) => {
       chatStore.clearChatRoom();
@@ -136,7 +242,16 @@ export default {
       }
     });
 
-    return { isAddOption, messages, chatStore };
+    return {
+      imageIndex,
+      imageFileList,
+      isAddOption,
+      messages,
+      chatStore,
+      imageList,
+      isOnUpload,
+      imageFileList,
+    };
   },
   computed: {
     connected() {
@@ -144,13 +259,50 @@ export default {
     },
   },
   methods: {
+    onFileChange(e) {
+      const files = e.target.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (this.imageList.length < 5) {
+          this.imageList.push(URL.createObjectURL(file));
+          this.imageFileList.push(file);
+        }
+      }
+      console.log(this.imageFileList);
+      this.handleToggleUpload();
+    },
+    handleToggleUpload() {
+      this.imageIndex = 0;
+      this.isOnUpload = !this.isOnUpload;
+      this.toggleAddOption();
+    },
+    handleCloseUpload() {
+      this.isOnUpload = false;
+      this.isAddOption = false;
+    },
     handleSubmitNewMessage() {
+      if (this.imageFileList.length > 0) {
+        for (let i = 0; i < this.imageFileList.length; i++) {
+          console.log(i);
+          socket.emit("addMessage", {
+            roomId: this.$route.params.id,
+            message: { text: "", isImg: true },
+            img: this.imageFileList[i],
+          });
+        }
+        this.imageFileList = [];
+      }
       if (this.chatInput !== "") {
         socket.emit("addMessage", {
           roomId: this.$route.params.id,
           message: { text: this.chatInput },
+          img: null,
         });
         this.chatInput = "";
+      }
+      if (this.isOnUpload) {
+        this.isOnUpload = false;
+        this.isAddOption = false;
       }
     },
     handleBack() {
@@ -160,17 +312,29 @@ export default {
       this.isAddOption = !this.isAddOption;
     },
     handleEndDeal() {
-      console.log(
-        this.chatStore.chatRoom.product._id,
-        this.chatStore.chatRoom.user.user._id,
-      );
       axios
         .post("/product/decrease-product-count", {
-          roomId: this.chatStore.chatRoom.,
+          roomId: this.chatStore.chatRoom.id,
           productId: this.chatStore.chatRoom.product._id,
           customerId: this.chatStore.chatRoom.otherUser.user._id,
         })
         .then((response) => {
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    handleDelivered() {
+      axios
+        .put(
+          `/history/update-to-ongoing/${this.chatStore.chatRoom.history._id}`,
+        )
+        .then((response) => {
+          socket.emit("addMessage", {
+            roomId: this.$route.params.id,
+            message: { text: "ส่งของไปแล้วจ้า" },
+          });
           console.log(response.data);
         })
         .catch((err) => {
@@ -190,6 +354,7 @@ export default {
       send,
       image,
       closeDeal,
+      delivery,
       add,
       location,
       closeDeal,

@@ -1,7 +1,7 @@
 <template>
   <Container>
     <div
-      class="flex md:flex-row flex-col items-center w-full py-5 px-10 absolute top-0 z-20 bg-white border-b-black border-[1px] rounded-t-2xl"
+      class="flex md:flex-row flex-col items-center w-full py-5 px-10 absolute top-0 z-10 bg-white border-b-black border-[1px] rounded-t-2xl"
     >
       <div
         class="flex w-full justify-between items-center text-lg font-semibold"
@@ -10,7 +10,14 @@
           <img :src="chevronLeft" alt="back" class="w-5" />
           <p>กลับ</p>
         </button>
-        <div>{{ chatStore.chatRoom?.otherUser?.user?.username }}</div>
+        <div
+          class="cursor-pointer hover:underline duration-500"
+          @click="
+            $router.push(`/store/${chatStore.chatRoom?.otherUser?.user?._id}`)
+          "
+        >
+          {{ chatStore.chatRoom?.otherUser?.user?.username }}
+        </div>
         <div>
           <img
             :src="threePointLeader"
@@ -22,11 +29,13 @@
       <div
         class="md:w-fit w-full flex items-center justify-start md:justify-center gap-x-2 md:mr-16 md:border-black md:border-l-[1px] md:px-3 font-semibold md:pt-0 pt-5"
       >
-        <img
-          :src="chatStore.chatRoom?.product?.productImage[0]"
-          alt="product_image"
-          class="rounded-lg w-16 h-16"
-        />
+        <div class="w-16 h-16">
+          <img
+            :src="chatStore.chatRoom?.product?.productImage[0]"
+            alt="product_image"
+            class="rounded-lg w-16 h-16"
+          />
+        </div>
         <div class="whitespace-nowrap">
           <p>{{ chatStore.chatRoom?.product?.name }}</p>
           <p>฿ {{ chatStore.chatRoom?.product?.price }}</p>
@@ -52,7 +61,9 @@
           <p class="break-words">
             {{ item.text }}
           </p>
-          <p class="text-xs font-light pt-1"></p>
+          <p class="text-xs font-light pt-1">
+            {{ formatDateMessage(item?.createdAt.toString()) }}
+          </p>
         </div>
 
         <div v-else>
@@ -64,11 +75,20 @@
           <p
             class="text-xs font-light pt-1"
             :class="item.isMyMessage ? 'text-right' : 'text-left'"
-          ></p>
+          >
+            {{ formatDateMessage(item?.createdAt.toString()) }}
+          </p>
         </div>
 
         <span>
-          <img :src="mockProfile" class="w-16" />
+          <img
+            :src="
+              item.isMyMessage
+                ? chatStore.chatRoom?.user?.user?.profileImage
+                : chatStore.chatRoom?.otherUser?.user?.profileImage
+            "
+            class="w-16 h-16 rounded-full border-[2px] border-[#D9D9D9]"
+          />
         </span>
       </div>
     </div>
@@ -137,6 +157,7 @@
               <button
                 class="bg-[#d9d9d9] w-24 h-24 rounded-xl flex justify-center items-center"
                 v-if="chatStore.chatRoom.user.role === 'customer'"
+                @click="handleSendLocation"
               >
                 <img :src="location" class="w-12 h-12" />
               </button>
@@ -284,6 +305,26 @@ export default {
     },
   },
   methods: {
+    handleSendLocation() {
+      if (!this.chatStore.chatRoom?.user?.user?.mainAddress) {
+        this.$router.push("/profile/address");
+        console.log("hello");
+      } else {
+        const address = [
+          this.chatStore.chatRoom?.user?.user?.mainAddress?.firstname +
+            this.chatStore.chatRoom?.user?.user?.mainAddress?.lastname,
+          this.chatStore.chatRoom?.user?.user?.mainAddress?.address,
+          this.chatStore.chatRoom?.user?.user?.mainAddress?.addressDescription,
+          this.chatStore.chatRoom?.user?.user?.mainAddress?.phone,
+        ];
+        for (let i = 0; i < 4; i++) {
+          socket.emit("addMessage", {
+            roomId: this.$route.params.id,
+            message: { text: address[i] },
+          });
+        }
+      }
+    },
     onFileChange(e) {
       const files = e.target.files;
       for (let i = 0; i < files.length; i++) {

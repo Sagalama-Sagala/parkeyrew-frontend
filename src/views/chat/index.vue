@@ -27,7 +27,7 @@
               <img
                 :src="item.otherUser?.user?.profileImage"
                 :alt="item.roomId"
-                class="md:w-20 md:h-20 w-12 h-12"
+                class="md:w-20 md:h-20 w-12 h-12 rounded-full border-[2px] border-[#D9D9D9]"
               />
               <div class="h-full md:py-3">
                 <h2 class="font-semibold">
@@ -38,7 +38,11 @@
                   <span v-if="item.lastMessage" class="px-1 text-lg">:</span>
                   {{
                     item.lastMessage?.text
-                      ? formatMessage(item.lastMessage.text)
+                      ? formatMessage(
+                          item.lastMessage.text == ""
+                            ? "image..."
+                            : item.lastMessage?.text,
+                        )
                       : ""
                   }}
                 </h3>

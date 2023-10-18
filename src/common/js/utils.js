@@ -22,18 +22,20 @@ export const formatDate = (dateFromDb) => {
 };
 
 export const formatDateMessage = (dateFromDb) => {
-  if (dateFromDb) {
-    const ddmmyy = formatDate(dateFromDb);
-    const hh = dateFromDb.slice(11, 13);
-    const hhInt = parseInt(hh) + 7;
-    if (hhInt > 23) {
-      hhInt = hhInt % 24;
-    }
-    const mm = dateFromDb.slice(14, 16);
-    const dateFormat = ddmmyy + " " + `${hhInt}` + ":" + mm;
-    return dateFormat;
+  if (!dateFromDb) {
+    return "";
   }
-  return "";
+  const ddmmyy =
+    dateFromDb.slice(0, 4) +
+    "/" +
+    dateFromDb.slice(5, 7) +
+    "/" +
+    dateFromDb.slice(8, 10);
+  const hh = dateFromDb.slice(11, 13);
+  const hhInt = parseInt(hh) + 7;
+  const mm = dateFromDb.slice(14, 16);
+  const dateFormat = ddmmyy + " " + hhInt + ":" + mm;
+  return dateFormat;
 };
 
 export const formatStatus = (statusFromDb) => {

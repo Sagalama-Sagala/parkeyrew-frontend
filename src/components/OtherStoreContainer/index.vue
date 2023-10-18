@@ -45,7 +45,7 @@
             </div>
           </div>
           <div class="flex flex-col">
-            <div>
+            <div @click="handleCopyLink">
               <img
                 class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden"
                 :src="shareIcon"
@@ -220,6 +220,11 @@ export default {
           },
         );
     },
+    handleCopyLink()
+        {
+            navigator.clipboard.writeText(window.location.href);
+            this.$toast.info("คัดลอกลิงค์สำเร็จ");
+        }
   },
 };
 </script>

@@ -55,7 +55,7 @@
                                 alt="edit profile icon"
                             />
                         </div>
-                        <div>
+                        <div @click="handleCopyLink">
                             <img
                                 class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden cursor-pointer"
                                 :src="shareIcon"
@@ -232,6 +232,11 @@ export default {
                     console.log(err);
                 });
         },
+        handleCopyLink()
+        {
+            navigator.clipboard.writeText(window.location.href);
+            this.$toast.info("คัดลอกลิงค์สำเร็จ");
+        }
     },
 };
 </script>

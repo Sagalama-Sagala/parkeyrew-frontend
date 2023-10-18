@@ -21,16 +21,7 @@
               class="w-[5.5rem] h-[5.5rem] rounded-full md:block hidden border-[2px] border-black"
             />
             <b class="w-[55%]">{{ item.data.username }}</b>
-                <div v-if="item.status === 'not following'"
-                class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
-                >
-                + ติดตาม
-                </div>
-                <div v-else-if="item.status === 'i'"
-                class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
-                >
-                - ยกเลิกติดตาม
-                </div>
+
           </div>
         </div>
         <div v-else>
@@ -45,16 +36,7 @@
               class="w-[5.5rem] h-[5.5rem] rounded-full md:block hidden border-[2px] border-black"
             />
             <b class="w-[55%]">{{ item.data.username }}</b>
-              <div v-if="item.status === 'not following'"
-              class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
-              >
-              + ติดตาม
-              </div>
-              <div v-else-if="item.status === 'following'"
-              class="w- border-2 border-primary rounded-md p-2 text-primary bg-secondary hover:bg-primary hover:text-secondary hover:cursor-pointer max-h-[3rem] min-w-[4.5rem]"
-              >
-              - ยกเลิกติดตาม
-              </div>
+
           </div>
         </div>
         <slot></slot>

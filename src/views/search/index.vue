@@ -442,7 +442,7 @@ export default {
       minRange: 0,
       maxRange: 100,
       unit: "%",
-      value1: 0,
+      value1: 51,
       value2: 100,
   });
   const priceSlider = reactive({

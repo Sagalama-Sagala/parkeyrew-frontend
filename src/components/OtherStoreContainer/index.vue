@@ -1,14 +1,14 @@
 <template>
   <Loading :isLoading="this.otherStoreStore?.isLoading" />
-  <div class="flex flex-col">
+  <div class="flex flex-col ">
     <div
-      class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2 md:h-[36rem]  md:pt-0 pt-8"
+    class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2  md:pt-0 pt-8"
     >
       <div
-        class="bg-secondary mx-[3rem] text-black flex flex-col md:gap-6 gap-[3rem] items-center justify-center px-10 md:py-[3rem] py-0 mt-[5rem] md:pb-[6rem] pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg "
+      class="bg-secondary mx-[3rem] text-black flex flex-col md:gap-6 gap-[1rem]  items-center justify-center px-10 md:py-[3rem] py-0 mt-[5rem] md:pb-[6rem] pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
       >
         <div
-          class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8 md:mb-0 mb-20"
+        class="flex md:flex-row flex-col justify-between items-center md:w-[36rem]  md:pt-0 pt-8 "
         >
           <div>
             <img
@@ -45,7 +45,7 @@
             </div>
           </div>
           <div class="flex flex-col">
-            <div>
+            <div @click="handleCopyLink">
               <img
                 class="w-[3rem] rounded-2xl mb-3 hover:cursor-pointer md:block hidden"
                 :src="shareIcon"
@@ -55,7 +55,7 @@
           </div>
         </div>
         <div
-          class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-16"
+          class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem]  md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-3"
         >
           <div class="flex w-[50%] justify-end">
             <div class="hover:cursor-pointer" @click="openFollower">
@@ -114,17 +114,17 @@
         </div>
       </div>
       <div
-        class="flex md:flex-row flex-col gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 pb-6"
+        class="flex gap-5 text-black text-xl items-center justify-center md:space-x-5 md:w-[46rem] mt-6 pb-6"
       >
         <div
-          class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+        class="flex items-center justify-center md:w-[22rem] w-[7rem] md:h-12 h-10 rounded-[1rem] hover:cursor-pointer"
           :class="page !== 'review' ? 'bg-tertiary' : 'bg-secondary'"
           @click="routeToMyStore()"
         >
           <h1><b>ร้านค้า</b></h1>
         </div>
         <div
-          class="flex items-center justify-center md:w-[22rem] w-[14rem] h-12 rounded-[1rem] hover:cursor-pointer"
+        class="flex items-center justify-center md:w-[22rem] w-[7rem] md:h-12 h-10 rounded-[1rem] hover:cursor-pointer"
           :class="page === 'review' ? 'bg-tertiary' : 'bg-secondary'"
           @click="routeToReview()"
         >
@@ -220,6 +220,11 @@ export default {
           },
         );
     },
+    handleCopyLink()
+        {
+            navigator.clipboard.writeText(window.location.href);
+            this.$toast.info("คัดลอกลิงค์สำเร็จ");
+        }
   },
 };
 </script>

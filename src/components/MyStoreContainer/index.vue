@@ -9,16 +9,16 @@
 
     <div class="flex flex-col">
         <div
-            class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2 md:h-[36rem] md:pt-0 pt-8"
+            class="bg-primary text-white flex flex-col md:items-center md:justify-center w-full md:mt-2  md:pt-0 pt-8"
         >
             <div
-                class="bg-secondary mx-[3rem] text-black flex flex-col md:gap-6 gap-[3rem] items-center justify-center px-10 md:py-[3rem] py-0 mt-12 md:pb-[6rem] pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
+                class="bg-secondary mx-[3rem] text-black flex flex-col md:gap-6 gap-[1rem]  items-center justify-center px-10 md:py-[3rem] py-0 mt-[5rem] md:pb-[6rem] pb-8 rounded-[3rem] shadow-[15.0px_15.0px_0.0px_rgba(0,0,0,0.18)] text-lg"
             >
                 <div
-                    class="flex md:flex-row flex-col justify-between items-center md:w-[36rem] h-[4rem] md:pt-0 pt-8"
+                    class="flex md:flex-row flex-col justify-between items-center md:w-[36rem]  md:pt-0 pt-8 "
                 >
                     <img
-                        class="md:h-[7rem] md:w-[7rem] h-[5rem] w-[5rem] rounded-full"
+                        class="md:h-[6rem] md:w-[6rem] h-[4rem] w-[4rem] rounded-full border-2 "
                         :src="
                             !this.myStoreStore?.mystore?.profileImage ||
                             this.myStoreStore?.mystore?.profileImage === ''
@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div
-                    class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 pt-[7rem]"
+                    class="md:text-lg text-sm flex flex-row justify-center items-center md:w-[36rem] md:h-[4rem] h-[2rem] md:border-b-2 md:border-t-2 border-black md:gap-10 gap-5 md:pb-6 md:pt-6 "
                 >
                     <div class="hover:cursor-pointer" @click="openFollower">
                         <b

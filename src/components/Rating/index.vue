@@ -4,7 +4,7 @@
       v-for="index in 5"
       :key="index"
       :src="getStarImage(index)"
-      class="w-5"
+      class="md:w-5 w-3"
       :class="{ ' hover:translate-y-[-0.15rem] duration-75': clickable }"
       @click="handleStarCick(index)"
     />

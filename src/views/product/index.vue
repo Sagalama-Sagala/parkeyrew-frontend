@@ -157,7 +157,7 @@
               class="hover:underline hover:cursor-pointer"
               @click="handleGotoStore"
             >
-              ดูร้านค้าผู้ชายคนนี้ >
+              ดูร้านค้าผู้ขายคนนี้ >
             </h1>
           </div>
         </div>

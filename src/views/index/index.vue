@@ -46,7 +46,7 @@
         สินค้าล่าสุดที่ถูกลงขาย
       </h2>
       <div
-        class="grid md:[grid-template-columns:repeat(auto-fill,_minmax(18rem,3fr))] gap-7 md:justify-start justify-center"
+        class="grid md:[grid-template-columns:repeat(auto-fill,_minmax(16rem,3fr))] [grid-template-columns:repeat(auto-fill,_minmax(8rem,3fr))]  gap-6 md:justify-start justify-center"
       >
         <ProductCard
           v-for="(item, index) in products"
